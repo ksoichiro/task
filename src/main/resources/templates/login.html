@@ -1,0 +1,9 @@
+<html xmlns:th="">
+<form class="form-signin" th:action="@{/login}" method="post">
+    <div class="form-group">
+        <input type="text" id="username" name="username" class="form-control input-lg top" th:placeholder="#{login.username}" required="true" autofocus="true" />
+        <input type="password" id="password" name="password" class="form-control input-lg bottom" th:placeholder="#{login.password}" required="true" />
+    </div>
+    <button class="btn btn-primary btn-block btn-lg" type="submit" th:text="#{login.submit}"></button>
+</form>
+</html>

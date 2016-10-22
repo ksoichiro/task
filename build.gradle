@@ -1,4 +1,4 @@
-import org.springframework.security.crypto.password.StandardPasswordEncoder
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 buildscript {
     repositories {
@@ -79,7 +79,7 @@ idea {
 
 // e.g. ./gradlew encodePassword -Pargs="test"
 task encodePassword << {
-    StandardPasswordEncoder encoder = new StandardPasswordEncoder()
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder()
     String username = 'test'
     if (project.hasProperty('args')) {
         username = project.args.split('\\s+')[0]
