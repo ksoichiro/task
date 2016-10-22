@@ -2,7 +2,9 @@ package com.ksoichiro.task.service;
 
 import com.ksoichiro.task.App;
 import com.ksoichiro.task.domain.Account;
+import com.ksoichiro.task.domain.Task;
 import com.ksoichiro.task.repository.AccountRepository;
+import com.ksoichiro.task.repository.TaskRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -14,23 +16,25 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-@Sql({"/truncate.sql", "/data-account.sql"})
+@Sql({"/truncate.sql", "/data-task.sql"})
 @SpringApplicationConfiguration(App.class)
-public class AccountServiceTests extends AbstractTransactionalJUnit4SpringContextTests {
+public class TaskServiceTests extends AbstractTransactionalJUnit4SpringContextTests {
+    @Autowired
+    private TaskRepository taskRepository;
+
     @Autowired
     private AccountRepository accountRepository;
 
     @Autowired
-    private AccountService accountService;
+    private TaskService taskService;
 
     @Test
     public void create() {
-        Account account = new Account();
-        account.setUsername("foo");
-        account.setName("Foo Bar");
-        account.setEnabled(true);
-        account.setPassword("PASSWORD");
-        Account created = accountService.create(account);
+        Account account = accountRepository.findOne(1);
+        Task task = new Task();
+        task.setName("Write a report about Spring");
+        task.setAccount(account);
+        Task created = taskService.create(task);
         assertThat(created, is(notNullValue()));
         assertThat(created.getId(), is(2));
         assertThat(created.getCreatedAt(), is(notNullValue()));
@@ -39,15 +43,12 @@ public class AccountServiceTests extends AbstractTransactionalJUnit4SpringContex
 
     @Test
     public void update() {
-        Account account = accountRepository.findOne(1);
-        account.setUsername("b");
-        account.setPassword("foobar");
-        Account updated = accountService.update(account);
+        Task task = taskRepository.findOne(1);
+        task.setName("Send a mail to my boss");
+        Task updated = taskService.update(task);
         assertThat(updated, is(notNullValue()));
         assertThat(updated.getId(), is(1));
-        assertThat(updated.getUsername(), is("b"));
-        assertThat(updated.getName(), is("A"));
-        assertThat(updated.getPassword(), is("foobar"));
+        assertThat(updated.getName(), is("Send a mail to my boss"));
         assertThat(updated.getCreatedAt(), is(notNullValue()));
         assertThat(updated.getUpdatedAt(), is(greaterThan(updated.getCreatedAt())));
     }
