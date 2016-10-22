@@ -1,4 +1,8 @@
 <html xmlns:th="">
+<head>
+    <!--/*/<th:block th:include="_fragments/head :: head" />/*/-->
+    <title th:text="#{title}">Task</title>
+</head>
 <form class="form-signin" th:action="@{/login}" method="post">
     <div class="form-group">
         <input type="text" id="username" name="username" class="form-control input-lg top" th:placeholder="#{login.username}" required="true" autofocus="true" />
