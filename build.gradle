@@ -50,6 +50,9 @@ webResource {
         dependencies {
             install name: 'jquery', version: '1.11.2', filter: ["dist/*.min.*"]
             install name: 'bootstrap', version: '3.3.4', filter: ["dist/css/*.min.css", "dist/js/*.min.js", "dist/fonts/*"]
+            install name: 'components-font-awesome', version: '4.3.0', filter: ["css/*.min.css", "fonts/*"]
+            install name: 'respond-minmax', version: '1.4.2', filter: ["dest/*.min.js"]
+            install name: 'html5shiv', version: '3.7.2', filter: ["dist/*.min.js"]
         }
     }
 }

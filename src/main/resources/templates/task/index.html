@@ -1,8 +1,12 @@
-<html xmlns:th="">
+<html xmlns:th="" xmlns:layout=""
+      layout:decorator="_layouts/default">
 <head>
+    <title th:text="#{title.task.index}"></title>
 </head>
 <body>
 <div><a th:href="@{/logout}" th:text="#{logout}"></a></div>
+
+<div layout:fragment="content">
 
 <div class="pull-right">
     <a th:href="@{/task/create}" class="btn btn-primary"><i class="fa fa-plus"></i> <span th:text="#{task.create}"></span></a>
@@ -22,6 +26,8 @@
 </table>
 
 <nav th:replace="_fragments/pagination :: pagination(page=${tasks}, url=@{/task})"></nav>
+
+</div>
 
 </body>
 </html>
