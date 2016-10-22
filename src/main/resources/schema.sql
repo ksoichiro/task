@@ -4,6 +4,7 @@ create table `account` (
     `name` varchar(255) not null,
     `password` varchar(255) not null,
     `enabled` tinyint(1) not null default 1,
+    `role_id` int not null,
     `created_at` datetime(3),
     `updated_at` datetime(3)
 );

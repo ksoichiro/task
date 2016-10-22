@@ -3,6 +3,7 @@ package com.ksoichiro.task.service;
 import com.ksoichiro.task.App;
 import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.repository.AccountRepository;
+import com.ksoichiro.task.repository.RoleRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -21,6 +22,9 @@ public class AccountServiceTests extends AbstractTransactionalJUnit4SpringContex
     private AccountRepository accountRepository;
 
     @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
     private AccountService accountService;
 
     @Test
@@ -30,6 +34,7 @@ public class AccountServiceTests extends AbstractTransactionalJUnit4SpringContex
         account.setName("Foo Bar");
         account.setEnabled(true);
         account.setPassword("PASSWORD");
+        account.setRole(roleRepository.findOne(1));
         Account created = accountService.create(account);
         assertThat(created, is(notNullValue()));
         assertThat(created.getId(), is(2));
