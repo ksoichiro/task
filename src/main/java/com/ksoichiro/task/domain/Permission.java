@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 @Data
@@ -13,6 +15,9 @@ import javax.persistence.Entity;
 public class Permission extends BaseEntity {
     private String cd;
     private String name;
+
+    @OneToMany(mappedBy = "permission")
+    private List<RolePermission> rolePermissions;
 
     public Permission() {
     }

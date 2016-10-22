@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 
 @Entity
 @Data
@@ -12,6 +14,9 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 public class Task extends BaseEntity {
     private String name;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Account account;
 
     public Task() {
     }

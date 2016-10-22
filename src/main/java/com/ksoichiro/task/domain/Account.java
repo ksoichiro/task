@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 @Data
@@ -15,6 +17,9 @@ public class Account extends BaseEntity {
     private String name;
     private String password;
     private boolean enabled;
+
+    @OneToMany(mappedBy = "account")
+    private List<TeamAccount> teamAccounts;
 
     public Account() {
     }
