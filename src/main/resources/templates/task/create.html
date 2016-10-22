@@ -1,0 +1,22 @@
+<html xmlns:th="" xmlns:layout=""
+      layout:decorator="_layouts/default">
+<head>
+    <title th:text="#{title.task.index}"></title>
+</head>
+<body>
+<div><a th:href="@{/logout}" th:text="#{logout}"></a></div>
+
+<div layout:fragment="content">
+
+<form th:action="@{/task/create-save}" th:object="${taskCreateForm}" method="post">
+    <div class="form-group">
+        <label for="name" th:text="#{task.name}"></label>
+        <input type="text" class="form-control" th:field="*{name}" required="required" />
+    </div>
+    <button type="submit" class="btn btn-primary" th:text="#{form.submit.save}"></button>
+</form>
+
+</div>
+
+</body>
+</html>
