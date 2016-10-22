@@ -12,7 +12,7 @@
     <a th:href="@{/task/create}" class="btn btn-primary"><i class="fa fa-plus"></i> <span th:text="#{task.create}"></span></a>
 </div>
 
-<table class="table-normal">
+<table class="table table-striped">
     <thead>
     <tr>
         <th th:text="#{task.name}"></th>
@@ -22,7 +22,7 @@
     <tbody>
     <tr th:each="entity : ${tasks}">
         <td th:text="${entity.name}"></td>
-        <td><a th:href="@{/task/update/__${entity.id}__}" class="btn btn-sm btn-default" th:text="#{general.edit}"></a></td>
+        <td><a th:href="@{/task/update/__${entity.id}__}" class="btn btn-xs btn-default" th:text="#{general.edit}"></a></td>
     </tr>
     </tbody>
 </table>
