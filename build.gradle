@@ -57,6 +57,10 @@ webResource {
     }
 }
 
+bootRun {
+    addResources true
+}
+
 idea {
     module {
         inheritOutputDirs = false
