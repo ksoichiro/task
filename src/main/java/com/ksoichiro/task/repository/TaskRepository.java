@@ -11,4 +11,9 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     @Query("SELECT t from #{#entityName} t "
         + "WHERE t.account = ?1")
     Page<Task> findByAccount(Account account, Pageable pageable);
+
+    @Query("SELECT t from #{#entityName} t "
+        + "WHERE t.id = ?1 "
+        + "AND t.account = ?2")
+    Task findByIdAndAccount(Integer id, Account account);
 }

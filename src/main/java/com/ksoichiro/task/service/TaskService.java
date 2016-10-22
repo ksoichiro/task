@@ -20,9 +20,21 @@ public class TaskService {
         return taskRepository.findByAccount(account, pageable);
     }
 
+    public Task findByIdAndAccount(Integer id, Account account) {
+        return taskRepository.findByIdAndAccount(id, account);
+    }
+
     @Transactional
     public Task create(Task task) {
         return taskRepository.save(task);
+    }
+
+    @Transactional
+    public Task update(Task task, Account updatedBy) {
+        if (!task.getAccount().getId().equals(updatedBy.getId())) {
+            throw new IllegalStateException("Task cannot be updated by this account");
+        }
+        return update(task);
     }
 
     @Transactional

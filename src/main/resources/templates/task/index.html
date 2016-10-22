@@ -16,11 +16,13 @@
     <thead>
     <tr>
         <th th:text="#{task.name}"></th>
+        <th>&#160;</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="entity : ${tasks}">
         <td th:text="${entity.name}"></td>
+        <td><a th:href="@{/task/update/__${entity.id}__}" class="btn btn-sm btn-default" th:text="#{general.edit}"></a></td>
     </tr>
     </tbody>
 </table>
