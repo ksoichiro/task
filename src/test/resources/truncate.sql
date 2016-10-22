@@ -1,0 +1,10 @@
+truncate table `account`;
+truncate table `task`;
+truncate table `memo`;
+truncate table `tag`;
+truncate table `task_tag`;
+truncate table `team`;
+truncate table `team_account`;
+truncate table `role`;
+truncate table `permission`;
+truncate table `role_permission`;

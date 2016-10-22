@@ -2,10 +2,7 @@ package com.ksoichiro.task.domain;
 
 import lombok.Data;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.PreUpdate;
+import javax.persistence.*;
 import java.util.Date;
 
 @Data
@@ -17,8 +14,8 @@ public class BaseEntity {
     protected Date createdAt;
     protected Date updatedAt;
 
-    @PreUpdate
-    public void preUpdate() {
+    @PrePersist
+    public void prePersist() {
         if (createdAt == null) {
             createdAt = new Date();
         }
