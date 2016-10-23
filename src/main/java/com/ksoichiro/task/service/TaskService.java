@@ -4,6 +4,7 @@ import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.domain.Task;
 import com.ksoichiro.task.repository.TaskRepository;
 import com.ksoichiro.task.util.DateUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 
 @Service
+@Slf4j
 public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
@@ -35,16 +37,15 @@ public class TaskService {
     }
 
     @Transactional
-    public Task update(Task task, Account updatedBy) {
-        if (!task.getAccount().getId().equals(updatedBy.getId())) {
-            throw new IllegalStateException("Task cannot be updated by this account");
-        }
-        return update(task);
-    }
-
-    @Transactional
     public Task update(Task task) {
-        task.setUpdatedAt(new Date());
-        return taskRepository.save(task);
+        Task toUpdate = taskRepository.findOne(task.getId());
+        if (!task.getAccount().getId().equals(toUpdate.getAccount().getId())) {
+            throw new IllegalStateException("Task cannot be updated by this account: owner: " + task.getAccount().getId() + ", updated by: " + toUpdate.getAccount().getId());
+        }
+        if (task.getName() != null) {
+            toUpdate.setName(task.getName());
+        }
+        toUpdate.setUpdatedAt(new Date());
+        return taskRepository.save(toUpdate);
     }
 }

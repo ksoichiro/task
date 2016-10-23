@@ -5,6 +5,7 @@ import com.ksoichiro.task.domain.converter.TaskStatusConverter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -16,6 +17,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
+@Slf4j
 public class Task extends BaseEntity {
     private String name;
 
@@ -28,5 +30,13 @@ public class Task extends BaseEntity {
     private Account account;
 
     public Task() {
+    }
+
+    @Override
+    public void preSave() {
+        super.preSave();
+        if (status == null) {
+            status = TaskStatusEnum.NOT_YET;
+        }
     }
 }

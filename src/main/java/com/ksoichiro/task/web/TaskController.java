@@ -29,13 +29,13 @@ public class TaskController {
     @RequestMapping("/today")
     public String today(@AuthenticationPrincipal Account account, Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("tasks", taskService.findByAccountAndScheduledAtIsToday(account, pageable));
-        return "task/index";
+        return "task/today";
     }
 
     @RequestMapping("/all")
     public String all(@AuthenticationPrincipal Account account, Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("tasks", taskService.findByAccount(account, pageable));
-        return "task/index";
+        return "task/all";
     }
 
     @RequestMapping("/create")
@@ -58,7 +58,7 @@ public class TaskController {
             bindingResult.reject("error.task.create");
             return create(taskCreateForm, bindingResult, model);
         }
-        return "redirect:/task";
+        return "redirect:/task/today";
     }
 
     @RequestMapping("/update/{id}")
@@ -78,14 +78,14 @@ public class TaskController {
         }
         try {
             Task task = new Task();
-            task.setAccount(account);
             BeanUtils.copyProperties(taskUpdateForm, task);
-            taskService.update(task, account);
+            task.setAccount(account);
+            taskService.update(task);
         } catch (Exception e) {
             log.warn("Failed to update task for account {}", account.getId(), e);
             bindingResult.reject("error.task.update");
             return update(taskUpdateForm.getId(), account, taskUpdateForm, bindingResult, model);
         }
-        return "redirect:/task";
+        return "redirect:/task/today";
     }
 }

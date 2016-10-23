@@ -15,7 +15,8 @@ public class BaseEntity {
     protected Date updatedAt;
 
     @PrePersist
-    public void prePersist() {
+    @PreUpdate
+    public void preSave() {
         if (createdAt == null) {
             createdAt = new Date();
         }
