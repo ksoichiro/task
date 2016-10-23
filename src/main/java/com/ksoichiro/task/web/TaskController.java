@@ -1,5 +1,6 @@
 package com.ksoichiro.task.web;
 
+import com.ksoichiro.task.constant.TaskStatusEnum;
 import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.domain.Task;
 import com.ksoichiro.task.form.TaskCreateForm;
@@ -40,6 +41,7 @@ public class TaskController {
 
     @RequestMapping("/create")
     public String create(TaskCreateForm taskCreateForm, BindingResult bindingResult, Model model) {
+        model.addAttribute("allTaskStatus", TaskStatusEnum.values());
         return "task/create";
     }
 
@@ -67,6 +69,7 @@ public class TaskController {
                          TaskUpdateForm taskUpdateForm, BindingResult bindingResult, Model model) {
         Task task = taskService.findByIdAndAccount(id, account);
         BeanUtils.copyProperties(task, taskUpdateForm);
+        model.addAttribute("allTaskStatus", TaskStatusEnum.values());
         return "task/update";
     }
 

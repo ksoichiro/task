@@ -45,6 +45,9 @@ public class TaskService {
         if (task.getName() != null) {
             toUpdate.setName(task.getName());
         }
+        if (task.getStatus() != null) {
+            toUpdate.setStatus(task.getStatus());
+        }
         toUpdate.setUpdatedAt(new Date());
         return taskRepository.save(toUpdate);
     }
