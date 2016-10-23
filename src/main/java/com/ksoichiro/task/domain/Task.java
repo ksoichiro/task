@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import java.util.Date;
 
 @Entity
 @Data
@@ -14,6 +15,8 @@ import javax.persistence.ManyToOne;
 @AllArgsConstructor
 public class Task extends BaseEntity {
     private String name;
+
+    private Date scheduledAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Account account;

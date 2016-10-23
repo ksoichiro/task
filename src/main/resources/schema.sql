@@ -13,6 +13,7 @@ create table `task` (
     `id` int primary key auto_increment,
     `name` varchar(255) not null,
     `account_id` int not null,
+    `scheduled_at` date,
     `created_at` datetime(3),
     `updated_at` datetime(3)
 );

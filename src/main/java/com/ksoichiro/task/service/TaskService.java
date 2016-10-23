@@ -3,6 +3,7 @@ package com.ksoichiro.task.service;
 import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.domain.Task;
 import com.ksoichiro.task.repository.TaskRepository;
+import com.ksoichiro.task.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,10 @@ public class TaskService {
 
     public Page<Task> findByAccount(Account account, Pageable pageable) {
         return taskRepository.findByAccount(account, pageable);
+    }
+
+    public Page<Task> findByAccountAndScheduledAtIsToday(Account account, Pageable pageable) {
+        return taskRepository.findByAccountAndScheduledAt(account, DateUtils.truncateTime(new Date()), pageable);
     }
 
     public Task findByIdAndAccount(Integer id, Account account) {

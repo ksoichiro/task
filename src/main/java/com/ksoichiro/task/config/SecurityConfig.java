@@ -2,6 +2,7 @@ package com.ksoichiro.task.config;
 
 import com.ksoichiro.task.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
+@ConditionalOnProperty(name = "application.security.enabled", havingValue = "true", matchIfMissing = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private LoginService loginService;

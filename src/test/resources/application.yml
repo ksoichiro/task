@@ -1,0 +1,9 @@
+spring:
+    datasource:
+        data: classpath:/data-empty.sql
+    jpa:
+        hibernate:
+            ddl-auto: ''
+application:
+    security:
+        enabled: false

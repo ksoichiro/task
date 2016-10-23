@@ -14,7 +14,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,8 +26,14 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
-    @RequestMapping
-    public String index(@AuthenticationPrincipal Account account, Model model, @PageableDefault Pageable pageable) {
+    @RequestMapping("/today")
+    public String today(@AuthenticationPrincipal Account account, Model model, @PageableDefault Pageable pageable) {
+        model.addAttribute("tasks", taskService.findByAccountAndScheduledAtIsToday(account, pageable));
+        return "task/index";
+    }
+
+    @RequestMapping("/all")
+    public String all(@AuthenticationPrincipal Account account, Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("tasks", taskService.findByAccount(account, pageable));
         return "task/index";
     }
