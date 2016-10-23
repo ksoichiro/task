@@ -12,6 +12,7 @@ create table `account` (
 create table `task` (
     `id` int primary key auto_increment,
     `name` varchar(255) not null,
+    `status` int not null default 0,
     `account_id` int not null,
     `scheduled_at` date,
     `created_at` datetime(3),
