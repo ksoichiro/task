@@ -4,6 +4,9 @@
     <title th:text="#{title}">Task</title>
 </head>
 <form class="form-signin" th:action="@{/login}" method="post">
+    <div class="alert alert-warning" th:if="${param.error}" th:text="#{error.login}"></div>
+    <div class="alert alert-info" th:if="${param.logout}" th:text="#{logout.success}"></div>
+
     <div class="form-group">
         <input type="text" id="username" name="username" class="form-control input-lg top" th:placeholder="#{login.username}" required="true" autofocus="true" />
         <input type="password" id="password" name="password" class="form-control input-lg bottom" th:placeholder="#{login.password}" required="true" />
