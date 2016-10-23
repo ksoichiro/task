@@ -13,6 +13,10 @@ public class AccountService {
     @Autowired
     private AccountRepository accountRepository;
 
+    public Account findById(Integer id) {
+        return accountRepository.findOne(id);
+    }
+
     @Transactional
     public Account create(Account account) {
         return accountRepository.save(account);

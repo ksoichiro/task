@@ -34,6 +34,7 @@ public class LoginService implements UserDetailsService {
         }
         Account account = new Account(username, domainAccount.getPassword(), domainAccount.isEnabled(), authorities);
         account.setId(domainAccount.getId());
+        account.setName(domainAccount.getName());
         account.setCreatedAt(domainAccount.getCreatedAt());
         account.setUpdatedAt(domainAccount.getUpdatedAt());
         account.setRole(domainAccount.getRole());
