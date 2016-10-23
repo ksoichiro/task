@@ -4,15 +4,14 @@
     <title th:text="#{title.task.index}"></title>
 </head>
 <body>
-<div><a th:href="@{/logout}" th:text="#{logout}"></a></div>
 
 <div layout:fragment="content">
 
 <form th:action="@{/task/create-save}" th:object="${taskCreateForm}" method="post">
-    <div class="form-group">
-        <label for="name" th:text="#{task.name}"></label>
-        <input type="text" class="form-control" th:field="*{name}" required="required" />
-    </div>
+    <div class="alert alert-danger" th:if="${#fields.hasErrors('global')}" th:errors="*{global}">Error</div>
+
+    <div th:replace="_fragments/form :: input-text(field = 'name', label = #{task.name})"></div>
+
     <button type="submit" class="btn btn-primary" th:text="#{general.save}"></button>
 </form>
 

@@ -5,6 +5,7 @@ import com.ksoichiro.task.domain.Task;
 import com.ksoichiro.task.form.TaskCreateForm;
 import com.ksoichiro.task.form.TaskUpdateForm;
 import com.ksoichiro.task.service.TaskService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequestMapping("/task")
+@Slf4j
 public class TaskController {
     @Autowired
     private TaskService taskService;
@@ -40,10 +43,16 @@ public class TaskController {
         if (bindingResult.hasErrors()) {
             return create(taskCreateForm, bindingResult, model);
         }
-        Task task = new Task();
-        task.setAccount(account);
-        BeanUtils.copyProperties(taskCreateForm, task);
-        taskService.create(task);
+        try {
+            Task task = new Task();
+            task.setAccount(account);
+            BeanUtils.copyProperties(taskCreateForm, task);
+            taskService.create(task);
+        } catch (Exception e) {
+            log.warn("Failed to create task for account {}", account.getId(), e);
+            bindingResult.reject("error.task.create");
+            return create(taskCreateForm, bindingResult, model);
+        }
         return "redirect:/task";
     }
 
@@ -62,10 +71,16 @@ public class TaskController {
         if (bindingResult.hasErrors()) {
             return update(taskUpdateForm.getId(), account, taskUpdateForm, bindingResult, model);
         }
-        Task task = new Task();
-        task.setAccount(account);
-        BeanUtils.copyProperties(taskUpdateForm, task);
-        taskService.update(task, account);
+        try {
+            Task task = new Task();
+            task.setAccount(account);
+            BeanUtils.copyProperties(taskUpdateForm, task);
+            taskService.update(task, account);
+        } catch (Exception e) {
+            log.warn("Failed to update task for account {}", account.getId(), e);
+            bindingResult.reject("error.task.update");
+            return update(taskUpdateForm.getId(), account, taskUpdateForm, bindingResult, model);
+        }
         return "redirect:/task";
     }
 }
