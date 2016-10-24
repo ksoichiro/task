@@ -11,7 +11,6 @@ import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -63,19 +61,6 @@ public class AppErrorController implements ErrorController {
         return result;
     }
 
-    // This won't be called
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public String handleNotFoundError(Throwable throwable, Model model) {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        log.error("Not found {}", request.getRequestURI());
-        Map<String, Object> attrs = new HashMap<>();
-        attrs.put("status", 404);
-        attrs.put("error", "Not Found");
-        model.addAttribute("error", attrs);
-        return "error";
-    }
-
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Throwable.class)
     public String handleException(Throwable throwable, Model model) {
@@ -97,9 +82,7 @@ public class AppErrorController implements ErrorController {
         try {
             Integer status = (Integer) attrs.get("status");
             if (status == 404) {
-                // TODO With this implementation, the original requested URI is now shown.
-                HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-                log.info("Unknown URI (404): {}", request.getRequestURI());
+                log.info("Not found: {}", attrs.get("path"));
             }
             model.addAttribute("guidance", messageSource.getMessage("http.error." + status, null, Locale.getDefault()));
         } catch (NoSuchMessageException ignore) {
