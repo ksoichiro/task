@@ -4,6 +4,10 @@ spring:
     jpa:
         hibernate:
             ddl-auto: ''
+server:
+    error:
+        whitelabel:
+            enabled: false
 security:
     basic:
         enabled: false
