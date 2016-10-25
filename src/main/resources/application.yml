@@ -4,6 +4,8 @@ spring:
     jpa:
         hibernate:
             ddl-auto: ''
+    mvc:
+        date-format: 'yyyy/MM/dd HH:mm:ss'
 server:
     error:
         whitelabel:
