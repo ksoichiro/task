@@ -1,0 +1,34 @@
+<html xmlns:th="">
+<body>
+
+<div th:fragment="list (url)">
+
+<div class="pull-right">
+    <a th:href="@{/task/create}" class="btn btn-primary"><i class="fa fa-plus"></i> <span th:text="#{task.create}"></span></a>
+</div>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th th:text="#{task.name}"></th>
+        <th th:text="#{task.status}"></th>
+        <th th:text="#{task.created-at}"></th>
+        <th>&#160;</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="entity : ${tasks}">
+        <td th:text="${entity.name}"></td>
+        <td th:text="${{entity.status}}"></td>
+        <td th:text="${{entity.createdAt}}"></td>
+        <td><a th:href="@{/task/update/__${entity.id}__}" class="btn btn-xs btn-default" th:text="#{general.edit}"></a></td>
+    </tr>
+    </tbody>
+</table>
+
+<nav th:replace="_fragments/pagination :: pagination(page=${tasks}, url=${url})"></nav>
+
+</div>
+
+</body>
+</html>
