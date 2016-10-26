@@ -7,6 +7,7 @@ buildscript {
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:1.3.2.RELEASE"
         classpath "org.springframework.boot:spring-boot-starter-security:1.3.2.RELEASE"
+        classpath "com.github.ksoichiro:gradle-build-info-plugin:0.1.5"
     }
 }
 
@@ -20,6 +21,7 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin: 'com.github.ksoichiro.web.resource'
+apply plugin: 'com.github.ksoichiro.build.info'
 
 repositories {
     jcenter()
@@ -55,6 +57,10 @@ webResource {
             install name: 'html5shiv', version: '3.7.2', filter: ["dist/*.min.js"]
         }
     }
+}
+
+buildInfo {
+    gitPropertiesEnabled true
 }
 
 bootRun {
