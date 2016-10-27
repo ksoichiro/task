@@ -10,6 +10,10 @@ server:
     error:
         whitelabel:
             enabled: false
+    compression:
+        enabled: true
+        mime-types: text/html,text/css,application/json
+        min-response-size: 2048
 security:
     basic:
         enabled: false
