@@ -21,6 +21,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -57,7 +58,8 @@ public class AppErrorController implements ErrorController {
     public Object controllerExecution(ProceedingJoinPoint pjp) throws Throwable {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         Object result = pjp.proceed();
-        log.info("Processed request {}", request.getRequestURI());
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
+        log.info("{} {}", response.getStatus(), request.getRequestURI());
         return result;
     }
 
@@ -65,7 +67,7 @@ public class AppErrorController implements ErrorController {
     @ExceptionHandler(Throwable.class)
     public String handleException(Throwable throwable, Model model) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        log.error("Unhandled exception in {}: {}", request.getRequestURI(), throwable.toString(), throwable);
+        log.error("500 {} {}", request.getRequestURI(), throwable.toString(), throwable);
         Map<String, Object> attrs = new HashMap<>();
         attrs.put("status", 500);
         attrs.put("error", "Internal Server Error");
@@ -82,7 +84,7 @@ public class AppErrorController implements ErrorController {
         try {
             Integer status = (Integer) attrs.get("status");
             if (status == 404) {
-                log.info("Not found: {}", attrs.get("path"));
+                log.info("404 {}", attrs.get("path"));
             }
             model.addAttribute("guidance", messageSource.getMessage("http.error." + status, null, Locale.getDefault()));
         } catch (NoSuchMessageException ignore) {
