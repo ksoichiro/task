@@ -1,5 +1,6 @@
 package com.ksoichiro.task.web;
 
+import com.ksoichiro.task.aspect.AbstractControllerAdvice;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -30,24 +31,12 @@ import java.util.Map;
 @Controller
 @Aspect
 @Slf4j
-public class AppErrorController implements ErrorController {
+public class AppErrorController extends AbstractControllerAdvice implements ErrorController {
     @Autowired
     private ErrorAttributes errorAttributes;
 
     @Autowired
     private MessageSource messageSource;
-
-    @Pointcut("@within(org.springframework.stereotype.Controller)")
-    public void controller() {
-    }
-
-    @Pointcut("@annotation(org.springframework.web.bind.annotation.RequestMapping)")
-    public void requestMapping() {
-    }
-
-    @Pointcut("execution(* com.ksoichiro.task.web..*.*(..))")
-    public void anyProjectMethodExecution() {
-    }
 
     @Override
     public String getErrorPath() {
