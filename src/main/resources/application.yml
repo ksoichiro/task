@@ -17,3 +17,6 @@ server:
 security:
     basic:
         enabled: false
+management:
+    context-path: /manage
+    add-application-context-header: false
