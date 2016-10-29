@@ -13,6 +13,8 @@ import org.springframework.web.servlet.resource.VersionResourceResolver;
 
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
+    private static final int CACHE_PERIOD = 100 * 24 * 60 * 60;
+
     @Autowired
     private MessageSource messageSource;
 
@@ -38,7 +40,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
             .addVersionStrategy(new PrefixAndFixedVersionStrategy("lib/", gitProperties.getCommitId()), "/lib/**");
         registry.addResourceHandler("/**")
             .addResourceLocations("classpath:static/")
-            .setCachePeriod(null)
+            .setCachePeriod(CACHE_PERIOD)
             .resourceChain(true)
             .addResolver(versionResolver);
     }
