@@ -6,14 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/")
 public class RootController {
-    @RequestMapping("/")
+    @RequestMapping({"/", "home"})
     public String index() {
         return "redirect:/task/today";
-    }
-
-    @RequestMapping("/home")
-    public String home() {
-        return index();
     }
 
     @RequestMapping("/login")
