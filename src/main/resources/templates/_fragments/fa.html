@@ -1,7 +1,9 @@
 <html xmlns:th="">
 <body>
 
-<a th:fragment="icon-link (name, href, text)" th:href="${href}" class="link-fa"><i th:class="|fa fa-${name} fa-fw|" aria-hidden="true"></i>&#160;<span th:text="${text}"></span></a>
+<a th:fragment="icon-link (name, href, text)" th:href="${href}"><i th:class="|fa fa-${name} fa-fw|" aria-hidden="true"></i>&#160;<span th:text="${text}"></span></a>
+
+<i th:fragment="fa-fw (name)" th:href="${href}" th:class="|fa fa-${name} fa-fw|" aria-hidden="true"></i>
 
 </body>
 </html>

@@ -21,7 +21,7 @@
         <td th:text="${entity.name}"></td>
         <td th:text="${{entity.status}}"></td>
         <td th:text="${{entity.createdAt}}"></td>
-        <td><a th:href="@{/task/update/__${entity.id}__}" class="btn btn-xs btn-default" th:text="#{general.edit}"></a></td>
+        <td><a th:href="@{/task/update/__${entity.id}__}" class="btn btn-xs btn-default"><i th:replace="_fragments/fa :: fa-fw(edit)"></i>&#160;<span th:text="#{general.edit}"></span></a></td>
     </tr>
     </tbody>
 </table>
