@@ -29,17 +29,17 @@
     <div class="content row">
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-                <li th:classappend="${active} == 'task-today' ? 'active' : ''"><a th:href="@{/task/today}" th:text="#{title.task.today}"> <span class="sr-only">(current)</span></a></li>
-                <li th:classappend="${active} == 'task-all' ? 'active' : ''"><a th:href="@{/task/all}" th:text="#{title.task.all}"></a></li>
+                <li th:classappend="${active} == 'task-today' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link(calendar, @{/task/today}, #{title.task.today})"></a></li>
+                <li th:classappend="${active} == 'task-all' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link(list, @{/task/all}, #{title.task.all})"></a></li>
             </ul>
             <ul class="nav nav-sidebar">
-                <li th:classappend="${active} == 'tag' ? 'active' : ''"><a th:href="@{/tag}" th:text="#{title.tag}"></a></li>
-                <li th:classappend="${active} == 'team' ? 'active' : ''"><a th:href="@{/team}" th:text="#{title.team}"></a></li>
+                <li th:classappend="${active} == 'tag' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link(tags, @{/tag}, #{title.tag})"></a></li>
+                <li th:classappend="${active} == 'team' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link(group, @{/team}, #{title.team})"></a></li>
             </ul>
             <ul class="nav nav-sidebar">
-                <li th:classappend="${active} == 'admin-team' ? 'active' : ''"><a th:href="@{/admin/team}" th:text="#{title.admin.team}"></a></li>
-                <li th:classappend="${active} == 'admin-role' ? 'active' : ''"><a th:href="@{/admin/role}" th:text="#{title.admin.role}"></a></li>
-                <li th:classappend="${active} == 'admin-permission' ? 'active' : ''"><a th:href="@{/admin/permission}" th:text="#{title.admin.permission}"></a></li>
+                <li th:classappend="${active} == 'admin-team' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link(group, @{/admin/team}, #{title.admin.team})"></a></li>
+                <li th:classappend="${active} == 'admin-role' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link(user-circle-o, @{/admin/role}, #{title.admin.role})"></a></li>
+                <li th:classappend="${active} == 'admin-permission' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link(shield, @{/admin/permission}, #{title.admin.permission})"></a></li>
             </ul>
         </div>
         <div id="main-content" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2" layout:fragment="content"></div>
