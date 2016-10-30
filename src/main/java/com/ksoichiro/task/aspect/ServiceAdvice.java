@@ -26,7 +26,7 @@ public class ServiceAdvice {
             if (e.contains(SQLException.class)) {
                 // If needed, we can handle specific SQL error codes.
                 SQLException cause = getCause(e, SQLException.class);
-                log.warn("SQL Error: {}, SQLState: {}", cause.getErrorCode(), cause.getSQLState());
+                log.warn("SQL Error: {}, SQLState: {}, message: {}", cause.getErrorCode(), cause.getSQLState(), cause.getMessage());
             }
             // Rethrow it to delegate handling
             throw e;
