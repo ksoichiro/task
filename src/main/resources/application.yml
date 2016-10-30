@@ -6,6 +6,8 @@ spring:
             ddl-auto: ''
     mvc:
         date-format: 'yyyy/MM/dd HH:mm:ss'
+    aop:
+        proxy-target-class: true
 server:
     error:
         whitelabel:
