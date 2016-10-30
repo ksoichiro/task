@@ -1,3 +1,15 @@
+-- for non-embedded database
+drop table if exists `account`;
+drop table if exists `task`;
+drop table if exists `memo`;
+drop table if exists `tag`;
+drop table if exists `task_tag`;
+drop table if exists `team`;
+drop table if exists `team_account`;
+drop table if exists `role`;
+drop table if exists `permission`;
+drop table if exists `role_permission`;
+
 create table `account` (
     `id` int primary key auto_increment,
     `username` varchar(255) not null,
@@ -28,12 +40,14 @@ create table `memo` (
 
 create table `tag` (
     `id` int primary key auto_increment,
-    `team_id` int,
-    `account_id` int,
+    `team_id` int not null default 0,
+    `account_id` int not null default 0,
     `name` varchar(128) not null,
     `created_at` datetime(3),
     `updated_at` datetime(3)
 );
+alter table `tag`
+    add unique `uq_tag` (`team_id`, `account_id`, `name`);
 
 create table `task_tag` (
     `id` int primary key auto_increment,

@@ -24,4 +24,8 @@ public class BaseEntity {
             updatedAt = new Date();
         }
     }
+
+    static Date emptyDate() {
+        return new Date(0);
+    }
 }

@@ -23,4 +23,12 @@ public class Tag extends BaseEntity {
 
     public Tag() {
     }
+
+    @Override
+    public void preSave() {
+        super.preSave();
+        if (team == null) {
+            team = Team.empty();
+        }
+    }
 }
