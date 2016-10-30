@@ -74,6 +74,23 @@ bootRun {
     }
 }
 
+task processSql << {
+    def sqlFile = file("src/main/sql/data.sql")
+    file("src/main/resources/data-h2.sql").withWriter { writer ->
+        file("src/main/sql/data.sql").eachLine { line ->
+            if (!line.startsWith("set ")) {
+                writer.println(line)
+            }
+        }
+    }
+    copy {
+        from sqlFile
+        into "src/main/resources"
+        rename "data.sql", "data-mariadb.sql"
+    }
+}
+processResources.dependsOn 'processSql'
+
 idea {
     module {
         inheritOutputDirs = false

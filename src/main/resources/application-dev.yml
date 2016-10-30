@@ -1,6 +1,6 @@
 spring:
     datasource:
         platform: mariadb
-        url: "jdbc:mariadb://192.168.33.10/task?sessionVariables=sql_mode='NO_AUTO_VALUE_ON_ZERO'"
+        url: jdbc:mariadb://192.168.33.10/task
         username: root
         password: test
