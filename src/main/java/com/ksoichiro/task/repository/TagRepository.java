@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface TagRepository extends JpaRepository<Tag, Integer> {
     @Query("SELECT t FROM #{#entityName} t "
-        + "WHERE t.account = ? ")
+        + "WHERE t.account = ?1 ")
     Page<Tag> findByAccount(Account account, Pageable pageable);
 
     @Query("SELECT t from #{#entityName} t "
