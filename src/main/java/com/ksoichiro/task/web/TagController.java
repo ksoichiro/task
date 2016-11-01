@@ -2,6 +2,7 @@ package com.ksoichiro.task.web;
 
 import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.domain.Tag;
+import com.ksoichiro.task.exception.DuplicateTagNameException;
 import com.ksoichiro.task.form.TagCreateForm;
 import com.ksoichiro.task.form.TagUpdateForm;
 import com.ksoichiro.task.service.TagService;
@@ -47,6 +48,10 @@ public class TagController {
             tag.setAccount(account);
             BeanUtils.copyProperties(tagCreateForm, tag);
             tagService.create(tag);
+        } catch (DuplicateTagNameException e) {
+            log.warn("Failed to create tag for account {}", account.getId(), e);
+            bindingResult.reject("error.tag.name.duplicate");
+            return create(tagCreateForm, bindingResult, model);
         } catch (Exception e) {
             log.warn("Failed to create tag for account {}", account.getId(), e);
             bindingResult.reject("error.tag.create");
@@ -75,6 +80,10 @@ public class TagController {
             BeanUtils.copyProperties(tagUpdateForm, tag);
             tag.setAccount(account);
             tagService.update(tag);
+        } catch (DuplicateTagNameException e) {
+            log.warn("Failed to update tag for account {}", account.getId(), e);
+            bindingResult.reject("error.tag.name.duplicate");
+            return update(tagUpdateForm.getId(), account, tagUpdateForm, bindingResult, model);
         } catch (Exception e) {
             log.warn("Failed to update tag for account {}", account.getId(), e);
             bindingResult.reject("error.tag.update");

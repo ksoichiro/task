@@ -16,4 +16,9 @@ public interface TagRepository extends JpaRepository<Tag, Integer> {
         + "WHERE t.id = ?1 "
         + "AND t.account = ?2")
     Tag findByIdAndAccount(Integer id, Account account);
+
+    @Query("SELECT t from #{#entityName} t "
+        + "WHERE t.name = ?1 "
+        + "AND t.account = ?2")
+    Tag findByNameAndAccount(String name, Account account);
 }
