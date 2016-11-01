@@ -49,7 +49,7 @@ public class TagController {
             tagService.create(tag);
         } catch (Exception e) {
             log.warn("Failed to create tag for account {}", account.getId(), e);
-            bindingResult.reject("error.task.create");
+            bindingResult.reject("error.tag.create");
             return create(tagCreateForm, bindingResult, model);
         }
         return "redirect:/tag";
