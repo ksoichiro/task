@@ -12,7 +12,7 @@
 
     <input type="hidden" th:field="*{id}" />
 
-    <div th:replace="_fragments/form :: input-text(field = 'name', label = #{tag.name})"></div>
+    <div th:replace="_fragments/form :: input-text(field = 'name', label = #{tag.name}, autofocus = true)"></div>
 
     <button type="submit" class="btn btn-primary"><i th:replace="_fragments/fa :: fa-fw(check)"></i>&#160;<span th:text="#{general.save}"></span></button>
 </form>

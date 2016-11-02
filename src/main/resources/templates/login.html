@@ -8,7 +8,7 @@
     <div class="alert alert-info" th:if="${param.logout}" th:text="#{logout.success}"></div>
 
     <div class="form-group">
-        <input type="text" id="username" name="username" class="form-control input-lg top" th:placeholder="#{login.username}" required="true" autofocus="true" />
+        <input type="text" id="username" name="username" class="form-control input-lg top" th:placeholder="#{login.username}" required="true" autofocus="autofocus" />
         <input type="password" id="password" name="password" class="form-control input-lg bottom" th:placeholder="#{login.password}" required="true" />
     </div>
     <button class="btn btn-primary btn-block btn-lg" type="submit" th:text="#{login.submit}"></button>
