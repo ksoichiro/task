@@ -30,7 +30,7 @@
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
                 <li id="nav-item-task-today" th:classappend="${active} == 'task-today' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link-badge(calendar, @{/task/today}, #{title.task.today}, '-')"></a></li>
-                <li th:classappend="${active} == 'task-all' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link(list, @{/task/all}, #{title.task.all})"></a></li>
+                <li id="nav-item-task-all" th:classappend="${active} == 'task-all' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link-badge(list, @{/task/all}, #{title.task.all}, '-')"></a></li>
             </ul>
             <ul class="nav nav-sidebar">
                 <li th:classappend="${active} == 'tag' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link(tags, @{/tag}, #{title.tag})"></a></li>
@@ -57,6 +57,7 @@
 <script th:inline="javascript">
 /*<![CDATA[*/
   get(/*[[@{/task/today/count}]]*/, '#nav-item-task-today .icon-link-badge .count');
+  get(/*[[@{/task/all/count}]]*/, '#nav-item-task-all .icon-link-badge .count');
 /*]]>*/
 </script>
 </body>

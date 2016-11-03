@@ -38,6 +38,12 @@ public class TaskController {
         return taskService.countByAccountAndScheduledAtIsToday(account).toString();
     }
 
+    @RequestMapping("/all/count")
+    @ResponseBody
+    public String countTaskAll(@AuthenticationPrincipal Account account) {
+        return taskService.countByAccount(account).toString();
+    }
+
     @RequestMapping("/today")
     public String today(@AuthenticationPrincipal Account account, Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("tasks", taskService.findByAccountAndScheduledAtIsToday(account, pageable));

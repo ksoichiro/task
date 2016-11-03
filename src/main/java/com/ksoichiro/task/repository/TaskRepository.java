@@ -10,6 +10,10 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Date;
 
 public interface TaskRepository extends JpaRepository<Task, Integer> {
+    @Query("SELECT count(t) from #{#entityName} t "
+        + "WHERE t.account = ?1 ")
+    Long countByAccount(Account account);
+
     @Query("SELECT t from #{#entityName} t "
         + "WHERE t.account = ?1 ")
     Page<Task> findByAccount(Account account, Pageable pageable);

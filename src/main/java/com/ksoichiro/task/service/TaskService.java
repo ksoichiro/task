@@ -23,6 +23,10 @@ public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
 
+    public Long countByAccount(Account account) {
+        return taskRepository.countByAccount(account);
+    }
+
     public Page<Task> findByAccount(Account account, Pageable pageable) {
         return taskRepository.findByAccount(account, pageable);
     }
