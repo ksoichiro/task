@@ -3,6 +3,7 @@ package com.ksoichiro.task.web;
 import com.ksoichiro.task.constant.TaskStatusEnum;
 import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.domain.Task;
+import com.ksoichiro.task.dto.TaskDTO;
 import com.ksoichiro.task.form.TaskCreateForm;
 import com.ksoichiro.task.form.TaskSearchForm;
 import com.ksoichiro.task.form.TaskUpdateForm;
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.Date;
 
 @Controller
 @RequestMapping("/task")
@@ -55,7 +58,10 @@ public class TaskController {
     @RequestMapping(value = "/today", method = RequestMethod.POST)
     public String todaySearch(@AuthenticationPrincipal Account account, TaskSearchForm taskSearchForm, Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("allTaskStatus", TaskStatusEnum.values());
-        model.addAttribute("tasks", taskService.findByAccountAndScheduledAtIsToday(account, pageable));
+        TaskDTO dto = new TaskDTO();
+        BeanUtils.copyProperties(taskSearchForm, dto);
+        dto.setScheduledAt(new Date());
+        model.addAttribute("tasks", taskService.findByAccountAndConditions(account, dto, pageable));
         return "task/today";
     }
 
@@ -69,7 +75,9 @@ public class TaskController {
     @RequestMapping(value = "/all", method = RequestMethod.POST)
     public String allSearch(@AuthenticationPrincipal Account account, TaskSearchForm taskSearchForm, Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("allTaskStatus", TaskStatusEnum.values());
-        model.addAttribute("tasks", taskService.findByAccount(account, pageable));
+        TaskDTO dto = new TaskDTO();
+        BeanUtils.copyProperties(taskSearchForm, dto);
+        model.addAttribute("tasks", taskService.findByAccountAndConditions(account, dto, pageable));
         return "task/all";
     }
 
