@@ -4,6 +4,7 @@ import com.ksoichiro.task.constant.TaskStatusEnum;
 import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.domain.Task;
 import com.ksoichiro.task.form.TaskCreateForm;
+import com.ksoichiro.task.form.TaskSearchForm;
 import com.ksoichiro.task.form.TaskUpdateForm;
 import com.ksoichiro.task.service.TagService;
 import com.ksoichiro.task.service.TaskService;
@@ -44,14 +45,30 @@ public class TaskController {
         return taskService.countByAccount(account).toString();
     }
 
-    @RequestMapping("/today")
-    public String today(@AuthenticationPrincipal Account account, Model model, @PageableDefault Pageable pageable) {
+    @RequestMapping(value = "/today", method = RequestMethod.GET)
+    public String today(@AuthenticationPrincipal Account account, TaskSearchForm taskSearchForm, Model model, @PageableDefault Pageable pageable) {
+        model.addAttribute("allTaskStatus", TaskStatusEnum.values());
         model.addAttribute("tasks", taskService.findByAccountAndScheduledAtIsToday(account, pageable));
         return "task/today";
     }
 
-    @RequestMapping("/all")
-    public String all(@AuthenticationPrincipal Account account, Model model, @PageableDefault Pageable pageable) {
+    @RequestMapping(value = "/today", method = RequestMethod.POST)
+    public String todaySearch(@AuthenticationPrincipal Account account, TaskSearchForm taskSearchForm, Model model, @PageableDefault Pageable pageable) {
+        model.addAttribute("allTaskStatus", TaskStatusEnum.values());
+        model.addAttribute("tasks", taskService.findByAccountAndScheduledAtIsToday(account, pageable));
+        return "task/today";
+    }
+
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    public String all(@AuthenticationPrincipal Account account, TaskSearchForm taskSearchForm, Model model, @PageableDefault Pageable pageable) {
+        model.addAttribute("allTaskStatus", TaskStatusEnum.values());
+        model.addAttribute("tasks", taskService.findByAccount(account, pageable));
+        return "task/all";
+    }
+
+    @RequestMapping(value = "/all", method = RequestMethod.POST)
+    public String allSearch(@AuthenticationPrincipal Account account, TaskSearchForm taskSearchForm, Model model, @PageableDefault Pageable pageable) {
+        model.addAttribute("allTaskStatus", TaskStatusEnum.values());
         model.addAttribute("tasks", taskService.findByAccount(account, pageable));
         return "task/all";
     }

@@ -3,8 +3,58 @@
 
 <div th:fragment="list (url)">
 
-<div class="pull-right">
-    <a th:href="@{/task/create}" class="btn btn-primary"><i class="fa fa-plus"></i> <span th:text="#{task.create}"></span></a>
+<div class="row">
+    <div class="col-sm-10">
+        <form th:action="${url}" th:object="${taskSearchForm}" method="post" class="row col-sm-8">
+            <div class="input-group">
+                <input type="text" class="form-control" th:placeholder="#{task.search}" />
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit"><i class="fa fa-search fa-fw" aria-hidden="true"></i>&#160;</button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#search-modal">
+                        &#160;<span class="caret"></span>
+                    </button>
+                </span>
+            </div>
+        </form>
+
+        <div class="modal fade" id="search-modal" tabindex="-1" role="dialog" aria-labelledby="search-modal-label">
+            <form th:action="${url}" th:object="${taskSearchForm}" method="post" class="form-horizontal">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="search-modal-label" th:text="#{general.search.options}"></h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group form-group-sm">
+                                <label class="control-label col-sm-2" th:for="status" th:text="#{task.status}"></label>
+                                <div class="col-sm-10">
+                                    <!--/*
+                                        th:selected does not work with th:field.
+                                        http://forum.thymeleaf.org/th-selected-not-working-on-multiple-select-td4025883.html#a4025884
+                                    */-->
+                                    <select class="form-control" id="status" name="status" aria-describedby="status-status">
+                                        <option th:each="status : ${allTaskStatus}"
+                                                th:selected="${status == taskSearchForm.status}"
+                                                th:value="${status.code}"
+                                                th:text="${{status}}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-search fa-fw" aria-hidden="true"></i>&#160;</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-sm-2">
+        <div class="pull-right">
+            <a th:href="@{/task/create}" class="btn btn-primary"><i class="fa fa-plus"></i> <span th:text="#{task.create}"></span></a>
+        </div>
+    </div>
 </div>
 
 <table class="table table-striped">
