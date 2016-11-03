@@ -14,6 +14,11 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
         + "WHERE t.account = ?1 ")
     Page<Task> findByAccount(Account account, Pageable pageable);
 
+    @Query("SELECT count(t) from #{#entityName} t "
+        + "WHERE t.account = ?1 "
+        + "AND t.scheduledAt = ?2 ")
+    Long countByAccountAndScheduledAt(Account account, Date scheduledAt);
+
     @Query("SELECT t from #{#entityName} t "
         + "WHERE t.account = ?1 "
         + "AND t.scheduledAt = ?2 ")

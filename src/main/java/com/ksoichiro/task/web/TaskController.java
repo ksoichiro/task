@@ -20,6 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/task")
@@ -30,6 +31,12 @@ public class TaskController {
 
     @Autowired
     private TagService tagService;
+
+    @RequestMapping("/today/count")
+    @ResponseBody
+    public String countTaskToday(@AuthenticationPrincipal Account account) {
+        return taskService.countByAccountAndScheduledAtIsToday(account).toString();
+    }
 
     @RequestMapping("/today")
     public String today(@AuthenticationPrincipal Account account, Model model, @PageableDefault Pageable pageable) {

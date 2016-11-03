@@ -95,3 +95,23 @@
     font-size: floor((@font-size-base * 2));
   }
 }
+
+li {
+  .icon-link-badge {
+    .count {
+      &:extend(.badge);
+      &:extend(.pull-right);
+      font-weight: normal;
+      background-color: @brand-primary;
+      color: #fff;
+    }
+  }
+  &.active {
+    .icon-link-badge {
+      .count {
+        background-color: #fff;
+        color: @brand-primary;
+      }
+    }
+  }
+}

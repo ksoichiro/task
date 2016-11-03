@@ -27,6 +27,10 @@ public class TaskService {
         return taskRepository.findByAccount(account, pageable);
     }
 
+    public Long countByAccountAndScheduledAtIsToday(Account account) {
+        return taskRepository.countByAccountAndScheduledAt(account, DateUtils.truncateTime(new Date()));
+    }
+
     public Page<Task> findByAccountAndScheduledAtIsToday(Account account, Pageable pageable) {
         return taskRepository.findByAccountAndScheduledAt(account, DateUtils.truncateTime(new Date()), pageable);
     }
