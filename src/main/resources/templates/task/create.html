@@ -26,7 +26,7 @@
 
     <div class="form-group has-feedback" th:classappend="${#fields.hasErrors('tags')}? 'has-error'">
         <label class="control-label" th:for="tags" th:text="#{task.tag}"></label>
-        <select multiple="multiple" class="form-control" th:field="*{tags}">
+        <select multiple="multiple" class="chosen-select" th:attr="data-placeholder=#{tag.select-some-tags}" th:field="*{tags}">
             <option th:each="tag : ${myTags}" th:value="${tag.id}" th:text="${tag.name}"></option>
         </select>
     </div>
