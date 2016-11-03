@@ -12,6 +12,7 @@
     <tr>
         <th th:text="#{task.name}"></th>
         <th th:text="#{task.status}"></th>
+        <th th:text="#{task.tag}"></th>
         <th th:text="#{task.scheduled-at}"></th>
         <th th:text="#{task.created-at}"></th>
         <th>&#160;</th>
@@ -21,6 +22,9 @@
     <tr th:each="entity : ${tasks}">
         <td th:text="${entity.name}"></td>
         <td th:text="${{entity.status}}"></td>
+        <td><!--/*/<th:block th:each="tag : ${entity.tags}">
+            <span class="label label-primary" style="display: inline-block;" th:text="${tag.name}"></span>
+        </th:block>/*/--></td>
         <td th:text="${{entity.scheduledAt}}"></td>
         <td th:text="${{entity.createdAt}}"></td>
         <td><a th:href="@{/task/update/__${entity.id}__}" class="btn btn-xs btn-default" data-toggle="tooltip" data-placement="top" th:title="#{general.edit}"><i th:replace="_fragments/fa :: fa-fw(edit)"></i></a></td>

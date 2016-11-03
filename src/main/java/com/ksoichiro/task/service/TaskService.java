@@ -1,7 +1,9 @@
 package com.ksoichiro.task.service;
 
 import com.ksoichiro.task.domain.Account;
+import com.ksoichiro.task.domain.Tag;
 import com.ksoichiro.task.domain.Task;
+import com.ksoichiro.task.domain.TaskTag;
 import com.ksoichiro.task.repository.TaskRepository;
 import com.ksoichiro.task.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -47,6 +51,9 @@ public class TaskService {
         }
         if (task.getStatus() != null) {
             toUpdate.setStatus(task.getStatus());
+        }
+        if (task.getTags() != null) {
+            toUpdate.setTags(task.getTags());
         }
         toUpdate.setUpdatedAt(new Date());
         return taskRepository.save(toUpdate);

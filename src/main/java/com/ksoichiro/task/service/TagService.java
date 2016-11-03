@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class TagService {
@@ -19,6 +20,10 @@ public class TagService {
 
     public Page<Tag> findByAccount(Account account, Pageable pageable) {
         return tagRepository.findByAccount(account, pageable);
+    }
+
+    public List<Tag> findByAccount(Account account) {
+        return tagRepository.findByAccount(account);
     }
 
     public Tag findByIdAndAccount(Integer id, Account account) {

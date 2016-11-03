@@ -5,17 +5,17 @@ import com.ksoichiro.task.domain.converter.TaskStatusConverter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
+@ToString(exclude = {"tags"})
 @AllArgsConstructor
 @Slf4j
 public class Task extends BaseEntity {
@@ -28,6 +28,12 @@ public class Task extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Account account;
+
+    @OneToMany
+    @JoinTable(name = "TaskTag",
+        joinColumns = @JoinColumn(name = "task_id"),
+        inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private List<Tag> tags;
 
     public Task() {
     }

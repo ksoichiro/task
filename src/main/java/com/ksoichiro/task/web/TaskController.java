@@ -5,6 +5,7 @@ import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.domain.Task;
 import com.ksoichiro.task.form.TaskCreateForm;
 import com.ksoichiro.task.form.TaskUpdateForm;
+import com.ksoichiro.task.service.TagService;
 import com.ksoichiro.task.service.TaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -27,6 +28,9 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
+    @Autowired
+    private TagService tagService;
+
     @RequestMapping("/today")
     public String today(@AuthenticationPrincipal Account account, Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("tasks", taskService.findByAccountAndScheduledAtIsToday(account, pageable));
@@ -40,15 +44,16 @@ public class TaskController {
     }
 
     @RequestMapping("/create")
-    public String create(TaskCreateForm taskCreateForm, BindingResult bindingResult, Model model) {
+    public String create(@AuthenticationPrincipal Account account, TaskCreateForm taskCreateForm, BindingResult bindingResult, Model model) {
         model.addAttribute("allTaskStatus", TaskStatusEnum.values());
+        model.addAttribute("myTags", tagService.findByAccount(account));
         return "task/create";
     }
 
     @RequestMapping(value = "/create-save", method = RequestMethod.POST)
     public String createSave(@AuthenticationPrincipal Account account, @Validated TaskCreateForm taskCreateForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            return create(taskCreateForm, bindingResult, model);
+            return create(account, taskCreateForm, bindingResult, model);
         }
         try {
             Task task = new Task();
@@ -58,7 +63,7 @@ public class TaskController {
         } catch (Exception e) {
             log.warn("Failed to create task for account {}", account.getId(), e);
             bindingResult.reject("error.task.create");
-            return create(taskCreateForm, bindingResult, model);
+            return create(account, taskCreateForm, bindingResult, model);
         }
         return "redirect:/task/today";
     }
@@ -70,6 +75,7 @@ public class TaskController {
         Task task = taskService.findByIdAndAccount(id, account);
         BeanUtils.copyProperties(task, taskUpdateForm);
         model.addAttribute("allTaskStatus", TaskStatusEnum.values());
+        model.addAttribute("myTags", tagService.findByAccount(account));
         return "task/update";
     }
 

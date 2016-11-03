@@ -4,6 +4,7 @@ spring:
     thymeleaf:
         cache: false
     jpa:
+        show-sql: true
         hibernate:
             ddl-auto: ''
     mvc:

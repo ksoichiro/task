@@ -11,16 +11,20 @@ import java.util.Date;
 
 public interface TaskRepository extends JpaRepository<Task, Integer> {
     @Query("SELECT t from #{#entityName} t "
-        + "WHERE t.account = ?1")
+        + "WHERE t.account = ?1 ")
     Page<Task> findByAccount(Account account, Pageable pageable);
 
     @Query("SELECT t from #{#entityName} t "
         + "WHERE t.account = ?1 "
-        + "AND t.scheduledAt = ?2")
+        + "AND t.scheduledAt = ?2 ")
     Page<Task> findByAccountAndScheduledAt(Account account, Date scheduledAt, Pageable pageable);
 
-    @Query("SELECT t from #{#entityName} t "
+    @Query(value = "SELECT t from #{#entityName} t "
+        + "LEFT OUTER JOIN FETCH t.tags tg "
         + "WHERE t.id = ?1 "
-        + "AND t.account = ?2")
+        + "AND t.account = ?2 ",
+        countQuery = "SELECT count(t) from Task t "
+            + "WHERE t.id = ?1 "
+            + "AND t.account = ?2 ")
     Task findByIdAndAccount(Integer id, Account account);
 }
