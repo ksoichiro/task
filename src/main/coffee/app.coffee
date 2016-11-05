@@ -13,8 +13,14 @@ $ ->
           response
 
   # Toggle showing/hiding sidebar
+  $sidebar = $('#sidebar')
+  $mainContent = $('#main-content')
+  toggleSidebar = ->
+    $sidebar.toggleClass 'sidebar-open'
+    $mainContent.toggleClass 'sidebar-open col-sm-offset-3 col-md-offset-2'
+
   $('[data-toggle="sidebar"]').on 'click', (e) ->
     # Prevent URL changes
     e.preventDefault()
-    $('#sidebar').toggleClass 'sidebar-open'
-    $('#main-content').toggleClass 'disable-offset'
+    toggleSidebar()
+    Cookies.set 'sidebar', $sidebar.hasClass('sidebar-open'), expires: 7

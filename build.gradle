@@ -68,6 +68,7 @@ webResource {
             install name: 'html5shiv', version: '3.7.2', filter: ["dist/*.min.js"]
             install name: 'chosen', version: '1.6.2', filter: ["*.js"]
             install name: 'bootstrap-chosen', version: '1.0.1', filter: ["*.png"]
+            install name: 'js-cookie', version: '2.1.3'
         }
     }
 }
