@@ -35,8 +35,8 @@
     <div class="content row">
         <div class="col-sm-3 col-md-2 sidebar affix sidebar-menu">
             <ul class="nav nav-sidebar">
-                <li id="nav-item-task-today" th:classappend="${active} == 'task-today' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link-badge(calendar, @{/task/today}, #{title.task.today}, '-')"></a></li>
-                <li id="nav-item-task-all" th:classappend="${active} == 'task-all' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link-badge(list, @{/task/all}, #{title.task.all}, '-')"></a></li>
+                <li th:classappend="${active} == 'task-today' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link-badge(calendar, @{/task/today}, #{title.task.today}, '-', @{/task/today/count})"></a></li>
+                <li th:classappend="${active} == 'task-all' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link-badge(list, @{/task/all}, #{title.task.all}, '-', @{/task/all/count})"></a></li>
             </ul>
             <ul class="nav nav-sidebar">
                 <li th:classappend="${active} == 'tag' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link(tags, @{/tag}, #{title.tag})"></a></li>
@@ -60,11 +60,5 @@
 <script th:src="@{/lib/bootstrap/dist/js/bootstrap.min.js}"></script>
 <script th:src="@{/lib/chosen/chosen.jquery.js}"></script>
 <script th:src="@{/js/app.js}"></script>
-<script th:inline="javascript">
-/*<![CDATA[*/
-  get(/*[[@{/task/today/count}]]*/, '#nav-item-task-today .icon-link-badge .count');
-  get(/*[[@{/task/all/count}]]*/, '#nav-item-task-all .icon-link-badge .count');
-/*]]>*/
-</script>
 </body>
 </html>

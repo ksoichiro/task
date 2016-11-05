@@ -3,9 +3,9 @@
 
 <a th:fragment="icon-link (name, href, text)" th:href="${href}"><i th:class="|fa fa-${name} fa-fw|" aria-hidden="true"></i>&#160;<span th:text="${text}"></span></a>
 
-<a th:fragment="icon-link-badge (name, href, text, badge)" class="icon-link-badge" th:href="${href}">
+<a th:fragment="icon-link-badge (name, href, text, badge, url)" class="icon-link-badge" th:href="${href}">
     <i th:class="|fa fa-${name} fa-fw|" aria-hidden="true"></i>&#160;<span th:text="${text}"></span>
-    <span class="count" th:text="${badge}"></span>
+    <span class="count" th:text="${badge}" th:attr="data-api='get',data-from=${url}"></span>
 </a>
 
 <i th:fragment="fa-fw (name)" th:href="${href}" th:class="|fa fa-${name} fa-fw|" aria-hidden="true"></i>
