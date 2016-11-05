@@ -8,6 +8,9 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
+            <div class="navbar-left">
+                <a href="#" data-toggle="sidebar"><i class="fa fa-bars fa-fw navbar-text hamburger"></i></a>
+            </div>
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
@@ -19,9 +22,9 @@
     </div>
 </nav>
 
-<div id="styles" class="container-fluid scroll-spied" data-spy="scroll" data-target=".sidebar-menu" data-offset="50">
+<div class="container-fluid scroll-spied" data-spy="scroll" data-target="#sidebar" data-offset="50">
     <div class="content row">
-        <div class="col-sm-3 col-md-2 sidebar affix sidebar-menu" data-offset="50">
+        <div class="col-sm-3 col-md-2 affix" id="sidebar" th:classappend="${sidebar} ? 'sidebar-open'">
             <ul class="nav nav-sidebar">
                 <li><a href="#buttons">Buttons</a></li>
                 <li><a href="#tables">Tables</a></li>
@@ -33,7 +36,7 @@
                 <li><a href="#alerts">Alerts</a></li>
             </ul>
         </div>
-        <div id="main-content" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">
+        <div id="main-content" class="col-sm-9 col-md-10" th:classappend="${sidebar} ? 'col-sm-offset-3 col-md-offset-2' : 'sidebar-open'">
             <div class="custom-panel">
                 <div class="custom-panel-body">
                     <h2 id="buttons">Buttons</h2>
@@ -266,6 +269,7 @@
 <script th:src="@{/lib/jquery/dist/jquery.min.js}"></script>
 <script th:src="@{/lib/bootstrap/dist/js/bootstrap.min.js}"></script>
 <script th:src="@{/lib/chosen/chosen.jquery.js}"></script>
+<script th:src="@{/lib/js-cookie/src/js.cookie.js}"></script>
 <script th:src="@{/js/app.js}"></script>
 </body>
 </html>
