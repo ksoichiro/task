@@ -31,9 +31,9 @@
     </div>
 </nav>
 
-<div class="container-fluid">
+<div class="container-fluid scroll-spied" data-spy="scroll" data-target=".sidebar-menu" data-offset="50">
     <div class="content row">
-        <div class="col-sm-3 col-md-2 sidebar">
+        <div class="col-sm-3 col-md-2 sidebar affix sidebar-menu">
             <ul class="nav nav-sidebar">
                 <li id="nav-item-task-today" th:classappend="${active} == 'task-today' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link-badge(calendar, @{/task/today}, #{title.task.today}, '-')"></a></li>
                 <li id="nav-item-task-all" th:classappend="${active} == 'task-all' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link-badge(list, @{/task/all}, #{title.task.all}, '-')"></a></li>
