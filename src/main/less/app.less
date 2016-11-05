@@ -5,6 +5,8 @@
 @chosen-sprite-path: "../lib/bootstrap-chosen/chosen-sprite.png";
 @chosen-sprite-retina-path: "../lib/bootstrap-chosen/chosen-sprite@2x.png";
 
+@sidebar-transition: 0.2s;
+
 .form-signin {
   width: 300px;
   margin: 80px auto;
@@ -38,12 +40,12 @@
   }
 
   .content {
-    .sidebar {
+    #sidebar {
       display: none;
     }
 
     @media (min-width: 768px) {
-      .sidebar {
+      #sidebar {
         position: fixed;
         top: 51px;
         bottom: 0;
@@ -55,6 +57,13 @@
         overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
         background-color: #fff;
         border-right: 1px solid #eee;
+
+        // Hide sidebar by default
+        margin-left: -100%;
+        transition-duration: @sidebar-transition;
+        &.sidebar-open {
+          margin-left: 0;
+        }
       }
     }
 
@@ -76,6 +85,12 @@
 
     #main-content {
       padding: 20px;
+
+      transition-duration: @sidebar-transition;
+      &.disable-offset {
+        margin-left: 0;
+        width: 100%;
+      }
 
       .custom-panel {
         &:extend(.panel);
