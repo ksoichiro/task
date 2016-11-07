@@ -2,11 +2,11 @@
 <body>
 
 <div th:fragment="input-text (field, label, autofocus)" class="form-group has-feedback" th:classappend="${#fields.hasErrors('__${field}__')}? 'has-error'">
-    <label class="control-label" th:for="${field}" th:text="${label}"></label>
-    <input type="text" class="form-control" th:field="*{__${field}__}" aria-describedby="${field}-status" th:autofocus="${autofocus}? 'autofocus'"/>
-    <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" th:if="${#fields.hasErrors('__${field}__')}"></span>
-    <span id="${field}-status" class="sr-only">(error)</span>
-    <div class="help-block" th:if="${#fields.hasErrors('__${field}__')}" th:errors="*{__${field}__}">Error</div>
+  <label class="control-label" th:for="${field}" th:text="${label}"></label>
+  <input type="text" class="form-control" th:field="*{__${field}__}" aria-describedby="${field}-status" th:autofocus="${autofocus}? 'autofocus'"/>
+  <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" th:if="${#fields.hasErrors('__${field}__')}"></span>
+  <span id="${field}-status" class="sr-only">(error)</span>
+  <div class="help-block" th:if="${#fields.hasErrors('__${field}__')}" th:errors="*{__${field}__}">Error</div>
 </div>
 
 </body>

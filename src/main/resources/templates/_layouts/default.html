@@ -1,62 +1,62 @@
 <html xmlns:th="" xmlns:layout="">
 <head>
-    <!--/*/<th:block th:include="_fragments/head :: head" />/*/-->
-    <title layout:title-pattern="$CONTENT_TITLE | $DECORATOR_TITLE">Task</title>
+  <!--/*/<th:block th:include="_fragments/head :: head" />/*/-->
+  <title layout:title-pattern="$CONTENT_TITLE | $DECORATOR_TITLE">Task</title>
 </head>
 <body id="main-body">
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <div class="navbar-left">
-                <a href="#" data-toggle="sidebar"><i class="fa fa-bars fa-fw navbar-text hamburger"></i></a>
-            </div>
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" th:href="@{/home}" th:text="#{title}"></a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-circle fa-fw" aria-hidden="true"></i>&#160;<span th:text="${#authentication.name}"></span> <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a th:href="@{/account}"><i class="fa fa-user fa-fw" aria-hidden="true"></i>&#160;<span th:text="#{general.profile}"></span></a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a th:href="@{/logout}"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i>&#160;<span th:text="#{logout}"></span></a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <div class="navbar-left">
+        <a href="#" data-toggle="sidebar"><i class="fa fa-bars fa-fw navbar-text hamburger"></i></a>
+      </div>
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" th:href="@{/home}" th:text="#{title}"></a>
     </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-circle fa-fw" aria-hidden="true"></i>&#160;<span th:text="${#authentication.name}"></span> <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a th:href="@{/account}"><i class="fa fa-user fa-fw" aria-hidden="true"></i>&#160;<span th:text="#{general.profile}"></span></a></li>
+            <li role="separator" class="divider"></li>
+            <li><a th:href="@{/logout}"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i>&#160;<span th:text="#{logout}"></span></a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
 </nav>
 
 <div class="container-fluid scroll-spied" data-spy="scroll" data-target="#sidebar" data-offset="50">
-    <div class="content row">
-        <div class="col-sm-3 col-md-2 affix" id="sidebar" th:classappend="${sidebar} ? 'sidebar-open'">
-            <ul class="nav nav-sidebar">
-                <li th:classappend="${active} == 'task-today' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link-badge(calendar, @{/task/today}, #{title.task.today}, '-', @{/task/today/count})"></a></li>
-                <li th:classappend="${active} == 'task-all' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link-badge(list, @{/task/all}, #{title.task.all}, '-', @{/task/all/count})"></a></li>
-            </ul>
-            <ul class="nav nav-sidebar">
-                <li th:classappend="${active} == 'tag' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link(tags, @{/tag}, #{title.tag})"></a></li>
-                <li th:classappend="${active} == 'team' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link(group, @{/team}, #{title.team})"></a></li>
-            </ul>
-            <ul class="nav nav-sidebar">
-                <li th:classappend="${active} == 'admin-team' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link(group, @{/admin/team}, #{title.admin.team})"></a></li>
-                <li th:classappend="${active} == 'admin-role' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link(user-circle-o, @{/admin/role}, #{title.admin.role})"></a></li>
-                <li th:classappend="${active} == 'admin-permission' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link(shield, @{/admin/permission}, #{title.admin.permission})"></a></li>
-            </ul>
-        </div>
-        <div id="main-content" class="col-sm-9 col-md-10" th:classappend="${sidebar} ? 'col-sm-offset-3 col-md-offset-2' : 'sidebar-open'">
-            <div class="custom-panel">
-                <div class="custom-panel-body" layout:fragment="content"></div>
-            </div>
-        </div>
+  <div class="content row">
+    <div class="col-sm-3 col-md-2 affix" id="sidebar" th:classappend="${sidebar} ? 'sidebar-open'">
+      <ul class="nav nav-sidebar">
+        <li th:classappend="${active} == 'task-today' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link-badge(calendar, @{/task/today}, #{title.task.today}, '-', @{/task/today/count})"></a></li>
+        <li th:classappend="${active} == 'task-all' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link-badge(list, @{/task/all}, #{title.task.all}, '-', @{/task/all/count})"></a></li>
+      </ul>
+      <ul class="nav nav-sidebar">
+        <li th:classappend="${active} == 'tag' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link(tags, @{/tag}, #{title.tag})"></a></li>
+        <li th:classappend="${active} == 'team' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link(group, @{/team}, #{title.team})"></a></li>
+      </ul>
+      <ul class="nav nav-sidebar">
+        <li th:classappend="${active} == 'admin-team' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link(group, @{/admin/team}, #{title.admin.team})"></a></li>
+        <li th:classappend="${active} == 'admin-role' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link(user-circle-o, @{/admin/role}, #{title.admin.role})"></a></li>
+        <li th:classappend="${active} == 'admin-permission' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link(shield, @{/admin/permission}, #{title.admin.permission})"></a></li>
+      </ul>
     </div>
+    <div id="main-content" class="col-sm-9 col-md-10" th:classappend="${sidebar} ? 'col-sm-offset-3 col-md-offset-2' : 'sidebar-open'">
+      <div class="custom-panel">
+        <div class="custom-panel-body" layout:fragment="content"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script th:src="@{/lib/jquery/dist/jquery.min.js}"></script>

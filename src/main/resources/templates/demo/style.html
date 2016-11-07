@@ -1,269 +1,269 @@
 <html xmlns:th="">
 <head>
-    <!--/*/<th:block th:include="_fragments/head :: head" />/*/-->
-    <title th:text="#{title}">Task</title>
+  <!--/*/<th:block th:include="_fragments/head :: head" />/*/-->
+  <title th:text="#{title}">Task</title>
 </head>
 <body id="main-body">
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <div class="navbar-left">
-                <a href="#" data-toggle="sidebar"><i class="fa fa-bars fa-fw navbar-text hamburger"></i></a>
-            </div>
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" th:href="@{/home}">Styles</a>
-        </div>
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <div class="navbar-left">
+        <a href="#" data-toggle="sidebar"><i class="fa fa-bars fa-fw navbar-text hamburger"></i></a>
+      </div>
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" th:href="@{/home}">Styles</a>
     </div>
+  </div>
 </nav>
 
 <div class="container-fluid scroll-spied" data-spy="scroll" data-target="#sidebar" data-offset="50">
-    <div class="content row">
-        <div class="col-sm-3 col-md-2 affix" id="sidebar" th:classappend="${sidebar} ? 'sidebar-open'">
-            <ul class="nav nav-sidebar">
-                <li><a href="#buttons">Buttons</a></li>
-                <li><a href="#tables">Tables</a></li>
-                <li><a href="#forms">Forms</a></li>
-                <li><a href="#contextual-background">Contextual background</a></li>
-                <li><a href="#navbars">Navbars</a></li>
-                <li><a href="#pagination">Pagination</a></li>
-                <li><a href="#labels">Labels</a></li>
-                <li><a href="#alerts">Alerts</a></li>
-            </ul>
-        </div>
-        <div id="main-content" class="col-sm-9 col-md-10" th:classappend="${sidebar} ? 'col-sm-offset-3 col-md-offset-2' : 'sidebar-open'">
-            <div class="custom-panel">
-                <div class="custom-panel-body">
-                    <h2 id="buttons">Buttons</h2>
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <p>
-                                <button type="button" class="btn btn-primary">Default button</button>
-                                <button type="button" class="btn btn-default">Default button</button>
-                            </p>
-                        </div>
-                    </div>
-
-                    <h2 id="tables">Tables</h2>
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>A</th>
-                                    <th>B</th>
-                                    <th>C</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>a</td>
-                                    <td>あ</td>
-                                    <td>100</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>b</td>
-                                    <td>あ</td>
-                                    <td>1000</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <h2 id="forms">Forms</h2>
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <form>
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Email address</label>
-                                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="exampleInputPassword1">Password</label>
-                                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="exampleInputFile">File input</label>
-                                    <input type="file" id="exampleInputFile" />
-                                    <p class="help-block">Example block-level help text here.</p>
-                                </div>
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" /> Check me out
-                                    </label>
-                                </div>
-                                <button type="submit" class="btn btn-default">Submit</button>
-                            </form>
-
-                            <h3>Textarea</h3>
-                            <textarea class="form-control" rows="3"></textarea>
-
-                            <h3>Select</h3>
-                            <select class="form-control">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                            </select>
-                            <select multiple="multiple" class="form-control">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                            </select>
-
-                            <h3>Horizontal</h3>
-                            <form class="form-horizontal">
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Email</label>
-                                    <div class="col-sm-10">
-                                        <p class="form-control-static">email@example.com</p>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputPassword" class="col-sm-2 control-label">Password</label>
-                                    <div class="col-sm-10">
-                                        <input type="password" class="form-control" id="inputPassword" placeholder="Password" />
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
-                    <h2 id="contextual-background">Contextual background</h2>
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <p class="bg-primary">Message</p>
-                            <p class="bg-success">Message</p>
-                            <p class="bg-info">Message</p>
-                            <p class="bg-warning">Message</p>
-                            <p class="bg-danger">Message</p>
-                        </div>
-                    </div>
-
-                    <h2 id="navbars">Navbars</h2>
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <nav class="navbar navbar-inverse">
-                                <div class="container-fluid">
-                                    <div class="navbar-header">
-                                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                                            <span class="sr-only">Toggle navigation</span>
-                                            <span class="icon-bar"></span>
-                                            <span class="icon-bar"></span>
-                                            <span class="icon-bar"></span>
-                                        </button>
-                                        <a class="navbar-brand" href="#">Brand</a>
-                                    </div>
-                                    <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1">
-                                        <ul class="nav navbar-nav navbar-right">
-                                            <li class="dropdown">
-                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-circle fa-fw" aria-hidden="true"></i>&#160;<span>User</span> <span class="caret"></span></a>
-                                                <ul class="dropdown-menu">
-                                                    <li><a href="#"><i class="fa fa-user fa-fw" aria-hidden="true"></i>&#160;<span th:text="#{general.profile}"></span></a></li>
-                                                    <li role="separator" class="divider"></li>
-                                                    <li><a href="#"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i>&#160;<span th:text="#{logout}"></span></a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </nav>
-                        </div>
-                    </div>
-
-                    <h2 id="pagination">Pagination</h2>
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <p>
-                                <nav aria-label="Page navigation">
-                                    <ul class="pagination">
-                                        <li>
-                                            <a href="#" aria-label="Previous">
-                                                <span aria-hidden="true">&laquo;</span>
-                                            </a>
-                                        </li>
-                                        <li><a href="#">1</a></li>
-                                        <li><a href="#">2</a></li>
-                                        <li><a href="#">3</a></li>
-                                        <li><a href="#">4</a></li>
-                                        <li><a href="#">5</a></li>
-                                        <li>
-                                            <a href="#" aria-label="Next">
-                                                <span aria-hidden="true">&raquo;</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </p>
-                            <p>
-                                <nav aria-label="Page navigation">
-                                    <ul class="pagination">
-                                        <li class="disabled">
-                                            <a href="#" aria-label="Previous">
-                                                <span aria-hidden="true">&laquo;</span>
-                                            </a>
-                                        </li>
-                                        <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-                                        <li><a href="#">2</a></li>
-                                        <li><a href="#">3</a></li>
-                                        <li><a href="#">4</a></li>
-                                        <li><a href="#">5</a></li>
-                                        <li>
-                                            <a href="#" aria-label="Next">
-                                                <span aria-hidden="true">&raquo;</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </p>
-                        </div>
-                    </div>
-
-                    <h2 id="labels">Labels</h2>
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <p>
-                                <span class="label label-default">Default</span>
-                                <span class="label label-primary">Primary</span>
-                                <span class="label label-success">Success</span>
-                                <span class="label label-info">Info</span>
-                                <span class="label label-warning">Warning</span>
-                                <span class="label label-danger">Danger</span>
-                            </p>
-                        </div>
-                    </div>
-
-                    <h2 id="alerts">Alerts</h2>
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <div class="alert alert-success" role="alert"><strong><i class="fa fa-check fa-fw" aria-hidden="true"></i>&#160;Success</strong>&#160;Message</div>
-                            <div class="alert alert-info" role="alert"><strong><i class="fa fa-info-circle fa-fw" aria-hidden="true"></i>&#160;Info</strong>&#160;Message</div>
-                            <div class="alert alert-warning" role="alert"><strong><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i>&#160;Warning</strong>&#160;Message</div>
-                            <div class="alert alert-danger" role="alert"><strong><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i>&#160;Danger</strong>&#160;Message</div>
-                        </div>
-                    </div>
-
-                    <!--<h2></h2>-->
-                    <!--<div class="panel panel-default">-->
-                        <!--<div class="panel-body">-->
-                        <!--</div>-->
-                    <!--</div>-->
-                </div>
-            </div>
-        </div>
+  <div class="content row">
+    <div class="col-sm-3 col-md-2 affix" id="sidebar" th:classappend="${sidebar} ? 'sidebar-open'">
+      <ul class="nav nav-sidebar">
+        <li><a href="#buttons">Buttons</a></li>
+        <li><a href="#tables">Tables</a></li>
+        <li><a href="#forms">Forms</a></li>
+        <li><a href="#contextual-background">Contextual background</a></li>
+        <li><a href="#navbars">Navbars</a></li>
+        <li><a href="#pagination">Pagination</a></li>
+        <li><a href="#labels">Labels</a></li>
+        <li><a href="#alerts">Alerts</a></li>
+      </ul>
     </div>
+    <div id="main-content" class="col-sm-9 col-md-10" th:classappend="${sidebar} ? 'col-sm-offset-3 col-md-offset-2' : 'sidebar-open'">
+      <div class="custom-panel">
+        <div class="custom-panel-body">
+          <h2 id="buttons">Buttons</h2>
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <p>
+                <button type="button" class="btn btn-primary">Default button</button>
+                <button type="button" class="btn btn-default">Default button</button>
+              </p>
+            </div>
+          </div>
+
+          <h2 id="tables">Tables</h2>
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <table class="table">
+                <thead>
+                <tr>
+                  <th>#</th>
+                  <th>A</th>
+                  <th>B</th>
+                  <th>C</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>a</td>
+                  <td>あ</td>
+                  <td>100</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>b</td>
+                  <td>あ</td>
+                  <td>1000</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <h2 id="forms">Forms</h2>
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <form>
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Email address</label>
+                  <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email" />
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Password</label>
+                  <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" />
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputFile">File input</label>
+                  <input type="file" id="exampleInputFile" />
+                  <p class="help-block">Example block-level help text here.</p>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" /> Check me out
+                  </label>
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+              </form>
+
+              <h3>Textarea</h3>
+              <textarea class="form-control" rows="3"></textarea>
+
+              <h3>Select</h3>
+              <select class="form-control">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+              </select>
+              <select multiple="multiple" class="form-control">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+              </select>
+
+              <h3>Horizontal</h3>
+              <form class="form-horizontal">
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Email</label>
+                  <div class="col-sm-10">
+                    <p class="form-control-static">email@example.com</p>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputPassword" class="col-sm-2 control-label">Password</label>
+                  <div class="col-sm-10">
+                    <input type="password" class="form-control" id="inputPassword" placeholder="Password" />
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <h2 id="contextual-background">Contextual background</h2>
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <p class="bg-primary">Message</p>
+              <p class="bg-success">Message</p>
+              <p class="bg-info">Message</p>
+              <p class="bg-warning">Message</p>
+              <p class="bg-danger">Message</p>
+            </div>
+          </div>
+
+          <h2 id="navbars">Navbars</h2>
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <nav class="navbar navbar-inverse">
+                <div class="container-fluid">
+                  <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                      <span class="sr-only">Toggle navigation</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Brand</a>
+                  </div>
+                  <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-circle fa-fw" aria-hidden="true"></i>&#160;<span>User</span> <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                          <li><a href="#"><i class="fa fa-user fa-fw" aria-hidden="true"></i>&#160;<span th:text="#{general.profile}"></span></a></li>
+                          <li role="separator" class="divider"></li>
+                          <li><a href="#"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i>&#160;<span th:text="#{logout}"></span></a></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </nav>
+            </div>
+          </div>
+
+          <h2 id="pagination">Pagination</h2>
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <p>
+                <nav aria-label="Page navigation">
+                  <ul class="pagination">
+                    <li>
+                      <a href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                      </a>
+                    </li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li>
+                      <a href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+              </p>
+              <p>
+                <nav aria-label="Page navigation">
+                  <ul class="pagination">
+                    <li class="disabled">
+                      <a href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                      </a>
+                    </li>
+                    <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li>
+                      <a href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+              </p>
+            </div>
+          </div>
+
+          <h2 id="labels">Labels</h2>
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <p>
+                <span class="label label-default">Default</span>
+                <span class="label label-primary">Primary</span>
+                <span class="label label-success">Success</span>
+                <span class="label label-info">Info</span>
+                <span class="label label-warning">Warning</span>
+                <span class="label label-danger">Danger</span>
+              </p>
+            </div>
+          </div>
+
+          <h2 id="alerts">Alerts</h2>
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <div class="alert alert-success" role="alert"><strong><i class="fa fa-check fa-fw" aria-hidden="true"></i>&#160;Success</strong>&#160;Message</div>
+              <div class="alert alert-info" role="alert"><strong><i class="fa fa-info-circle fa-fw" aria-hidden="true"></i>&#160;Info</strong>&#160;Message</div>
+              <div class="alert alert-warning" role="alert"><strong><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i>&#160;Warning</strong>&#160;Message</div>
+              <div class="alert alert-danger" role="alert"><strong><i class="fa fa-exclamation-triangle fa-fw" aria-hidden="true"></i>&#160;Danger</strong>&#160;Message</div>
+            </div>
+          </div>
+
+          <!--<h2></h2>-->
+          <!--<div class="panel panel-default">-->
+            <!--<div class="panel-body">-->
+            <!--</div>-->
+          <!--</div>-->
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script th:src="@{/lib/jquery/dist/jquery.min.js}"></script>

@@ -1,16 +1,16 @@
 <html xmlns:th="">
 <head>
-    <!--/*/<th:block th:include="_fragments/head :: head" />/*/-->
-    <title th:text="#{title}">Task</title>
+  <!--/*/<th:block th:include="_fragments/head :: head" />/*/-->
+  <title th:text="#{title}">Task</title>
 </head>
 <form class="form-signin" th:action="@{/login}" method="post">
-    <div class="alert alert-warning" th:if="${param.error}" th:text="#{error.login}"></div>
-    <div class="alert alert-info" th:if="${param.logout}" th:text="#{logout.success}"></div>
+  <div class="alert alert-warning" th:if="${param.error}" th:text="#{error.login}"></div>
+  <div class="alert alert-info" th:if="${param.logout}" th:text="#{logout.success}"></div>
 
-    <div class="form-group">
-        <input type="text" id="username" name="username" class="form-control" th:placeholder="#{login.username}" required="true" autofocus="autofocus" />
-        <input type="password" id="password" name="password" class="form-control" th:placeholder="#{login.password}" required="true" />
-    </div>
-    <button class="btn btn-primary btn-block" type="submit" th:text="#{login.submit}"></button>
+  <div class="form-group">
+    <input type="text" id="username" name="username" class="form-control" th:placeholder="#{login.username}" required="true" autofocus="autofocus" />
+    <input type="password" id="password" name="password" class="form-control" th:placeholder="#{login.password}" required="true" />
+  </div>
+  <button class="btn btn-primary btn-block" type="submit" th:text="#{login.submit}"></button>
 </form>
 </html>
