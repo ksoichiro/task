@@ -21,6 +21,7 @@ def vJavaLang = '1.8'
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
+apply plugin: 'jacoco'
 apply plugin: 'com.github.ksoichiro.web.resource'
 apply plugin: 'com.github.ksoichiro.build.info'
 
@@ -83,6 +84,14 @@ bootRun {
         systemProperty "spring.profiles.active", System.properties['spring.profiles.active']
     }
 }
+
+test {
+    jacoco {
+        excludes = ['com.ksoichiro.task.domain.Q*']
+    }
+}
+
+check.dependsOn 'jacocoTestReport'
 
 def querydslDir = file('src/main/generated')
 
