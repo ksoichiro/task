@@ -1,17 +1,18 @@
 package com.ksoichiro.task.web;
 
 import com.ksoichiro.task.aspect.AbstractControllerAdvice;
+import com.ksoichiro.task.domain.Account;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ErrorAttributes;
 import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -48,7 +49,7 @@ public class AppErrorController extends AbstractControllerAdvice implements Erro
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         Object result = pjp.proceed();
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
-        log.info("{} {}", response.getStatus(), request.getRequestURI());
+        log.info("{} {} {}", response.getStatus(), request.getRequestURI(), getUsername());
         return result;
     }
 
@@ -56,7 +57,7 @@ public class AppErrorController extends AbstractControllerAdvice implements Erro
     @ExceptionHandler(Throwable.class)
     public String handleException(Throwable throwable, Model model) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        log.error("500 {} {}", request.getRequestURI(), throwable.toString(), throwable);
+        log.error("500 {} {} {}", request.getRequestURI(), throwable.toString(), getUsername(), throwable);
         Map<String, Object> attrs = new HashMap<>();
         attrs.put("status", 500);
         attrs.put("error", "Internal Server Error");
@@ -73,12 +74,23 @@ public class AppErrorController extends AbstractControllerAdvice implements Erro
         try {
             Integer status = (Integer) attrs.get("status");
             if (status == 404) {
-                log.info("404 {}", attrs.get("path"));
+                log.info("404 {} {}", attrs.get("path"), getUsername());
             }
             model.addAttribute("guidance", messageSource.getMessage("http.error." + status, null, Locale.getDefault()));
         } catch (NoSuchMessageException ignore) {
         }
 
         return "error";
+    }
+
+    private String getUsername() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal == null) {
+            return "";
+        }
+        if (principal instanceof Account) {
+            return ((Account) principal).getUsername();
+        }
+        return principal.toString();
     }
 }
