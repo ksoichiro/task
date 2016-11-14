@@ -8,6 +8,8 @@ import com.ksoichiro.task.repository.TagRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
@@ -25,6 +27,16 @@ public class TagServiceTests extends AbstractTransactionalJUnit4SpringContextTes
 
     @Autowired
     private TagService tagService;
+
+    @Test
+    public void findByAccount() {
+        Account account = accountRepository.findOne(1);
+        Page<Tag> page = tagRepository.findByAccount(account, new PageRequest(0, 10));
+        assertThat(page, is(notNullValue()));
+        Tag tag = page.getContent().get(0);
+        assertThat(tag, is(notNullValue()));
+        assertThat(tag.getName(), is("Work"));
+    }
 
     @Test
     public void create() {
