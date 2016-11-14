@@ -51,6 +51,7 @@ dependencies {
     compile "org.mariadb.jdbc:mariadb-java-client"
     compile "com.mysema.querydsl:querydsl-jpa:${querydslVersion}"
     testCompile "org.springframework.boot:spring-boot-starter-test"
+    testCompile "org.springframework.security:spring-security-test"
 }
 
 jar {

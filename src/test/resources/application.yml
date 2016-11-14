@@ -2,8 +2,13 @@ spring:
     datasource:
         data: classpath:/data-empty.sql
     jpa:
+        show-sql: true
         hibernate:
             ddl-auto: ''
+    aop:
+        proxy-target-class: true
 application:
     security:
         enabled: false
+endpoints:
+    enabled: false
