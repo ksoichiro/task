@@ -19,6 +19,6 @@ public class TeamAccount extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Account account;
 
-    private TeamAccount() {
+    public TeamAccount() {
     }
 }

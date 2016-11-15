@@ -88,15 +88,17 @@ bootRun {
     }
 }
 
-test {
-    jacoco {
-        excludes = ['com.ksoichiro.task.domain.Q*']
-    }
-}
-
 jacocoTestReport {
     reports {
         xml.enabled true
+    }
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it,
+                exclude: [
+                    'com/ksoichiro/task/domain/Q*',
+                ])
+        })
     }
 }
 
@@ -146,9 +148,9 @@ idea {
         outputDir = file("${buildDir}/classes/main")
 
         excludeDirs += [
-                file('src/main/resources/static/css'),
-                file('src/main/resources/static/js'),
-                file('src/main/resources/static/lib'),
+            file('src/main/resources/static/css'),
+            file('src/main/resources/static/js'),
+            file('src/main/resources/static/lib'),
         ]
     }
     project {
