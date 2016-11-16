@@ -152,4 +152,46 @@ public class TaskControllerTests extends AbstractTransactionalJUnit4SpringContex
         assertThat(result.getStatus(), is(TaskStatusEnum.DOING));
         assertThat(result.getTags().stream().map(Tag::getName).collect(Collectors.toList()), containsInAnyOrder("Work", "Private"));
     }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void update() throws Exception {
+        Account account = accountRepository.findByUsername("a");
+        MvcResult mvcResult = mockMvc.perform(get("/task/update/4").with(user(account)))
+            .andExpect(status().isOk())
+            .andExpect(model().attributeExists("allTaskStatus"))
+            .andExpect(view().name("task/update"))
+            .andReturn();
+        ModelMap modelMap = mvcResult.getModelAndView().getModelMap();
+        Object listObj = modelMap.get("allTaskStatus");
+        assertThat(listObj, is(notNullValue()));
+        TaskStatusEnum[] status = (TaskStatusEnum[]) listObj;
+        assertThat(status, is(TaskStatusEnum.values()));
+        listObj = modelMap.get("myTags");
+        assertThat(listObj, is(notNullValue()));
+        List<Tag> tags = (List<Tag>) listObj;
+        assertThat(tags.stream().map(Tag::getName).collect(Collectors.toList()), is(Arrays.asList("Work", "Private")));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void updateSave() throws Exception {
+        Account account = accountRepository.findByUsername("a");
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("id", "4");
+        params.add("name", "Foo");
+        params.add("status", "2");
+        params.add("tags", "1");
+        params.add("tags", "2");
+        mockMvc.perform(post("/task/update-save")
+            .with(user(account)).with(csrf()).params(params))
+            .andExpect(status().is3xxRedirection())
+            .andReturn();
+        Page<Task> page = taskRepository.findByAccount(account, new PageRequest(0, 10));
+        Task result = page.getContent().stream().filter(t -> "Foo".equals(t.getName())).findFirst().get();
+        assertThat(result, is(notNullValue()));
+        assertThat(result.getName(), is("Foo"));
+        assertThat(result.getStatus(), is(TaskStatusEnum.HOLD));
+        assertThat(result.getTags().stream().map(Tag::getName).collect(Collectors.toList()), containsInAnyOrder("Work", "Private"));
+    }
 }
