@@ -1,6 +1,6 @@
 package com.ksoichiro.task.web;
 
-import com.ksoichiro.task.App;
+import com.ksoichiro.task.MvcTestConfiguration;
 import com.ksoichiro.task.constant.TaskStatusEnum;
 import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.domain.Tag;
@@ -10,13 +10,10 @@ import com.ksoichiro.task.repository.TaskRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -39,9 +36,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Sql({"/truncate.sql", "/web/data-task.sql"})
-@SpringApplicationConfiguration(App.class)
-@WebAppConfiguration
-@TestPropertySource(properties = "application.security.enabled: true")
+@MvcTestConfiguration
 public class TaskControllerTests extends AbstractTransactionalJUnit4SpringContextTests {
     @Autowired
     private WebApplicationContext webApplicationContext;
