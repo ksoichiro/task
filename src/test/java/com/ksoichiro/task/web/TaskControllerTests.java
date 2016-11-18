@@ -1,6 +1,6 @@
 package com.ksoichiro.task.web;
 
-import com.ksoichiro.task.MvcTestConfiguration;
+import com.ksoichiro.task.annotation.MvcTestConfiguration;
 import com.ksoichiro.task.constant.TaskStatusEnum;
 import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.domain.Tag;

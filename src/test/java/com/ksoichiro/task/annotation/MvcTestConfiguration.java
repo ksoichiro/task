@@ -1,5 +1,6 @@
-package com.ksoichiro.task;
+package com.ksoichiro.task.annotation;
 
+import com.ksoichiro.task.App;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.web.WebAppConfiguration;
