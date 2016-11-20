@@ -10,21 +10,21 @@ import java.util.HashMap;
 import java.util.List;
 
 @RunWith(Theories.class)
-public class TaskCreateFormTests extends AbstractFormTests<TaskCreateForm> {
+public class TagUpdateFormTests extends AbstractFormTests<TagUpdateForm> {
     @DataPoints
-    public static final List<Fixture<TaskCreateForm>> FIXTURES = new ArrayList<Fixture<TaskCreateForm>>(){
+    public static final List<Fixture<TagUpdateForm>> FIXTURES = new ArrayList<Fixture<TagUpdateForm>>(){
         {
-            add(new Fixture<>(new TaskCreateForm(null, null, null), true, new HashMap<String, String>() {
+            add(new Fixture<>(new TagUpdateForm(null, null), true, new HashMap<String, String>() {
                 {
+                    put("id", "may not be null");
                     put("name", "may not be empty");
-                    put("status", "may not be null");
                 }
             }));
         }
     };
 
     @Theory
-    public void validate(Fixture<TaskCreateForm> fixture) throws Exception {
-        super.validate(fixture ,TaskCreateForm.class);
+    public void validate(Fixture<TagUpdateForm> fixture) throws Exception {
+        super.validate(fixture ,TagUpdateForm.class);
     }
 }

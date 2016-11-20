@@ -10,12 +10,13 @@ import java.util.HashMap;
 import java.util.List;
 
 @RunWith(Theories.class)
-public class TaskCreateFormTests extends AbstractFormTests<TaskCreateForm> {
+public class TaskUpdateFormTests extends AbstractFormTests<TaskUpdateForm> {
     @DataPoints
-    public static final List<Fixture<TaskCreateForm>> FIXTURES = new ArrayList<Fixture<TaskCreateForm>>(){
+    public static final List<Fixture<TaskUpdateForm>> FIXTURES = new ArrayList<Fixture<TaskUpdateForm>>(){
         {
-            add(new Fixture<>(new TaskCreateForm(null, null, null), true, new HashMap<String, String>() {
+            add(new Fixture<>(new TaskUpdateForm(null, null, null, null), true, new HashMap<String, String>() {
                 {
+                    put("id", "may not be null");
                     put("name", "may not be empty");
                     put("status", "may not be null");
                 }
@@ -24,7 +25,7 @@ public class TaskCreateFormTests extends AbstractFormTests<TaskCreateForm> {
     };
 
     @Theory
-    public void validate(Fixture<TaskCreateForm> fixture) throws Exception {
-        super.validate(fixture ,TaskCreateForm.class);
+    public void validate(Fixture<TaskUpdateForm> fixture) throws Exception {
+        super.validate(fixture ,TaskUpdateForm.class);
     }
 }
