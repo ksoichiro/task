@@ -17,6 +17,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -121,6 +122,10 @@ public class TaskController {
     public String updateSave(@AuthenticationPrincipal Account account,
                              @Validated TaskUpdateForm taskUpdateForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            if (StringUtils.isEmpty(taskUpdateForm.getId())) {
+                // Can't decide the task to update
+                return "redirect:/task/today";
+            }
             return update(taskUpdateForm.getId(), account, taskUpdateForm, bindingResult, model);
         }
         try {

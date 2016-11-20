@@ -149,6 +149,21 @@ public class TaskControllerTests extends AbstractTransactionalJUnit4SpringContex
     }
 
     @Test
+    public void createSaveWithValidationError() throws Exception {
+        Account account = accountRepository.findByUsername("a");
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("name", "");
+        params.add("status", "1");
+        params.add("tags", "1");
+        params.add("tags", "2");
+        mockMvc.perform(post("/task/create-save")
+            .with(user(account)).with(csrf()).params(params))
+            .andExpect(status().isOk())
+            .andExpect(model().hasErrors())
+            .andExpect(model().attributeHasFieldErrors("taskCreateForm", "name"));
+    }
+
+    @Test
     @SuppressWarnings("unchecked")
     public void update() throws Exception {
         Account account = accountRepository.findByUsername("a");
@@ -188,5 +203,34 @@ public class TaskControllerTests extends AbstractTransactionalJUnit4SpringContex
         assertThat(result.getName(), is("Foo"));
         assertThat(result.getStatus(), is(TaskStatusEnum.HOLD));
         assertThat(result.getTags().stream().map(Tag::getName).collect(Collectors.toList()), containsInAnyOrder("Work", "Private"));
+    }
+
+    @Test
+    public void updateSaveWithValidationErrorOnId() throws Exception {
+        Account account = accountRepository.findByUsername("a");
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("id", "");
+        params.add("name", "Foo");
+        params.add("status", "2");
+        params.add("tags", "1");
+        params.add("tags", "2");
+        mockMvc.perform(post("/task/update-save")
+            .with(user(account)).with(csrf()).params(params))
+            .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    public void updateSaveWithValidationError() throws Exception {
+        Account account = accountRepository.findByUsername("a");
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("id", "4");
+        params.add("name", "");
+        params.add("status", "2");
+        params.add("tags", "1");
+        params.add("tags", "2");
+        mockMvc.perform(post("/task/update-save")
+            .with(user(account)).with(csrf()).params(params))
+            .andExpect(status().isOk())
+            .andExpect(model().attributeHasFieldErrors("taskUpdateForm", "name"));
     }
 }

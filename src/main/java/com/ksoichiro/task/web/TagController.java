@@ -14,6 +14,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -73,6 +74,10 @@ public class TagController {
     public String updateSave(@AuthenticationPrincipal Account account,
                              @Validated TagUpdateForm tagUpdateForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            if (StringUtils.isEmpty(tagUpdateForm.getId())) {
+                // Can't decide the tag to update
+                return "redirect:/tag";
+            }
             return update(tagUpdateForm.getId(), account, tagUpdateForm, bindingResult, model);
         }
         try {
