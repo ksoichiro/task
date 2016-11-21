@@ -3,6 +3,7 @@ package com.ksoichiro.task.form;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.junit.Before;
+import org.junit.Test;
 import org.springframework.beans.BeanUtils;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ValidationUtils;
@@ -11,6 +12,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import java.util.Map;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -30,8 +32,16 @@ public abstract class AbstractFormTests<F> {
         validator = createValidator();
     }
 
-    protected void validate(Fixture<F> fixture, Class<F> formClass) throws Exception {
-        F form = formClass.newInstance();
+    @Test
+    public void formEquals() throws Exception {
+        // Just for increasing test coverage
+        F form = getFormClass().newInstance();
+        F form2 = getFormClass().newInstance();
+        assertThat(form, equalTo(form2));
+    }
+
+    protected void validate(Fixture<F> fixture) throws Exception {
+        F form = getFormClass().newInstance();
         BeanUtils.copyProperties(fixture, form);
         BindException errors = new BindException(form, "form");
         ValidationUtils.invokeValidator(validator, form, errors);
@@ -42,6 +52,8 @@ public abstract class AbstractFormTests<F> {
             assertThat(errors.getFieldError(e).getDefaultMessage(), is(fixture.errors.get(e)));
         });
     }
+
+    protected abstract Class<F> getFormClass();
 
     private Validator createValidator() {
         LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();

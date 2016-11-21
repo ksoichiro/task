@@ -24,6 +24,11 @@ public class TagCreateFormTests extends AbstractFormTests<TagCreateForm> {
 
     @Theory
     public void validate(Fixture<TagCreateForm> fixture) throws Exception {
-        super.validate(fixture ,TagCreateForm.class);
+        super.validate(fixture);
+    }
+
+    @Override
+    protected Class<TagCreateForm> getFormClass() {
+        return TagCreateForm.class;
     }
 }

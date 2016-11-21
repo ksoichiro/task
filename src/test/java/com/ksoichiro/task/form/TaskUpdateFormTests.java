@@ -26,6 +26,11 @@ public class TaskUpdateFormTests extends AbstractFormTests<TaskUpdateForm> {
 
     @Theory
     public void validate(Fixture<TaskUpdateForm> fixture) throws Exception {
-        super.validate(fixture ,TaskUpdateForm.class);
+        super.validate(fixture);
+    }
+
+    @Override
+    protected Class<TaskUpdateForm> getFormClass() {
+        return TaskUpdateForm.class;
     }
 }

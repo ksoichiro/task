@@ -32,7 +32,7 @@ public class TagService {
 
     @Transactional
     public Tag create(Tag tag) {
-        validateName(tag);
+        validateName(tag.getName(), tag.getAccount());
         return tagRepository.save(tag);
     }
 
@@ -43,16 +43,17 @@ public class TagService {
             throw new IllegalStateException("Tag cannot be updated by this account: owner: " + tag.getAccount().getId() + ", updated by: " + toUpdate.getAccount().getId());
         }
         if (tag.getName() != null && !tag.getName().equals(toUpdate.getName())) {
+            validateName(tag.getName(), tag.getAccount());
             toUpdate.setName(tag.getName());
-            validateName(toUpdate);
         }
         toUpdate.setUpdatedAt(new Date());
         return tagRepository.save(toUpdate);
     }
 
-    void validateName(Tag tag) {
-        if (tagRepository.findByNameAndAccount(tag.getName(), tag.getAccount()) != null) {
-            throw new DuplicateTagNameException("Tag name is already registered: " + tag.getName());
+    void validateName(String name, Account account) {
+        Tag duplicated = tagRepository.findByNameAndAccount(name, account);
+        if (duplicated != null) {
+            throw new DuplicateTagNameException("Tag name is already registered: " + name + ", id: " + duplicated.getId());
         }
     }
 }
