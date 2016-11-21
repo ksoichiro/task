@@ -75,6 +75,26 @@ public class TaskControllerTests extends AbstractTransactionalJUnit4SpringContex
     }
 
     @Test
+    @SuppressWarnings("unchecked")
+    public void allSearch() throws Exception {
+        Account account = accountRepository.findByUsername("a");
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("name", "mail ");
+        MvcResult mvcResult = mockMvc.perform(post("/task/all")
+            .with(user(account)).with(csrf()).params(params))
+            .andExpect(status().isOk())
+            .andExpect(model().attributeExists("tasks"))
+            .andExpect(view().name("task/all"))
+            .andReturn();
+        ModelMap modelMap = mvcResult.getModelAndView().getModelMap();
+        Object listObj = modelMap.get("tasks");
+        assertThat(listObj, is(notNullValue()));
+        assertThat(listObj, is(instanceOf(Page.class)));
+        Page<Task> page = (Page<Task>) listObj;
+        assertThat(page.getTotalElements(), is(3L));
+    }
+
+    @Test
     public void countTaskAll() throws Exception {
         Account account = accountRepository.findByUsername("a");
         mockMvc.perform(get("/task/all/count").with(user(account)))
@@ -97,6 +117,26 @@ public class TaskControllerTests extends AbstractTransactionalJUnit4SpringContex
         assertThat(listObj, is(instanceOf(Page.class)));
         Page<Task> page = (Page<Task>) listObj;
         assertThat(page.getTotalElements(), is(3L));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void todaySearch() throws Exception {
+        Account account = accountRepository.findByUsername("a");
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("name", "mail ");
+        MvcResult mvcResult = mockMvc.perform(post("/task/today")
+            .with(user(account)).with(csrf()).params(params))
+            .andExpect(status().isOk())
+            .andExpect(model().attributeExists("tasks"))
+            .andExpect(view().name("task/today"))
+            .andReturn();
+        ModelMap modelMap = mvcResult.getModelAndView().getModelMap();
+        Object listObj = modelMap.get("tasks");
+        assertThat(listObj, is(notNullValue()));
+        assertThat(listObj, is(instanceOf(Page.class)));
+        Page<Task> page = (Page<Task>) listObj;
+        assertThat(page.getTotalElements(), is(2L));
     }
 
     @Test
