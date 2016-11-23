@@ -18,6 +18,7 @@ public class ServiceAdvice {
     public void service() {
     }
 
+    @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
     @Around("service() && execution(* com.ksoichiro.task.service.*.*(..))")
     public Object execution(ProceedingJoinPoint pjp) throws Throwable {
         try {

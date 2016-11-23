@@ -43,6 +43,7 @@ public class Account extends User {
     }
 
     @PrePersist
+    @SuppressWarnings("unused")
     public void prePersist() {
         if (createdAt == null) {
             createdAt = new Date();
