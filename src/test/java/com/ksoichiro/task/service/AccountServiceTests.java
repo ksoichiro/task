@@ -28,6 +28,13 @@ public class AccountServiceTests extends AbstractTransactionalJUnit4SpringContex
     private AccountService accountService;
 
     @Test
+    public void findById() {
+        Account account = accountService.findById(1);
+        assertThat(account, is(notNullValue()));
+        assertThat(account.getId(), is(1));
+    }
+
+    @Test
     public void create() {
         Account account = new Account();
         account.setUsername("foo");

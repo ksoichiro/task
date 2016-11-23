@@ -125,6 +125,7 @@ public class TaskControllerTests extends AbstractTransactionalJUnit4SpringContex
         Account account = accountRepository.findByUsername("a");
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("name", "mail ");
+        params.add("status", "0");
         MvcResult mvcResult = mockMvc.perform(post("/task/today")
             .with(user(account)).with(csrf()).params(params))
             .andExpect(status().isOk())

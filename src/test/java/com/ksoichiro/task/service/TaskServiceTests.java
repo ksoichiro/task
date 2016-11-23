@@ -12,9 +12,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 @Sql({"/truncate.sql", "/data-task.sql"})
@@ -56,5 +54,15 @@ public class TaskServiceTests extends AbstractTransactionalJUnit4SpringContextTe
         assertThat(updated.getStatus(), is(TaskStatusEnum.DONE));
         assertThat(updated.getCreatedAt(), is(notNullValue()));
         assertThat(updated.getUpdatedAt(), is(greaterThan(updated.getCreatedAt())));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void updateWithDifferentAccount() {
+        Account account = accountRepository.findOne(2);
+        Task task = new Task();
+        task.setId(1);
+        task.setAccount(account);
+        task.setName("Test");
+        taskService.update(task);
     }
 }
