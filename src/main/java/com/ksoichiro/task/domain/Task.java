@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ToString(exclude = {"tags"})
+@ToString(exclude = {"parentTask", "tags"})
 @AllArgsConstructor
 @Slf4j
 public class Task extends BaseEntity {
@@ -23,6 +23,9 @@ public class Task extends BaseEntity {
 
     @Convert(converter = TaskStatusConverter.class)
     private TaskStatusEnum status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Task parentTask;
 
     private Date scheduledAt;
 

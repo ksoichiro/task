@@ -8,3 +8,4 @@ truncate table `team_account`;
 truncate table `role`;
 truncate table `permission`;
 truncate table `role_permission`;
+truncate table `project`;

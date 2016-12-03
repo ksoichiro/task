@@ -38,7 +38,7 @@ public class TaskStatusConverterTests extends AbstractTransactionalJUnit4SpringC
         Account account = accountRepository.findOne(1);
 
         for (TaskStatusEnum e : TaskStatusEnum.values()) {
-            Task task = new Task("a", e, null, account, null);
+            Task task = new Task("a", e, null, null, account, null);
             task = taskRepository.save(task);
             Integer status = Integer.parseInt(jdbcTemplate.queryForList("SELECT * FROM task WHERE id = ?", new Object[]{task.getId()}).get(0).get("status").toString());
             assertThat(status, is(e.getCode()));

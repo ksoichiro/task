@@ -9,6 +9,7 @@ drop table if exists `team_account`;
 drop table if exists `role`;
 drop table if exists `permission`;
 drop table if exists `role_permission`;
+drop table if exists `project`;
 
 create table `account` (
     `id` int primary key auto_increment,
@@ -26,6 +27,7 @@ create table `task` (
     `name` varchar(255) not null,
     `status` int not null default 0,
     `account_id` int not null,
+    `parent_task_id` int,
     `scheduled_at` date,
     `created_at` datetime(3),
     `updated_at` datetime(3)
@@ -93,6 +95,14 @@ create table `role_permission` (
     `id` int primary key auto_increment,
     `role_id` int not null,
     `permission_id` int not null,
+    `created_at` datetime(3),
+    `updated_at` datetime(3)
+);
+
+create table `project` (
+    `id` int primary key auto_increment,
+    `team_id` int not null default 0,
+    `name` varchar(255) not null,
     `created_at` datetime(3),
     `updated_at` datetime(3)
 );
