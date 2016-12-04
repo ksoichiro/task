@@ -1,8 +1,10 @@
 package com.ksoichiro.task.web;
 
 import com.ksoichiro.task.domain.Account;
+import com.ksoichiro.task.domain.Project;
 import com.ksoichiro.task.dto.ProjectDTO;
 import com.ksoichiro.task.form.ProjectCreateForm;
+import com.ksoichiro.task.form.ProjectUpdateForm;
 import com.ksoichiro.task.service.ProjectService;
 import com.ksoichiro.task.service.TeamService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,8 +15,10 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -49,6 +53,30 @@ public class ProjectController {
         projectDTO.setAccount(account);
         BeanUtils.copyProperties(projectCreateForm, projectDTO);
         projectService.create(projectDTO);
+        return "redirect:/project";
+    }
+
+    @RequestMapping("/update/{id}")
+    public String update(@PathVariable Integer id,
+                         @AuthenticationPrincipal Account account, ProjectUpdateForm projectUpdateForm, BindingResult bindingResult, Model model) {
+        Project project = projectService.findByIdAndAccount(id, account);
+        BeanUtils.copyProperties(project, projectUpdateForm);
+        return "project/update";
+    }
+
+    @RequestMapping(value = "/update-save", method = RequestMethod.POST)
+    public String updateSave(@AuthenticationPrincipal Account account, @Validated ProjectUpdateForm projectUpdateForm, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            if (StringUtils.isEmpty(projectUpdateForm.getId())) {
+                // Can't decide the task to update
+                return "redirect:/task/today";
+            }
+            return update(projectUpdateForm.getId(), account, projectUpdateForm, bindingResult, model);
+        }
+        ProjectDTO projectDTO = new ProjectDTO();
+        projectDTO.setAccount(account);
+        BeanUtils.copyProperties(projectUpdateForm, projectDTO);
+        projectService.update(projectDTO);
         return "redirect:/project";
     }
 }

@@ -15,6 +15,13 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
         + "where ta.account = ?1 ")
     Page<Project> findByAccount(Account account, Pageable pageable);
 
+    @Query(value = "SELECT p from #{#entityName} p "
+        + "JOIN FETCH p.team t "
+        + "JOIN FETCH t.teamAccounts ta "
+        + "WHERE p.id = ?1 "
+        + "AND ta.account = ?2 ")
+    Project findByIdAndAccount(Integer id, Account account);
+
     @Query("select p from #{#entityName} p "
         + "where p.team = ?1 ")
     Page<Project> findByTeam(Team team, Pageable pageable);

@@ -30,6 +30,10 @@ public class ProjectService {
         return projectRepository.findByAccount(account, pageable);
     }
 
+    public Project findByIdAndAccount(Integer id, Account account) {
+        return projectRepository.findByIdAndAccount(id, account);
+    }
+
     public Page<Project> findByTeam(Team team, Pageable pageable) {
         if (team == null || team.getId() == null) {
             throw new IllegalArgumentException("team is null");

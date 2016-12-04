@@ -1,5 +1,6 @@
 <html xmlns:th="" xmlns:layout=""
-    layout:decorator="_layouts/default">
+    layout:decorator="_layouts/default"
+    th:with="active='project'">
 <head>
   <title th:text="#{title.project}"></title>
 </head>
@@ -11,6 +12,8 @@
   <div class="alert alert-danger" th:if="${#fields.hasErrors('global')}" th:errors="*{global}">Error</div>
 
   <input type="hidden" th:field="*{id}" />
+
+  <div th:replace="_fragments/form :: input-text(field = 'cd', label = #{project.cd}, autofocus = true)"></div>
 
   <div th:replace="_fragments/form :: input-text(field = 'name', label = #{project.name}, autofocus = true)"></div>
 
