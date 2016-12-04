@@ -1,0 +1,23 @@
+<html xmlns:th="" xmlns:layout=""
+    layout:decorator="_layouts/default">
+<head>
+  <title th:text="#{title.team}"></title>
+</head>
+<body>
+
+<div layout:fragment="content">
+
+<form th:action="@{/team/update-save}" th:object="${teamUpdateForm}" method="post">
+  <div class="alert alert-danger" th:if="${#fields.hasErrors('global')}" th:errors="*{global}">Error</div>
+
+  <input type="hidden" th:field="*{id}" />
+
+  <div th:replace="_fragments/form :: input-text(field = 'name', label = #{team.name}, autofocus = true)"></div>
+
+  <button type="submit" class="btn btn-primary"><i th:replace="_fragments/fa :: fa-fw(check)"></i>&#160;<span th:text="#{general.save}"></span></button>
+</form>
+
+</div>
+
+</body>
+</html>

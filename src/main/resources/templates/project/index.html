@@ -1,0 +1,39 @@
+<html xmlns:th="" xmlns:layout=""
+    layout:decorator="_layouts/default"
+    th:with="active='project'">
+<head>
+  <title th:text="#{title.project}"></title>
+</head>
+<body>
+
+<div layout:fragment="content">
+
+<div class="pull-right">
+  <a th:href="@{/project/create}" class="btn btn-primary"><i class="fa fa-plus"></i> <span th:text="#{project.create}"></span></a>
+</div>
+
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th th:text="#{project.cd}"></th>
+    <th th:text="#{project.name}"></th>
+    <th th:text="#{task.created-at}"></th>
+    <th>&#160;</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="entity : ${projects}">
+    <td th:text="${entity.cd}"></td>
+    <td th:text="${entity.name}"></td>
+    <td th:text="${{entity.createdAt}}"></td>
+    <td><a th:href="@{/project/update/__${entity.id}__}" class="btn btn-xs btn-default" data-toggle="tooltip" data-placement="top" th:title="#{general.edit}"><i th:replace="_fragments/fa :: fa-fw(edit)"></i></a></td>
+  </tr>
+  </tbody>
+</table>
+
+<nav th:replace="_fragments/pagination :: pagination(page=${projects}, url=${url})"></nav>
+
+</div>
+
+</body>
+</html>

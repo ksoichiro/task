@@ -102,6 +102,7 @@ create table `role_permission` (
 create table `project` (
     `id` int primary key auto_increment,
     `team_id` int not null default 0,
+    `cd` varchar(255) not null,
     `name` varchar(255) not null,
     `created_at` datetime(3),
     `updated_at` datetime(3)

@@ -5,6 +5,7 @@ truncate table `account`;
 truncate table `task`;
 truncate table `tag`;
 truncate table `team`;
+truncate table `team_account`;
 
 insert into `role` values
 (1, 'admin', 'Administrator', '2016-01-01 00:00:00', '2016-01-01 00:00:00'),
@@ -32,4 +33,9 @@ insert into `tag` values
 (2, 0, 1, 'Routine',  '2016-10-02 09:00:00', '2016-10-02 09:00:00'),
 (3, 0, 1, 'Study',    '2016-10-02 09:00:00', '2016-10-02 09:00:00');
 
-insert into `team` values (0, '', '', '1970-01-01 00:00:00', '1970-01-01 00:00:00');
+insert into `team` values
+(0, '',     '',           '1970-01-01 00:00:00', '1970-01-01 00:00:00'),
+(1, 'devs', 'Developers', '2016-12-03 00:00:00', '2016-12-03 00:00:00');
+
+insert into `team_account` values
+(1, 1, 1, '2016-12-03 00:00:00', '2016-12-03 00:00:00');

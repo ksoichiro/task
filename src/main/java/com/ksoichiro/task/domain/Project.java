@@ -11,11 +11,20 @@ import javax.persistence.ManyToOne;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Project extends BaseEntity {
+    private String cd;
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Team team;
 
     public Project() {
+    }
+
+    @Override
+    public void preSave() {
+        super.preSave();
+        if (team == null) {
+            team = Team.empty();
+        }
     }
 }

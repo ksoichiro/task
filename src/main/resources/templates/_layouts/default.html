@@ -44,6 +44,7 @@
       <ul class="nav nav-sidebar">
         <li th:classappend="${active} == 'tag' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link(tags, @{/tag}, #{title.tag})"></a></li>
         <li th:classappend="${active} == 'team' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link(group, @{/team}, #{title.team})"></a></li>
+        <li th:classappend="${active} == 'project' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link(flag, @{/project}, #{title.project})"></a></li>
       </ul>
       <ul class="nav nav-sidebar">
         <li th:classappend="${active} == 'admin-team' ? 'active' : ''"><a th:replace="_fragments/fa :: icon-link(group, @{/admin/team}, #{title.admin.team})"></a></li>
