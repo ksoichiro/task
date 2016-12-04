@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -84,7 +85,11 @@ public class AppErrorController extends AbstractControllerAdvice implements Erro
     }
 
     private String getUsername() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return "";
+        }
+        Object principal = authentication.getPrincipal();
         if (principal == null) {
             return "";
         }
