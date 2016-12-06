@@ -10,5 +10,7 @@ spring:
 application:
     security:
         enabled: false
+    caching:
+        enabled: false
 endpoints:
     enabled: false

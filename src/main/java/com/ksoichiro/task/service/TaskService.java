@@ -14,6 +14,9 @@ import com.mysema.query.types.Predicate;
 import com.mysema.query.types.path.PathBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -36,6 +39,7 @@ public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
 
+    @Cacheable(cacheNames = "taskCount")
     public Long countByAccount(Account account) {
         return taskRepository.countByAccount(account);
     }
@@ -74,12 +78,13 @@ public class TaskService {
         return new PageImpl<>(content, pageable, total);
     }
 
+    @Cacheable(cacheNames = "taskCount", key = "{ #account, T(com.ksoichiro.task.util.DateUtils).today() }")
     public Long countByAccountAndScheduledAtIsToday(Account account) {
-        return taskRepository.countByAccountAndScheduledAt(account, DateUtils.truncateTime(new Date()));
+        return taskRepository.countByAccountAndScheduledAt(account, DateUtils.today());
     }
 
     public Page<Task> findByAccountAndScheduledAtIsToday(Account account, Pageable pageable) {
-        return taskRepository.findByAccountAndScheduledAt(account, DateUtils.truncateTime(new Date()), pageable);
+        return taskRepository.findByAccountAndScheduledAt(account, DateUtils.today(), pageable);
     }
 
     public Task findByIdAndAccount(Integer id, Account account) {
@@ -87,11 +92,17 @@ public class TaskService {
     }
 
     @Transactional
+    @Caching(evict = {
+        @CacheEvict(cacheNames = "taskCount", key = "#task.account"),
+        @CacheEvict(cacheNames = "taskCount", key = "{ #task.account, T(com.ksoichiro.task.util.DateUtils).today() }")})
     public Task create(Task task) {
         return taskRepository.save(task);
     }
 
     @Transactional
+    @Caching(evict = {
+        @CacheEvict(cacheNames = "taskCount", key = "#task.account"),
+        @CacheEvict(cacheNames = "taskCount", key = "{ #task.account, T(com.ksoichiro.task.util.DateUtils).today() }")})
     public Task update(Task task) {
         Task toUpdate = taskRepository.findOne(task.getId());
         if (!task.getAccount().getId().equals(toUpdate.getAccount().getId())) {

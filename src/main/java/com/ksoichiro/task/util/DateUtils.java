@@ -5,6 +5,10 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 public abstract class DateUtils {
+    public static Date today() {
+        return truncateTime(new Date());
+    }
+
     public static Date truncateTime(Date source) {
         Calendar calendar = GregorianCalendar.getInstance();
         calendar.setTime(source);
