@@ -11,6 +11,8 @@ spring:
         date-format: 'yyyy/MM/dd HH:mm:ss'
     aop:
         proxy-target-class: true
+    cache:
+        type: guava
 server:
     error:
         whitelabel:
