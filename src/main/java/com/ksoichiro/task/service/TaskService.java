@@ -39,7 +39,7 @@ public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
 
-    @Cacheable(cacheNames = "taskCount")
+    @Cacheable(cacheNames = "taskCount", key = "#account.id")
     public Long countByAccount(Account account) {
         return taskRepository.countByAccount(account);
     }
@@ -78,7 +78,7 @@ public class TaskService {
         return new PageImpl<>(content, pageable, total);
     }
 
-    @Cacheable(cacheNames = "taskCount", key = "{ #account, T(com.ksoichiro.task.util.DateUtils).today() }")
+    @Cacheable(cacheNames = "taskCount", key = "#account.id + '-today'")
     public Long countByAccountAndScheduledAtIsToday(Account account) {
         return taskRepository.countByAccountAndScheduledAt(account, DateUtils.today());
     }
@@ -93,16 +93,16 @@ public class TaskService {
 
     @Transactional
     @Caching(evict = {
-        @CacheEvict(cacheNames = "taskCount", key = "#task.account"),
-        @CacheEvict(cacheNames = "taskCount", key = "{ #task.account, T(com.ksoichiro.task.util.DateUtils).today() }")})
+        @CacheEvict(cacheNames = "taskCount", key = "#task.account.id"),
+        @CacheEvict(cacheNames = "taskCount", key = "#task.account.id + '-today'")})
     public Task create(Task task) {
         return taskRepository.save(task);
     }
 
     @Transactional
     @Caching(evict = {
-        @CacheEvict(cacheNames = "taskCount", key = "#task.account"),
-        @CacheEvict(cacheNames = "taskCount", key = "{ #task.account, T(com.ksoichiro.task.util.DateUtils).today() }")})
+        @CacheEvict(cacheNames = "taskCount", key = "#task.account.id"),
+        @CacheEvict(cacheNames = "taskCount", key = "#task.account.id + '-today'")})
     public Task update(Task task) {
         Task toUpdate = taskRepository.findOne(task.getId());
         if (!task.getAccount().getId().equals(toUpdate.getAccount().getId())) {
