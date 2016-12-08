@@ -12,7 +12,10 @@ spring:
     aop:
         proxy-target-class: true
     cache:
-        type: guava
+        type: simple
+logging:
+    level:
+        org.springframework.cache: TRACE
 server:
     error:
         whitelabel:
