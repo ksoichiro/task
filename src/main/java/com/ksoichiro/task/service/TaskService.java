@@ -1,5 +1,6 @@
 package com.ksoichiro.task.service;
 
+import com.ksoichiro.task.constant.Caches;
 import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.domain.QTask;
 import com.ksoichiro.task.domain.Task;
@@ -39,7 +40,7 @@ public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
 
-    @Cacheable(cacheNames = "taskCount", key = "#account.id")
+    @Cacheable(cacheNames = Caches.TASK_COUNT, key = "#account.id")
     public Long countByAccount(Account account) {
         return taskRepository.countByAccount(account);
     }
@@ -78,7 +79,7 @@ public class TaskService {
         return new PageImpl<>(content, pageable, total);
     }
 
-    @Cacheable(cacheNames = "taskCount", key = "#account.id + '-today'")
+    @Cacheable(cacheNames = Caches.TASK_COUNT, key = "#account.id + '-today'")
     public Long countByAccountAndScheduledAtIsToday(Account account) {
         return taskRepository.countByAccountAndScheduledAt(account, DateUtils.today());
     }
@@ -93,16 +94,16 @@ public class TaskService {
 
     @Transactional
     @Caching(evict = {
-        @CacheEvict(cacheNames = "taskCount", key = "#task.account.id"),
-        @CacheEvict(cacheNames = "taskCount", key = "#task.account.id + '-today'")})
+        @CacheEvict(cacheNames = Caches.TASK_COUNT, key = "#task.account.id"),
+        @CacheEvict(cacheNames = Caches.TASK_COUNT, key = "#task.account.id + '-today'")})
     public Task create(Task task) {
         return taskRepository.save(task);
     }
 
     @Transactional
     @Caching(evict = {
-        @CacheEvict(cacheNames = "taskCount", key = "#task.account.id"),
-        @CacheEvict(cacheNames = "taskCount", key = "#task.account.id + '-today'")})
+        @CacheEvict(cacheNames = Caches.TASK_COUNT, key = "#task.account.id"),
+        @CacheEvict(cacheNames = Caches.TASK_COUNT, key = "#task.account.id + '-today'")})
     public Task update(Task task) {
         Task toUpdate = taskRepository.findOne(task.getId());
         if (!task.getAccount().getId().equals(toUpdate.getAccount().getId())) {
