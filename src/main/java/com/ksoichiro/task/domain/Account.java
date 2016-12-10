@@ -2,6 +2,7 @@ package com.ksoichiro.task.domain;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
+@ToString(exclude = {"role", "teamAccounts"})
 public class Account extends User {
     @Id
     @GeneratedValue

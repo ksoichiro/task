@@ -9,5 +9,56 @@
   <div class="help-block" th:if="${#fields.hasErrors('__${field}__')}" th:errors="*{__${field}__}">Error</div>
 </div>
 
+<div th:fragment="select-normal (field, label, options, optionValue)" class="form-group has-feedback" th:classappend="${#fields.hasErrors('__${field}__')}? 'has-error'">
+  <label class="control-label" th:for="${field}" th:text="${label}"></label>
+  <!--/*
+    th:selected does not work with th:field.
+    http://forum.thymeleaf.org/th-selected-not-working-on-multiple-select-td4025883.html#a4025884
+  */-->
+  <select class="form-control" th:id="${field}" th:name="${field}" th:attr="aria-describedby=|status-${field}|">
+    <option th:each="obj : ${__${options}__}"
+            th:value="${obj.__${optionValue}__}"
+            th:text="${{obj}}"
+            th:selected="${#object.__${field}__.__${optionValue}__.equals(obj.__${optionValue}__)}"></option>
+  </select>
+  <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" th:if="${#fields.hasErrors('__${field}__')}"></span>
+  <span th:id="|status-${field}|" class="sr-only">(error)</span>
+  <div class="help-block" th:if="${#fields.hasErrors('__${field}__')}" th:errors="*{__${field}__}">Error</div>
+</div>
+
+<div th:fragment="select-text (field, label, options, optionValue, optionText)" class="form-group has-feedback" th:classappend="${#fields.hasErrors('__${field}__')}? 'has-error'">
+  <label class="control-label" th:for="${field}" th:text="${label}"></label>
+  <!--/*
+    th:selected does not work with th:field.
+    http://forum.thymeleaf.org/th-selected-not-working-on-multiple-select-td4025883.html#a4025884
+  */-->
+  <select class="form-control" th:id="${field}" th:name="${field}" th:attr="aria-describedby=|status-${field}|">
+    <option th:each="obj : ${__${options}__}"
+            th:value="${obj.__${optionValue}__}"
+            th:text="${obj.__${optionText}__}"
+            th:selected="${#object.__${field}__} != null ? ${#object.__${field}__.equals(obj.__${optionValue}__)}"></option>
+  </select>
+  <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" th:if="${#fields.hasErrors('__${field}__')}"></span>
+  <span th:id="|status-${field}|" class="sr-only">(error)</span>
+  <div class="help-block" th:if="${#fields.hasErrors('__${field}__')}" th:errors="*{__${field}__}">Error</div>
+</div>
+
+<div th:fragment="select-multi (field, label, placeholder, options, optionValue, optionText)" class="form-group has-feedback" th:classappend="${#fields.hasErrors('__${field}__')}? 'has-error'">
+  <label class="control-label" th:for="${field}" th:text="${label}"></label>
+  <!--/*
+    th:selected does not work with th:field.
+    http://forum.thymeleaf.org/th-selected-not-working-on-multiple-select-td4025883.html#a4025884
+  */-->
+  <select multiple="multiple" class="chosen-select" th:attr="data-placeholder=${placeholder}" th:id="${field}" th:name="${field}">
+    <option th:each="obj : ${__${options}__}"
+            th:value="${obj.__${optionValue}__}"
+            th:text="${obj.__${optionText}__}"
+            th:selected="${#object.__${field}__}? ${#lists.contains(#object.__${field}__, obj)}"></option>
+  </select>
+  <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" th:if="${#fields.hasErrors('__${field}__')}"></span>
+  <span th:id="|status-${field}|" class="sr-only">(error)</span>
+  <div class="help-block" th:if="${#fields.hasErrors('__${field}__')}" th:errors="*{__${field}__}">Error</div>
+</div>
+
 </body>
 </html>

@@ -14,24 +14,9 @@
 
   <div th:replace="_fragments/form :: input-text(field = 'name', label = #{task.name}, autofocus = true)"></div>
 
-  <div class="form-group has-feedback" th:classappend="${#fields.hasErrors('status')}? 'has-error'">
-    <label class="control-label" th:for="status" th:text="#{task.status}"></label>
-    <select class="form-control" th:field="*{status}" aria-describedby="status-status">
-      <option th:each="status : ${allTaskStatus}"
-          th:value="${status.code}"
-          th:text="${{status}}"></option>
-    </select>
-    <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" th:if="${#fields.hasErrors('status')}"></span>
-    <span id="status-status" class="sr-only">(error)</span>
-    <div class="help-block" th:if="${#fields.hasErrors('status')}" th:errors="*{status}">Error</div>
-  </div>
+  <div th:replace="_fragments/form :: select-normal (field = 'status', label = #{task.status}, options = 'allTaskStatus', optionValue = 'code')"></div>
 
-  <div class="form-group has-feedback" th:classappend="${#fields.hasErrors('tags')}? 'has-error'">
-    <label class="control-label" th:for="tags" th:text="#{task.tag}"></label>
-    <select multiple="multiple" class="chosen-select" th:attr="data-placeholder=#{tag.select-some-tags}" th:field="*{tags}">
-      <option th:each="tag : ${myTags}" th:value="${tag.id}" th:text="${tag.name}" th:selected="${#lists.contains(taskUpdateForm.tags, tag)}"></option>
-    </select>
-  </div>
+  <div th:replace="_fragments/form :: select-multi (field = 'tags', label = #{task.tag}, placeholder = #{tag.select-some-tags}, options = 'myTags', optionValue = 'id', optionText = 'name')"></div>
 
   <button class="btn btn-default submit" th:attr="data-action=@{/task/today}"><i th:replace="_fragments/fa :: fa-fw(remove)"></i>&#160;<span th:text="#{general.cancel}"></span></button>
   <button type="submit" class="btn btn-primary"><i th:replace="_fragments/fa :: fa-fw(check)"></i>&#160;<span th:text="#{general.save}"></span></button>
