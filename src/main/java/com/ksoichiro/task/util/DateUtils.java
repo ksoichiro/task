@@ -1,5 +1,8 @@
 package com.ksoichiro.task.util;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -17,5 +20,17 @@ public abstract class DateUtils {
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         return calendar.getTime();
+    }
+
+    public static String toStringFromDate(Date date, String pattern) {
+        LocalDateTime t = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(pattern);
+        return dtf.format(t);
+    }
+
+    public static Date toDateFromString(String value, String pattern) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(pattern);
+        LocalDateTime t = LocalDateTime.parse(value, dtf);
+        return Date.from(t.atZone(ZoneId.systemDefault()).toInstant());
     }
 }
