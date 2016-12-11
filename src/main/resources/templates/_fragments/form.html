@@ -19,7 +19,7 @@
     <option th:each="obj : ${__${options}__}"
             th:value="${obj.__${optionValue}__}"
             th:text="${{obj}}"
-            th:selected="${#object.__${field}__.__${optionValue}__.equals(obj.__${optionValue}__)}"></option>
+            th:selected="${#object.__${field}__ != null} and ${#object.__${field}__.__${optionValue}__.equals(obj.__${optionValue}__)}"></option>
   </select>
   <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" th:if="${#fields.hasErrors('__${field}__')}"></span>
   <span th:id="|status-${field}|" class="sr-only">(error)</span>
