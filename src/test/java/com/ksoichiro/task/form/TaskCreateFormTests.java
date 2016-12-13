@@ -14,7 +14,7 @@ public class TaskCreateFormTests extends AbstractFormTests<TaskCreateForm> {
     @DataPoints
     public static final List<Fixture<TaskCreateForm>> FIXTURES = new ArrayList<Fixture<TaskCreateForm>>(){
         {
-            add(new Fixture<>(new TaskCreateForm(null, null, null), true, new HashMap<String, String>() {
+            add(new Fixture<>(new TaskCreateForm(null, null, null, null), true, new HashMap<String, String>() {
                 {
                     put("name", "may not be empty");
                     put("status", "may not be null");

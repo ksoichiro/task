@@ -9,6 +9,7 @@ import com.ksoichiro.task.form.TaskSearchForm;
 import com.ksoichiro.task.form.TaskUpdateForm;
 import com.ksoichiro.task.service.TagService;
 import com.ksoichiro.task.service.TaskService;
+import com.ksoichiro.task.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,6 +99,9 @@ public class TaskController {
             Task task = new Task();
             task.setAccount(account);
             BeanUtils.copyProperties(taskCreateForm, task);
+            if (!StringUtils.isEmpty(taskCreateForm.getScheduledAt())) {
+                task.setScheduledAt(DateUtils.toDateFromString(taskCreateForm.getScheduledAt()));
+            }
             taskService.create(task);
         } catch (Exception e) {
             log.warn("Failed to create task for account {}", account.getId(), e);

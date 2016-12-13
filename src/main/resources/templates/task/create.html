@@ -14,6 +14,8 @@
 
   <div th:replace="_fragments/form :: select-normal (field = 'status', label = #{task.status}, options = 'allTaskStatus', optionValue = 'code')"></div>
 
+  <div th:replace="_fragments/form :: input-text (field = 'scheduledAt', label = #{task.scheduled-at}, autofocus = false)"></div>
+
   <div th:replace="_fragments/form :: select-multi (field = 'tags', label = #{task.tag}, placeholder = #{tag.select-some-tags}, options = 'myTags', optionValue = 'id', optionText = 'name', selected = null)"></div>
 
   <button class="btn btn-default submit" th:attr="data-action=@{/task/today}"><i th:replace="_fragments/fa :: fa-fw(remove)"></i>&#160;<span th:text="#{general.cancel}"></span></button>

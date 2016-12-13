@@ -15,4 +15,10 @@ public class DateUtilsTests {
         Date d = DateUtils.toDateFromString(expr, pattern);
         assertThat(DateUtils.toStringFromDate(d, pattern), is(expr));
     }
+
+    @Test
+    public void parseWithoutPattern() {
+        assertThat(DateUtils.toStringFromDate(DateUtils.toDateFromString("2016-12-11 10:01:02"), "uuuu-MM-dd HH:mm:ss"), is("2016-12-11 10:01:02"));
+        assertThat(DateUtils.toStringFromDate(DateUtils.toDateFromString("2016-12-11"), "uuuu-MM-dd HH:mm:ss"), is("2016-12-11 00:00:00"));
+    }
 }
