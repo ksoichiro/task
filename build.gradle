@@ -126,19 +126,25 @@ clean {
     delete querydslDir
 }
 
-task processSql << {
+task processSql {
     def sqlFile = file("src/main/sql/data.sql")
-    file("src/main/resources/data-h2.sql").withWriter { writer ->
-        file("src/main/sql/data.sql").eachLine { line ->
-            if (!line.startsWith("set ")) {
-                writer.println(line)
+    def h2File = file("src/main/resources/data-h2.sql")
+    def mariadbFile = file("src/main/resources/data-mariadb.sql")
+    inputs.file sqlFile
+    outputs.files h2File, mariadbFile
+    doLast {
+        h2File.withWriter { writer ->
+            sqlFile.eachLine { line ->
+                if (!line.startsWith("set ")) {
+                    writer.println(line)
+                }
             }
         }
-    }
-    copy {
-        from sqlFile
-        into "src/main/resources"
-        rename "data.sql", "data-mariadb.sql"
+        copy {
+            from sqlFile
+            into "src/main/resources"
+            rename "data.sql", "data-mariadb.sql"
+        }
     }
 }
 processResources.dependsOn 'processSql'
