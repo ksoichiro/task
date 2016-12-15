@@ -1,5 +1,6 @@
 package com.ksoichiro.task.web;
 
+import com.ksoichiro.task.annotation.Post;
 import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.domain.Project;
 import com.ksoichiro.task.dto.ProjectDTO;
@@ -20,7 +21,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequestMapping("/project")
@@ -44,7 +44,7 @@ public class ProjectController {
         return "project/create";
     }
 
-    @RequestMapping(value = "/create-save", method = RequestMethod.POST)
+    @Post("/create-save")
     public String createSave(@AuthenticationPrincipal Account account, @Validated ProjectCreateForm projectCreateForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return create(account, projectCreateForm, bindingResult, model);
@@ -64,7 +64,7 @@ public class ProjectController {
         return "project/update";
     }
 
-    @RequestMapping(value = "/update-save", method = RequestMethod.POST)
+    @Post("/update-save")
     public String updateSave(@AuthenticationPrincipal Account account, @Validated ProjectUpdateForm projectUpdateForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             if (StringUtils.isEmpty(projectUpdateForm.getId())) {

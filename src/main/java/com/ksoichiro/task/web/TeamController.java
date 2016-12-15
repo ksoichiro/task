@@ -1,5 +1,6 @@
 package com.ksoichiro.task.web;
 
+import com.ksoichiro.task.annotation.Post;
 import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.dto.TeamDTO;
 import com.ksoichiro.task.form.TeamCreateForm;
@@ -14,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequestMapping("/team")
@@ -33,7 +33,7 @@ public class TeamController {
         return "team/create";
     }
 
-    @RequestMapping(value = "/create-save", method = RequestMethod.POST)
+    @Post("/create-save")
     public String createSave(@AuthenticationPrincipal Account account, @Validated TeamCreateForm teamCreateForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return create(account, teamCreateForm, bindingResult, model);

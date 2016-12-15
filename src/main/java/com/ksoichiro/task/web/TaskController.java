@@ -1,5 +1,7 @@
 package com.ksoichiro.task.web;
 
+import com.ksoichiro.task.annotation.Get;
+import com.ksoichiro.task.annotation.Post;
 import com.ksoichiro.task.constant.TaskStatusEnum;
 import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.domain.Task;
@@ -23,7 +25,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
@@ -50,14 +51,14 @@ public class TaskController {
         return taskService.countByAccount(account).toString();
     }
 
-    @RequestMapping(value = "/today", method = RequestMethod.GET)
+    @Get("/today")
     public String today(@AuthenticationPrincipal Account account, TaskSearchForm taskSearchForm, Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("allTaskStatus", TaskStatusEnum.values());
         model.addAttribute("tasks", taskService.findByAccountAndScheduledAtIsToday(account, pageable));
         return "task/today";
     }
 
-    @RequestMapping(value = "/today", method = RequestMethod.POST)
+    @Post("/today")
     public String todaySearch(@AuthenticationPrincipal Account account, TaskSearchForm taskSearchForm, Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("allTaskStatus", TaskStatusEnum.values());
         TaskDTO dto = new TaskDTO();
@@ -67,14 +68,14 @@ public class TaskController {
         return "task/today";
     }
 
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    @Get("/all")
     public String all(@AuthenticationPrincipal Account account, TaskSearchForm taskSearchForm, Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("allTaskStatus", TaskStatusEnum.values());
         model.addAttribute("tasks", taskService.findByAccount(account, pageable));
         return "task/all";
     }
 
-    @RequestMapping(value = "/all", method = RequestMethod.POST)
+    @Post("/all")
     public String allSearch(@AuthenticationPrincipal Account account, TaskSearchForm taskSearchForm, Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("allTaskStatus", TaskStatusEnum.values());
         TaskDTO dto = new TaskDTO();
@@ -90,7 +91,7 @@ public class TaskController {
         return "task/create";
     }
 
-    @RequestMapping(value = "/create-save", method = RequestMethod.POST)
+    @Post("/create-save")
     public String createSave(@AuthenticationPrincipal Account account, @Validated TaskCreateForm taskCreateForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return create(account, taskCreateForm, bindingResult, model);
@@ -122,7 +123,7 @@ public class TaskController {
         return "task/update";
     }
 
-    @RequestMapping(value = "/update-save", method = RequestMethod.POST)
+    @Post("/update-save")
     public String updateSave(@AuthenticationPrincipal Account account,
                              @Validated TaskUpdateForm taskUpdateForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {

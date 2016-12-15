@@ -1,5 +1,6 @@
 package com.ksoichiro.task.web;
 
+import com.ksoichiro.task.annotation.Post;
 import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.domain.Tag;
 import com.ksoichiro.task.exception.DuplicateTagNameException;
@@ -19,7 +20,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequestMapping("/tag")
@@ -39,7 +39,7 @@ public class TagController {
         return "tag/create";
     }
 
-    @RequestMapping(value = "/create-save", method = RequestMethod.POST)
+    @Post("/create-save")
     public String createSave(@AuthenticationPrincipal Account account, @Validated TagCreateForm tagCreateForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return create(tagCreateForm, bindingResult, model);
@@ -70,7 +70,7 @@ public class TagController {
         return "tag/update";
     }
 
-    @RequestMapping(value = "/update-save", method = RequestMethod.POST)
+    @Post("/update-save")
     public String updateSave(@AuthenticationPrincipal Account account,
                              @Validated TagUpdateForm tagUpdateForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
