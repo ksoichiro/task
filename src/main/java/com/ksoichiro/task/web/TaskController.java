@@ -2,6 +2,7 @@ package com.ksoichiro.task.web;
 
 import com.ksoichiro.task.annotation.Get;
 import com.ksoichiro.task.annotation.Post;
+import com.ksoichiro.task.annotation.StandardController;
 import com.ksoichiro.task.constant.TaskStatusEnum;
 import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.domain.Task;
@@ -18,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -29,8 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
 
-@Controller
-@RequestMapping("/task")
+@StandardController("/task")
 @Slf4j
 public class TaskController {
     @Autowired

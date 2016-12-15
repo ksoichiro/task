@@ -1,10 +1,9 @@
 package com.ksoichiro.task.web;
 
-import org.springframework.stereotype.Controller;
+import com.ksoichiro.task.annotation.StandardController;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@Controller
-@RequestMapping("/")
+@StandardController("/")
 public class RootController {
     @RequestMapping({"/", "home"})
     public String index() {
