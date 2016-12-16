@@ -10,4 +10,8 @@ public class ProjectDTO {
     private String name;
     private Integer teamId;
     private Account account;
+
+    public ProjectDTO(Account account) {
+        this.account = account;
+    }
 }

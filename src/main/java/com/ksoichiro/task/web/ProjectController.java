@@ -48,8 +48,7 @@ public class ProjectController {
         if (bindingResult.hasErrors()) {
             return create(account, projectCreateForm, bindingResult, model);
         }
-        ProjectDTO projectDTO = new ProjectDTO();
-        projectDTO.setAccount(account);
+        ProjectDTO projectDTO = new ProjectDTO(account);
         BeanUtils.copyProperties(projectCreateForm, projectDTO);
         projectService.create(projectDTO);
         return "redirect:/project";
@@ -72,8 +71,7 @@ public class ProjectController {
             }
             return update(projectUpdateForm.getId(), account, projectUpdateForm, bindingResult, model);
         }
-        ProjectDTO projectDTO = new ProjectDTO();
-        projectDTO.setAccount(account);
+        ProjectDTO projectDTO = new ProjectDTO(account);
         BeanUtils.copyProperties(projectUpdateForm, projectDTO);
         projectService.update(projectDTO);
         return "redirect:/project";
