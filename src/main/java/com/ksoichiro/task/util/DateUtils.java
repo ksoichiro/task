@@ -3,9 +3,8 @@ package com.ksoichiro.task.util;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 public abstract class DateUtils {
     public static Date today() {
@@ -13,13 +12,7 @@ public abstract class DateUtils {
     }
 
     public static Date truncateTime(Date source) {
-        Calendar calendar = GregorianCalendar.getInstance();
-        calendar.setTime(source);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        return calendar.getTime();
+        return Date.from(LocalDateTime.ofInstant(source.toInstant(), ZoneId.systemDefault()).truncatedTo(ChronoUnit.DAYS).atZone(ZoneId.systemDefault()).toInstant());
     }
 
     public static String toStringFromDate(Date date, String pattern) {
