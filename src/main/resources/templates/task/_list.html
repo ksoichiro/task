@@ -51,9 +51,7 @@
     </div>
   </div>
   <div class="col-sm-2">
-    <div class="pull-right">
-      <a th:href="@{/task/create}" class="btn btn-primary"><i class="fa fa-plus"></i> <span th:text="#{task.create}"></span></a>
-    </div>
+    <div th:replace="_fragments/button :: create(url = @{/task/create}, label = #{task.create})"></div>
   </div>
 </div>
 

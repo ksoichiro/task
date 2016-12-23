@@ -1,0 +1,9 @@
+<html xmlns:th="">
+<body>
+
+<div th:fragment="create(url, label)" class="pull-right">
+  <a th:href="${url}" class="btn btn-primary"><i class="fa fa-plus"></i> <span th:text="${label}"></span></a>
+</div>
+
+</body>
+</html>
