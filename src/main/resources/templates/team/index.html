@@ -8,9 +8,7 @@
 
 <div layout:fragment="content">
 
-<div class="pull-right">
-  <a th:href="@{/team/create}" class="btn btn-primary"><i class="fa fa-plus"></i> <span th:text="#{team.create}"></span></a>
-</div>
+<div th:replace="_fragments/button :: create(url = @{/team/create}, label = #{team.create})"></div>
 
 <table class="table table-striped">
   <thead>
