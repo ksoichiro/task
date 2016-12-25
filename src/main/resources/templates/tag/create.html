@@ -8,13 +8,11 @@
 
 <div layout:fragment="content">
 
-<form th:action="@{/tag/create-save}" th:object="${tagCreateForm}" method="post">
-  <div class="alert alert-danger" th:if="${#fields.hasErrors('global')}" th:errors="*{global}">Error</div>
-
-  <div th:replace="_fragments/form :: input-text(field = 'name', label = #{tag.name}, autofocus = true)"></div>
-
-  <button type="submit" class="btn btn-primary"><i th:replace="_fragments/fa :: fa-fw(check)"></i>&#160;<span th:text="#{general.save}"></span></button>
-</form>
+<div layout:include="_fragments/form :: form-normal(url=@{/tag/create-save}, form='tagCreateForm')">
+  <div layout:fragment="form-content">
+    <div th:replace="_fragments/form :: input-text(field = 'name', label = #{tag.name}, autofocus = true)"></div>
+  </div>
+</div>
 
 </div>
 

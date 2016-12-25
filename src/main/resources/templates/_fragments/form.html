@@ -1,6 +1,16 @@
 <html xmlns:th="" xmlns:layout="">
 <body>
 
+<div layout:fragment="form-normal(url, form)">
+  <form th:object="${__${form}__}" th:action="${url}" method="post">
+    <div class="alert alert-danger" th:if="${#fields.hasErrors('global')}" th:errors="*{global}">Error</div>
+
+    <div layout:fragment="form-content" th:remove="tag"></div>
+
+    <button type="submit" class="btn btn-primary"><i th:replace="_fragments/fa :: fa-fw(check)"></i>&#160;<span th:text="#{general.save}"></span></button>
+  </form>
+</div>
+
 <div th:fragment="input-text (field, label, autofocus)" class="form-group has-feedback" th:classappend="${#fields.hasErrors('__${field}__')}? 'has-error'">
   <div layout:include="_fragments/form :: form-base(field=${field}, label=${label})" th:remove="tag">
     <input layout:fragment="form-content" type="text" class="form-control" th:field="*{__${field}__}" th:attr="aria-describedby=|status-${field}|" th:autofocus="${autofocus}? 'autofocus'"/>
