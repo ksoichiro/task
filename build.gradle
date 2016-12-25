@@ -65,6 +65,7 @@ webResource {
         dest = 'src/main/resources/static'
     }
     bower {
+        logLevel "INFO"
         dependencies {
             install name: 'jquery', version: '1.11.2', filter: ["dist/*.min.*"]
             install name: 'bootstrap', version: '3.3.4', filter: ["dist/js/*.min.js", "dist/fonts/*"]
@@ -74,6 +75,14 @@ webResource {
             install name: 'chosen', version: '1.6.2', filter: ["*.js"]
             install name: 'bootstrap-chosen', version: '1.0.1', filter: ["*.png"]
             install name: 'js-cookie', version: '2.1.3'
+        }
+    }
+}
+webResourceInstallBowerDependencies {
+    doFirst {
+        def packageDir = file("${buildDir}/webResource/.bower/packages")
+        if (packageDir.exists()) {
+            packageDir.mkdirs()
         }
     }
 }
