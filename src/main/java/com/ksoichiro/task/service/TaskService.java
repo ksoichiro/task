@@ -14,6 +14,7 @@ import com.mysema.query.types.Path;
 import com.mysema.query.types.Predicate;
 import com.mysema.query.types.path.PathBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -49,11 +50,11 @@ public class TaskService {
         return taskRepository.findByAccount(account, pageable);
     }
 
-    public Page<Task> findByAccountAndConditions(Account account, TaskDTO dto, Pageable pageable) {
+    public Page<Task> findByAccountAndConditions(TaskDTO dto, Pageable pageable) {
         QTask task = QTask.task;
 
         BooleanBuilder predicate = new BooleanBuilder();
-        predicate.and(task.account.id.eq(account.getId()));
+        predicate.and(task.account.id.eq(dto.getAccount().getId()));
 
         if (!StringUtils.isEmpty(dto.getName())) {
             predicate.and(task.name.contains(dto.getName()));
@@ -94,29 +95,31 @@ public class TaskService {
 
     @Transactional
     @Caching(evict = {
-        @CacheEvict(cacheNames = Caches.TASK_COUNT, key = "#task.account.id"),
-        @CacheEvict(cacheNames = Caches.TASK_COUNT, key = "#task.account.id + '-today'")})
-    public Task create(Task task) {
+        @CacheEvict(cacheNames = Caches.TASK_COUNT, key = "#taskDTO.account.id"),
+        @CacheEvict(cacheNames = Caches.TASK_COUNT, key = "#taskDTO.account.id + '-today'")})
+    public Task create(TaskDTO taskDTO) {
+        Task task = new Task();
+        BeanUtils.copyProperties(taskDTO, task);
         return taskRepository.save(task);
     }
 
     @Transactional
     @Caching(evict = {
-        @CacheEvict(cacheNames = Caches.TASK_COUNT, key = "#task.account.id"),
-        @CacheEvict(cacheNames = Caches.TASK_COUNT, key = "#task.account.id + '-today'")})
-    public Task update(Task task) {
-        Task toUpdate = taskRepository.findOne(task.getId());
-        if (!task.getAccount().getId().equals(toUpdate.getAccount().getId())) {
-            throw new IllegalStateException("Task cannot be updated by this account: owner: " + task.getAccount().getId() + ", updated by: " + toUpdate.getAccount().getId());
+        @CacheEvict(cacheNames = Caches.TASK_COUNT, key = "#taskDTO.account.id"),
+        @CacheEvict(cacheNames = Caches.TASK_COUNT, key = "#taskDTO.account.id + '-today'")})
+    public Task update(TaskDTO taskDTO) {
+        Task toUpdate = taskRepository.findOne(taskDTO.getId());
+        if (!taskDTO.getAccount().getId().equals(toUpdate.getAccount().getId())) {
+            throw new IllegalStateException("Task cannot be updated by this account: owner: " + taskDTO.getAccount().getId() + ", updated by: " + toUpdate.getAccount().getId());
         }
-        if (task.getName() != null) {
-            toUpdate.setName(task.getName());
+        if (taskDTO.getName() != null) {
+            toUpdate.setName(taskDTO.getName());
         }
-        if (task.getStatus() != null) {
-            toUpdate.setStatus(task.getStatus());
+        if (taskDTO.getStatus() != null) {
+            toUpdate.setStatus(taskDTO.getStatus());
         }
-        if (task.getTags() != null) {
-            toUpdate.setTags(task.getTags());
+        if (taskDTO.getTags() != null) {
+            toUpdate.setTags(taskDTO.getTags());
         }
         toUpdate.setUpdatedAt(new Date());
         return taskRepository.save(toUpdate);

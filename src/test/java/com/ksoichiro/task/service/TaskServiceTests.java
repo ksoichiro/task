@@ -4,9 +4,11 @@ import com.ksoichiro.task.App;
 import com.ksoichiro.task.constant.TaskStatusEnum;
 import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.domain.Task;
+import com.ksoichiro.task.dto.TaskDTO;
 import com.ksoichiro.task.repository.AccountRepository;
 import com.ksoichiro.task.repository.TaskRepository;
 import org.junit.Test;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -30,11 +32,10 @@ public class TaskServiceTests extends AbstractTransactionalJUnit4SpringContextTe
     @Test
     public void create() {
         Account account = accountRepository.findOne(1);
-        Task task = new Task();
-        task.setName("Write a report about Spring");
-        task.setStatus(TaskStatusEnum.DOING);
-        task.setAccount(account);
-        Task created = taskService.create(task);
+        TaskDTO taskDTO = new TaskDTO(account);
+        taskDTO.setName("Write a report about Spring");
+        taskDTO.setStatus(TaskStatusEnum.DOING);
+        Task created = taskService.create(taskDTO);
         assertThat(created, is(notNullValue()));
         assertThat(created.getId(), is(greaterThan(1)));
         assertThat(created.getStatus(), is(TaskStatusEnum.DOING));
@@ -45,9 +46,11 @@ public class TaskServiceTests extends AbstractTransactionalJUnit4SpringContextTe
     @Test
     public void update() {
         Task task = taskRepository.findOne(1);
-        task.setName("Send a mail to my boss");
-        task.setStatus(TaskStatusEnum.DONE);
-        Task updated = taskService.update(task);
+        TaskDTO taskDTO = new TaskDTO();
+        BeanUtils.copyProperties(task, taskDTO);
+        taskDTO.setName("Send a mail to my boss");
+        taskDTO.setStatus(TaskStatusEnum.DONE);
+        Task updated = taskService.update(taskDTO);
         assertThat(updated, is(notNullValue()));
         assertThat(updated.getId(), is(1));
         assertThat(updated.getName(), is("Send a mail to my boss"));
@@ -59,10 +62,9 @@ public class TaskServiceTests extends AbstractTransactionalJUnit4SpringContextTe
     @Test(expected = IllegalStateException.class)
     public void updateWithDifferentAccount() {
         Account account = accountRepository.findOne(2);
-        Task task = new Task();
-        task.setId(1);
-        task.setAccount(account);
-        task.setName("Test");
-        taskService.update(task);
+        TaskDTO taskDTO = new TaskDTO(account);
+        taskDTO.setId(1);
+        taskDTO.setName("Test");
+        taskService.update(taskDTO);
     }
 }
