@@ -12,7 +12,6 @@ import com.ksoichiro.task.form.TaskSearchForm;
 import com.ksoichiro.task.form.TaskUpdateForm;
 import com.ksoichiro.task.service.TagService;
 import com.ksoichiro.task.service.TaskService;
-import com.ksoichiro.task.util.DateUtils;
 import com.ksoichiro.task.util.FormUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -61,8 +60,7 @@ public class TaskController {
     @Post("/today")
     public String todaySearch(@AuthenticationPrincipal Account account, TaskSearchForm taskSearchForm, Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("allTaskStatus", TaskStatusEnum.values());
-        TaskDTO dto = new TaskDTO();
-        BeanUtils.copyProperties(taskSearchForm, dto);
+        TaskDTO dto = taskSearchForm.toTaskDTO();
         dto.setScheduledAt(new Date());
         model.addAttribute("tasks", taskService.findByAccountAndConditions(account, dto, pageable));
         return "task/today";
@@ -78,9 +76,7 @@ public class TaskController {
     @Post("/all")
     public String allSearch(@AuthenticationPrincipal Account account, TaskSearchForm taskSearchForm, Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("allTaskStatus", TaskStatusEnum.values());
-        TaskDTO dto = new TaskDTO();
-        BeanUtils.copyProperties(taskSearchForm, dto);
-        model.addAttribute("tasks", taskService.findByAccountAndConditions(account, dto, pageable));
+        model.addAttribute("tasks", taskService.findByAccountAndConditions(account, taskSearchForm.toTaskDTO(), pageable));
         return "task/all";
     }
 

@@ -3,10 +3,8 @@ package com.ksoichiro.task.web;
 import com.ksoichiro.task.annotation.Post;
 import com.ksoichiro.task.annotation.StandardController;
 import com.ksoichiro.task.domain.Account;
-import com.ksoichiro.task.dto.TeamDTO;
 import com.ksoichiro.task.form.TeamCreateForm;
 import com.ksoichiro.task.service.TeamService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -37,10 +35,7 @@ public class TeamController {
         if (bindingResult.hasErrors()) {
             return create(account, teamCreateForm, bindingResult, model);
         }
-        TeamDTO teamDTO = new TeamDTO();
-        BeanUtils.copyProperties(teamCreateForm, teamDTO);
-        teamDTO.setAccount(account);
-        teamService.create(teamDTO);
+        teamService.create(teamCreateForm.toTeamDTO(account));
         return "redirect:/team";
     }
 }

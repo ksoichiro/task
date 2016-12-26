@@ -4,7 +4,6 @@ import com.ksoichiro.task.annotation.Post;
 import com.ksoichiro.task.annotation.StandardController;
 import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.domain.Project;
-import com.ksoichiro.task.dto.ProjectDTO;
 import com.ksoichiro.task.form.ProjectCreateForm;
 import com.ksoichiro.task.form.ProjectUpdateForm;
 import com.ksoichiro.task.service.ProjectService;
@@ -48,9 +47,7 @@ public class ProjectController {
         if (bindingResult.hasErrors()) {
             return create(account, projectCreateForm, bindingResult, model);
         }
-        ProjectDTO projectDTO = new ProjectDTO(account);
-        BeanUtils.copyProperties(projectCreateForm, projectDTO);
-        projectService.create(projectDTO);
+        projectService.create(projectCreateForm.toProjectDTO(account));
         return "redirect:/project";
     }
 
@@ -71,9 +68,7 @@ public class ProjectController {
             }
             return update(projectUpdateForm.getId(), account, projectUpdateForm, bindingResult, model);
         }
-        ProjectDTO projectDTO = new ProjectDTO(account);
-        BeanUtils.copyProperties(projectUpdateForm, projectDTO);
-        projectService.update(projectDTO);
+        projectService.update(projectUpdateForm.toProjectDTO(account));
         return "redirect:/project";
     }
 }
