@@ -3,13 +3,11 @@ package com.ksoichiro.task.web;
 import com.ksoichiro.task.annotation.Post;
 import com.ksoichiro.task.annotation.StandardController;
 import com.ksoichiro.task.domain.Account;
-import com.ksoichiro.task.domain.Project;
 import com.ksoichiro.task.form.ProjectCreateForm;
 import com.ksoichiro.task.form.ProjectUpdateForm;
 import com.ksoichiro.task.service.ProjectService;
 import com.ksoichiro.task.service.TeamService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -54,8 +52,7 @@ public class ProjectController {
     @RequestMapping("/update/{id}")
     public String update(@PathVariable Integer id,
                          @AuthenticationPrincipal Account account, ProjectUpdateForm projectUpdateForm, BindingResult bindingResult, Model model) {
-        Project project = projectService.findByIdAndAccount(id, account);
-        BeanUtils.copyProperties(project, projectUpdateForm);
+        projectUpdateForm.copyFrom(projectService.findByIdAndAccount(id, account));
         return "project/update";
     }
 

@@ -5,7 +5,6 @@ import com.ksoichiro.task.annotation.Post;
 import com.ksoichiro.task.annotation.StandardController;
 import com.ksoichiro.task.constant.TaskStatusEnum;
 import com.ksoichiro.task.domain.Account;
-import com.ksoichiro.task.domain.Task;
 import com.ksoichiro.task.dto.TaskDTO;
 import com.ksoichiro.task.form.TaskCreateForm;
 import com.ksoichiro.task.form.TaskSearchForm;
@@ -13,7 +12,6 @@ import com.ksoichiro.task.form.TaskUpdateForm;
 import com.ksoichiro.task.service.TagService;
 import com.ksoichiro.task.service.TaskService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -105,8 +103,7 @@ public class TaskController {
     public String update(@PathVariable Integer id,
                          @AuthenticationPrincipal Account account,
                          TaskUpdateForm taskUpdateForm, BindingResult bindingResult, Model model) {
-        Task task = taskService.findByIdAndAccount(id, account);
-        BeanUtils.copyProperties(task, taskUpdateForm);
+        taskUpdateForm.copyFrom(taskService.findByIdAndAccount(id, account));
         model.addAttribute("allTaskStatus", TaskStatusEnum.values());
         model.addAttribute("myTags", tagService.findByAccount(account));
         return "task/update";

@@ -3,6 +3,7 @@ package com.ksoichiro.task.form;
 import com.ksoichiro.task.constant.TaskStatusEnum;
 import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.domain.Tag;
+import com.ksoichiro.task.domain.Task;
 import com.ksoichiro.task.dto.TaskDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,5 +33,9 @@ public class TaskUpdateForm {
         TaskDTO taskDTO = new TaskDTO(account);
         BeanUtils.copyProperties(this, taskDTO);
         return taskDTO;
+    }
+
+    public void copyFrom(Task task) {
+        BeanUtils.copyProperties(task, this);
     }
 }

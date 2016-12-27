@@ -64,8 +64,7 @@ public class TagController {
     public String update(@PathVariable Integer id,
                          @AuthenticationPrincipal Account account,
                          TagUpdateForm tagUpdateForm, BindingResult bindingResult, Model model) {
-        Tag tag = tagService.findByIdAndAccount(id, account);
-        BeanUtils.copyProperties(tag, tagUpdateForm);
+        tagUpdateForm.copyFrom(tagService.findByIdAndAccount(id, account));
         return "tag/update";
     }
 
