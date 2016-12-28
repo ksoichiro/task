@@ -1,8 +1,6 @@
 package com.ksoichiro.task.web;
 
-import com.ksoichiro.task.annotation.Get;
-import com.ksoichiro.task.annotation.Post;
-import com.ksoichiro.task.annotation.StandardController;
+import com.ksoichiro.task.annotation.*;
 import com.ksoichiro.task.constant.TaskStatusEnum;
 import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.dto.TaskDTO;
@@ -15,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -36,25 +33,25 @@ public class TaskController {
 
     @RequestMapping("/today/count")
     @ResponseBody
-    public String countTaskToday(@AuthenticationPrincipal Account account) {
+    public String countTaskToday(@LoginAccount Account account) {
         return taskService.countByAccountAndScheduledAtIsToday(account).toString();
     }
 
     @RequestMapping("/all/count")
     @ResponseBody
-    public String countTaskAll(@AuthenticationPrincipal Account account) {
+    public String countTaskAll(@LoginAccount Account account) {
         return taskService.countByAccount(account).toString();
     }
 
     @Get("/today")
-    public String today(@AuthenticationPrincipal Account account, TaskSearchForm taskSearchForm, Model model, @PageableDefault Pageable pageable) {
+    public String today(@LoginAccount Account account, TaskSearchForm taskSearchForm, Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("allTaskStatus", TaskStatusEnum.values());
         model.addAttribute("tasks", taskService.findByAccountAndScheduledAtIsToday(account, pageable));
         return "task/today";
     }
 
     @Post("/today")
-    public String todaySearch(@AuthenticationPrincipal Account account, TaskSearchForm taskSearchForm, Model model, @PageableDefault Pageable pageable) {
+    public String todaySearch(@LoginAccount Account account, TaskSearchForm taskSearchForm, Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("allTaskStatus", TaskStatusEnum.values());
         TaskDTO dto = taskSearchForm.toDTO(account);
         dto.setScheduledAt(new Date());
@@ -63,28 +60,28 @@ public class TaskController {
     }
 
     @Get("/all")
-    public String all(@AuthenticationPrincipal Account account, TaskSearchForm taskSearchForm, Model model, @PageableDefault Pageable pageable) {
+    public String all(@LoginAccount Account account, TaskSearchForm taskSearchForm, Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("allTaskStatus", TaskStatusEnum.values());
         model.addAttribute("tasks", taskService.findByAccount(account, pageable));
         return "task/all";
     }
 
     @Post("/all")
-    public String allSearch(@AuthenticationPrincipal Account account, TaskSearchForm taskSearchForm, Model model, @PageableDefault Pageable pageable) {
+    public String allSearch(@LoginAccount Account account, TaskSearchForm taskSearchForm, Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("allTaskStatus", TaskStatusEnum.values());
         model.addAttribute("tasks", taskService.findByAccountAndConditions(taskSearchForm.toDTO(account), pageable));
         return "task/all";
     }
 
-    @RequestMapping("/create")
-    public String create(@AuthenticationPrincipal Account account, TaskCreateForm taskCreateForm, BindingResult bindingResult, Model model) {
+    @Create
+    public String create(@LoginAccount Account account, TaskCreateForm taskCreateForm, BindingResult bindingResult, Model model) {
         model.addAttribute("allTaskStatus", TaskStatusEnum.values());
         model.addAttribute("myTags", tagService.findByAccount(account));
         return "task/create";
     }
 
-    @Post("/create-save")
-    public String createSave(@AuthenticationPrincipal Account account, @Validated TaskCreateForm taskCreateForm, BindingResult bindingResult, Model model) {
+    @CreateSave
+    public String createSave(@LoginAccount Account account, @Validated TaskCreateForm taskCreateForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return create(account, taskCreateForm, bindingResult, model);
         }
@@ -98,9 +95,9 @@ public class TaskController {
         return "redirect:/task/today";
     }
 
-    @RequestMapping("/update/{id}")
+    @Update
     public String update(@PathVariable Integer id,
-                         @AuthenticationPrincipal Account account,
+                         @LoginAccount Account account,
                          TaskUpdateForm taskUpdateForm, BindingResult bindingResult, Model model) {
         taskUpdateForm.copyFrom(taskService.findByIdAndAccount(id, account));
         model.addAttribute("allTaskStatus", TaskStatusEnum.values());
@@ -108,8 +105,8 @@ public class TaskController {
         return "task/update";
     }
 
-    @Post("/update-save")
-    public String updateSave(@AuthenticationPrincipal Account account,
+    @UpdateSave
+    public String updateSave(@LoginAccount Account account,
                              @Validated TaskUpdateForm taskUpdateForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             if (taskUpdateForm.cannotDecideWhatToUpdate()) {

@@ -1,7 +1,6 @@
 package com.ksoichiro.task.web;
 
-import com.ksoichiro.task.annotation.Post;
-import com.ksoichiro.task.annotation.StandardController;
+import com.ksoichiro.task.annotation.*;
 import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.exception.DuplicateTagNameException;
 import com.ksoichiro.task.form.TagCreateForm;
@@ -11,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -25,18 +23,18 @@ public class TagController {
     private TagService tagService;
 
     @RequestMapping
-    public String index(@AuthenticationPrincipal Account account, Model model, @PageableDefault Pageable pageable) {
+    public String index(@LoginAccount Account account, Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("tags", tagService.findByAccount(account, pageable));
         return "tag/index";
     }
 
-    @RequestMapping("/create")
+    @Create
     public String create(TagCreateForm tagCreateForm, BindingResult bindingResult, Model model) {
         return "tag/create";
     }
 
-    @Post("/create-save")
-    public String createSave(@AuthenticationPrincipal Account account, @Validated TagCreateForm tagCreateForm, BindingResult bindingResult, Model model) {
+    @CreateSave
+    public String createSave(@LoginAccount Account account, @Validated TagCreateForm tagCreateForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return create(tagCreateForm, bindingResult, model);
         }
@@ -54,16 +52,16 @@ public class TagController {
         return "redirect:/tag";
     }
 
-    @RequestMapping("/update/{id}")
+    @Update
     public String update(@PathVariable Integer id,
-                         @AuthenticationPrincipal Account account,
+                         @LoginAccount Account account,
                          TagUpdateForm tagUpdateForm, BindingResult bindingResult, Model model) {
         tagUpdateForm.copyFrom(tagService.findByIdAndAccount(id, account));
         return "tag/update";
     }
 
-    @Post("/update-save")
-    public String updateSave(@AuthenticationPrincipal Account account,
+    @UpdateSave
+    public String updateSave(@LoginAccount Account account,
                              @Validated TagUpdateForm tagUpdateForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             if (tagUpdateForm.cannotDecideWhatToUpdate()) {
