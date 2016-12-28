@@ -14,13 +14,12 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.BeanUtils;
 
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TaskCreateForm {
+public class TaskCreateForm implements CreateForm<Task, TaskDTO> {
     @NotEmpty
     private String name;
 
@@ -32,7 +31,8 @@ public class TaskCreateForm {
 
     private List<Tag> tags;
 
-    public TaskDTO toTaskDTO(Account account) {
+    @Override
+    public TaskDTO toDTO(Account account) {
         TaskDTO taskDTO = new TaskDTO(account);
         BeanUtils.copyProperties(this, taskDTO);
         FormUtils.copyDate(this::getScheduledAt, taskDTO::setScheduledAt);

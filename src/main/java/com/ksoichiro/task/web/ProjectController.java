@@ -45,7 +45,7 @@ public class ProjectController {
         if (bindingResult.hasErrors()) {
             return create(account, projectCreateForm, bindingResult, model);
         }
-        projectService.create(projectCreateForm.toProjectDTO(account));
+        projectService.create(projectCreateForm.toDTO(account));
         return "redirect:/project";
     }
 
@@ -65,7 +65,7 @@ public class ProjectController {
             }
             return update(projectUpdateForm.getId(), account, projectUpdateForm, bindingResult, model);
         }
-        projectService.update(projectUpdateForm.toProjectDTO(account));
+        projectService.update(projectUpdateForm.toDTO(account));
         return "redirect:/project";
     }
 }

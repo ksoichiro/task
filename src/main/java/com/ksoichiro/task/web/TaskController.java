@@ -57,7 +57,7 @@ public class TaskController {
     @Post("/today")
     public String todaySearch(@AuthenticationPrincipal Account account, TaskSearchForm taskSearchForm, Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("allTaskStatus", TaskStatusEnum.values());
-        TaskDTO dto = taskSearchForm.toTaskDTO(account);
+        TaskDTO dto = taskSearchForm.toDTO(account);
         dto.setScheduledAt(new Date());
         model.addAttribute("tasks", taskService.findByAccountAndConditions(dto, pageable));
         return "task/today";
@@ -73,7 +73,7 @@ public class TaskController {
     @Post("/all")
     public String allSearch(@AuthenticationPrincipal Account account, TaskSearchForm taskSearchForm, Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("allTaskStatus", TaskStatusEnum.values());
-        model.addAttribute("tasks", taskService.findByAccountAndConditions(taskSearchForm.toTaskDTO(account), pageable));
+        model.addAttribute("tasks", taskService.findByAccountAndConditions(taskSearchForm.toDTO(account), pageable));
         return "task/all";
     }
 
@@ -90,7 +90,7 @@ public class TaskController {
             return create(account, taskCreateForm, bindingResult, model);
         }
         try {
-            taskService.create(taskCreateForm.toTaskDTO(account));
+            taskService.create(taskCreateForm.toDTO(account));
         } catch (Exception e) {
             log.warn("Failed to create task for account {}", account.getId(), e);
             bindingResult.reject("error.task.create");
@@ -120,7 +120,7 @@ public class TaskController {
             return update(taskUpdateForm.getId(), account, taskUpdateForm, bindingResult, model);
         }
         try {
-            taskService.update(taskUpdateForm.toTaskDTO(account));
+            taskService.update(taskUpdateForm.toDTO(account));
         } catch (Exception e) {
             log.warn("Failed to update task for account {}", account.getId(), e);
             bindingResult.reject("error.task.update");

@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TaskUpdateForm {
+public class TaskUpdateForm implements UpdateForm<Task, TaskDTO> {
     @NotNull
     private Integer id;
 
@@ -29,13 +29,10 @@ public class TaskUpdateForm {
 
     private List<Tag> tags;
 
-    public TaskDTO toTaskDTO(Account account) {
+    @Override
+    public TaskDTO toDTO(Account account) {
         TaskDTO taskDTO = new TaskDTO(account);
         BeanUtils.copyProperties(this, taskDTO);
         return taskDTO;
-    }
-
-    public void copyFrom(Task task) {
-        BeanUtils.copyProperties(task, this);
     }
 }

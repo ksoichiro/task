@@ -1,12 +1,16 @@
 package com.ksoichiro.task.form;
 
+import com.ksoichiro.task.domain.Account;
+import com.ksoichiro.task.domain.Team;
+import com.ksoichiro.task.dto.TeamDTO;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.beans.BeanUtils;
 
 import javax.validation.constraints.NotNull;
 
 @Data
-public class TeamUpdateForm {
+public class TeamUpdateForm implements UpdateForm<Team, TeamDTO> {
     @NotNull
     private Integer id;
 
@@ -15,4 +19,12 @@ public class TeamUpdateForm {
 
     @NotEmpty
     private String name;
+
+    @Override
+    public TeamDTO toDTO(Account account) {
+        TeamDTO teamDTO = new TeamDTO();
+        BeanUtils.copyProperties(this, teamDTO);
+        teamDTO.setAccount(account);
+        return teamDTO;
+    }
 }

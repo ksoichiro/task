@@ -35,7 +35,7 @@ public class TeamController {
         if (bindingResult.hasErrors()) {
             return create(account, teamCreateForm, bindingResult, model);
         }
-        teamService.create(teamCreateForm.toTeamDTO(account));
+        teamService.create(teamCreateForm.toDTO(account));
         return "redirect:/team";
     }
 }
