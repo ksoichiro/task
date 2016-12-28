@@ -44,10 +44,7 @@ public class TagController {
             return create(tagCreateForm, bindingResult, model);
         }
         try {
-            Tag tag = new Tag();
-            tag.setAccount(account);
-            BeanUtils.copyProperties(tagCreateForm, tag);
-            tagService.create(tag);
+            tagService.create(tagCreateForm.toDTO(account));
         } catch (DuplicateTagNameException e) {
             log.warn("Failed to create tag for account {}", account.getId(), e);
             bindingResult.reject("error.tag.name.duplicate");
@@ -79,10 +76,7 @@ public class TagController {
             return update(tagUpdateForm.getId(), account, tagUpdateForm, bindingResult, model);
         }
         try {
-            Tag tag = new Tag();
-            BeanUtils.copyProperties(tagUpdateForm, tag);
-            tag.setAccount(account);
-            tagService.update(tag);
+            tagService.update(tagUpdateForm.toDTO(account));
         } catch (DuplicateTagNameException e) {
             log.warn("Failed to update tag for account {}", account.getId(), e);
             bindingResult.reject("error.tag.name.duplicate");

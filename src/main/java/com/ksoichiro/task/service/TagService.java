@@ -2,8 +2,10 @@ package com.ksoichiro.task.service;
 
 import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.domain.Tag;
+import com.ksoichiro.task.dto.TagDTO;
 import com.ksoichiro.task.exception.DuplicateTagNameException;
 import com.ksoichiro.task.repository.TagRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,20 +33,22 @@ public class TagService {
     }
 
     @Transactional
-    public Tag create(Tag tag) {
-        validateName(tag.getName(), tag.getAccount());
+    public Tag create(TagDTO tagDTO) {
+        validateName(tagDTO.getName(), tagDTO.getAccount());
+        Tag tag = new Tag();
+        BeanUtils.copyProperties(tagDTO, tag);
         return tagRepository.save(tag);
     }
 
     @Transactional
-    public Tag update(Tag tag) {
-        Tag toUpdate = tagRepository.findOne(tag.getId());
-        if (!tag.getAccount().getId().equals(toUpdate.getAccount().getId())) {
-            throw new IllegalStateException("Tag cannot be updated by this account: owner: " + tag.getAccount().getId() + ", updated by: " + toUpdate.getAccount().getId());
+    public Tag update(TagDTO tagDTO) {
+        Tag toUpdate = tagRepository.findOne(tagDTO.getId());
+        if (!tagDTO.getAccount().getId().equals(toUpdate.getAccount().getId())) {
+            throw new IllegalStateException("Tag cannot be updated by this account: owner: " + tagDTO.getAccount().getId() + ", updated by: " + toUpdate.getAccount().getId());
         }
-        if (tag.getName() != null && !tag.getName().equals(toUpdate.getName())) {
-            validateName(tag.getName(), tag.getAccount());
-            toUpdate.setName(tag.getName());
+        if (tagDTO.getName() != null && !tagDTO.getName().equals(toUpdate.getName())) {
+            validateName(tagDTO.getName(), tagDTO.getAccount());
+            toUpdate.setName(tagDTO.getName());
         }
         toUpdate.setUpdatedAt(new Date());
         return tagRepository.save(toUpdate);

@@ -3,6 +3,7 @@ package com.ksoichiro.task.service;
 import com.ksoichiro.task.App;
 import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.domain.Tag;
+import com.ksoichiro.task.dto.TagDTO;
 import com.ksoichiro.task.exception.DuplicateTagNameException;
 import com.ksoichiro.task.repository.AccountRepository;
 import com.ksoichiro.task.repository.TagRepository;
@@ -42,10 +43,9 @@ public class TagServiceTests extends AbstractTransactionalJUnit4SpringContextTes
     @Test
     public void create() {
         Account account = accountRepository.findOne(1);
-        Tag tag = new Tag();
-        tag.setAccount(account);
-        tag.setName("Private");
-        Tag created = tagService.create(tag);
+        TagDTO tagDTO = new TagDTO(account);
+        tagDTO.setName("Private");
+        Tag created = tagService.create(tagDTO);
         assertThat(created, is(notNullValue()));
         assertThat(created.getId(), is(greaterThan(1)));
         assertThat(created.getName(), is("Private"));
@@ -56,17 +56,18 @@ public class TagServiceTests extends AbstractTransactionalJUnit4SpringContextTes
     @Test(expected = DuplicateTagNameException.class)
     public void createWithDuplicateName() {
         Account account = accountRepository.findOne(1);
-        Tag tag = new Tag();
-        tag.setAccount(account);
-        tag.setName("Work");
-        tagService.create(tag);
+        TagDTO tagDTO = new TagDTO(account);
+        tagDTO.setName("Work");
+        tagService.create(tagDTO);
     }
 
     @Test
     public void update() {
-        Tag tag = tagRepository.findOne(1);
-        tag.setName("Report");
-        Tag updated = tagService.update(tag);
+        Account account = accountRepository.findOne(1);
+        TagDTO tagDTO = new TagDTO(account);
+        tagDTO.setId(1);
+        tagDTO.setName("Report");
+        Tag updated = tagService.update(tagDTO);
         assertThat(updated, is(notNullValue()));
         assertThat(updated.getId(), is(1));
         assertThat(updated.getName(), is("Report"));
@@ -77,20 +78,18 @@ public class TagServiceTests extends AbstractTransactionalJUnit4SpringContextTes
     @Test(expected = DuplicateTagNameException.class)
     public void updateWithDuplicateName() {
         Account account = accountRepository.findOne(1);
-        Tag tag = new Tag();
-        tag.setId(1);
-        tag.setAccount(account);
-        tag.setName("Hobby");
-        tagService.update(tag);
+        TagDTO tagDTO = new TagDTO(account);
+        tagDTO.setId(1);
+        tagDTO.setName("Hobby");
+        tagService.update(tagDTO);
     }
 
     @Test(expected = IllegalStateException.class)
     public void updateWithDifferentAccount() {
         Account account = accountRepository.findOne(2);
-        Tag tag = new Tag();
-        tag.setId(1);
-        tag.setAccount(account);
-        tag.setName("Test");
-        tagService.update(tag);
+        TagDTO tagDTO = new TagDTO(account);
+        tagDTO.setId(1);
+        tagDTO.setName("Test");
+        tagService.update(tagDTO);
     }
 }
