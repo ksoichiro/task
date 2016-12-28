@@ -9,4 +9,10 @@ public interface UpdateForm<E, D> extends Form<E> {
     default void copyFrom(E entity) {
         BeanUtils.copyProperties(entity, this);
     }
+
+    Integer getId();
+
+    default boolean cannotDecideWhatToUpdate() {
+        return getId() == null;
+    }
 }

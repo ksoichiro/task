@@ -13,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -59,8 +58,7 @@ public class ProjectController {
     @Post("/update-save")
     public String updateSave(@AuthenticationPrincipal Account account, @Validated ProjectUpdateForm projectUpdateForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            if (StringUtils.isEmpty(projectUpdateForm.getId())) {
-                // Can't decide the task to update
+            if (projectUpdateForm.cannotDecideWhatToUpdate()) {
                 return "redirect:/task/today";
             }
             return update(projectUpdateForm.getId(), account, projectUpdateForm, bindingResult, model);

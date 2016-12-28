@@ -3,19 +3,16 @@ package com.ksoichiro.task.web;
 import com.ksoichiro.task.annotation.Post;
 import com.ksoichiro.task.annotation.StandardController;
 import com.ksoichiro.task.domain.Account;
-import com.ksoichiro.task.domain.Tag;
 import com.ksoichiro.task.exception.DuplicateTagNameException;
 import com.ksoichiro.task.form.TagCreateForm;
 import com.ksoichiro.task.form.TagUpdateForm;
 import com.ksoichiro.task.service.TagService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -69,8 +66,7 @@ public class TagController {
     public String updateSave(@AuthenticationPrincipal Account account,
                              @Validated TagUpdateForm tagUpdateForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            if (StringUtils.isEmpty(tagUpdateForm.getId())) {
-                // Can't decide the tag to update
+            if (tagUpdateForm.cannotDecideWhatToUpdate()) {
                 return "redirect:/tag";
             }
             return update(tagUpdateForm.getId(), account, tagUpdateForm, bindingResult, model);
