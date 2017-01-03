@@ -75,7 +75,7 @@ public class TaskService {
         Path<Task> path = QTask.task;
         Long total = countQuery.count();
 
-        List<Task> content = total > pageable.getOffset() ? query.list(path) : Collections.<Task>emptyList();
+        List<Task> content = total > pageable.getOffset() ? query.list(path) : Collections.emptyList();
 
         return new PageImpl<>(content, pageable, total);
     }
