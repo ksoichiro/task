@@ -122,7 +122,13 @@ task generateQuerydsl(type: JavaCompile) {
     destinationDir = querydslDir
     options.compilerArgs += [
         '-proc:only',
-        '-processor', 'com.mysema.query.apt.jpa.JPAAnnotationProcessor'
+        '-processor', [
+            'com.mysema.query.apt.jpa.JPAAnnotationProcessor',
+            // To use @__ in Lombok @AllArgsConstructor.onConstructor,
+            // add Lombok's annotation processor for Querydsl code generation
+            // https://github.com/ewerk/gradle-plugins/issues/59
+            'lombok.launch.AnnotationProcessorHider$AnnotationProcessor',
+        ].join(',')
     ]
 }
 

@@ -6,6 +6,7 @@ import com.ksoichiro.task.domain.TeamAccount;
 import com.ksoichiro.task.dto.TeamDTO;
 import com.ksoichiro.task.repository.TeamAccountRepository;
 import com.ksoichiro.task.repository.TeamRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,11 +19,10 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@AllArgsConstructor(onConstructor = @__({@Autowired}))
 public class TeamService {
-    @Autowired
     private TeamRepository teamRepository;
 
-    @Autowired
     private TeamAccountRepository teamAccountRepository;
 
     public List<Team> findByAccount(Account account) {

@@ -2,6 +2,7 @@ package com.ksoichiro.task.service;
 
 import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.repository.AccountRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 
 @Service
+@AllArgsConstructor(onConstructor = @__({@Autowired}))
 public class AccountService {
-    @Autowired
     private AccountRepository accountRepository;
 
     public Account findById(Integer id) {

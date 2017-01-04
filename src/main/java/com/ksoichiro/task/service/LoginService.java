@@ -2,6 +2,7 @@ package com.ksoichiro.task.service;
 
 import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.repository.AccountRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@AllArgsConstructor(onConstructor = @__({@Autowired}))
 public class LoginService implements UserDetailsService {
-    @Autowired
     private AccountRepository accountRepository;
 
     @Override

@@ -6,6 +6,7 @@ import com.ksoichiro.task.domain.Team;
 import com.ksoichiro.task.dto.ProjectDTO;
 import com.ksoichiro.task.repository.ProjectRepository;
 import com.ksoichiro.task.repository.TeamRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,11 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 
 @Service
+@AllArgsConstructor(onConstructor = @__({@Autowired}))
 public class ProjectService {
-    @Autowired
     private ProjectRepository projectRepository;
 
-    @Autowired
     private TeamRepository teamRepository;
 
     public Page<Project> findByAccount(Account account, Pageable pageable) {
