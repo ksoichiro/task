@@ -13,7 +13,7 @@ import com.mysema.query.jpa.impl.JPAQuery;
 import com.mysema.query.types.Path;
 import com.mysema.query.types.Predicate;
 import com.mysema.query.types.path.PathBuilder;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +34,12 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-@AllArgsConstructor(onConstructor = @__({@Autowired}))
+@RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 @Slf4j
 public class TaskService {
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
-    private TaskRepository taskRepository;
+    private final TaskRepository taskRepository;
 
     @Cacheable(cacheNames = Caches.TASK_COUNT, key = "#account.id")
     public Long countByAccount(Account account) {

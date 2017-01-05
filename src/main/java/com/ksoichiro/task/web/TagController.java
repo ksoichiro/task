@@ -6,7 +6,7 @@ import com.ksoichiro.task.exception.DuplicateTagNameException;
 import com.ksoichiro.task.form.TagCreateForm;
 import com.ksoichiro.task.form.TagUpdateForm;
 import com.ksoichiro.task.service.TagService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @StandardController("/tag")
-@AllArgsConstructor(onConstructor = @__({@Autowired}))
+@RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 @Slf4j
 public class TagController {
-    private TagService tagService;
+    private final TagService tagService;
 
     @RequestMapping
     public String index(@LoginAccount Account account, Model model, @PageableDefault Pageable pageable) {

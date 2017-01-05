@@ -2,7 +2,7 @@ package com.ksoichiro.task.web;
 
 import com.ksoichiro.task.aspect.AbstractControllerAdvice;
 import com.ksoichiro.task.domain.Account;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -33,12 +33,12 @@ import java.util.Map;
 @ControllerAdvice
 @Controller
 @Aspect
-@AllArgsConstructor(onConstructor = @__({@Autowired}))
+@RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 @Slf4j
 public class AppErrorController extends AbstractControllerAdvice implements ErrorController {
-    private ErrorAttributes errorAttributes;
+    private final ErrorAttributes errorAttributes;
 
-    private MessageSource messageSource;
+    private final MessageSource messageSource;
 
     @Override
     public String getErrorPath() {

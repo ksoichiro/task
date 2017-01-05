@@ -2,7 +2,7 @@ package com.ksoichiro.task.service;
 
 import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.repository.AccountRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,9 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@AllArgsConstructor(onConstructor = @__({@Autowired}))
+@RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class LoginService implements UserDetailsService {
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

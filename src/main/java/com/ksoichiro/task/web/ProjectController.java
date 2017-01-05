@@ -7,6 +7,7 @@ import com.ksoichiro.task.form.ProjectUpdateForm;
 import com.ksoichiro.task.service.ProjectService;
 import com.ksoichiro.task.service.TeamService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -18,12 +19,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @StandardController("/project")
-@AllArgsConstructor(onConstructor = @__({@Autowired}))
+@RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 @Slf4j
 public class ProjectController {
-    private ProjectService projectService;
+    private final ProjectService projectService;
 
-    private TeamService teamService;
+    private final TeamService teamService;
 
     @RequestMapping
     public String index(@LoginAccount Account account, Model model, @PageableDefault Pageable pageable) {

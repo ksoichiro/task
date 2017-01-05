@@ -5,7 +5,7 @@ import com.ksoichiro.task.domain.Tag;
 import com.ksoichiro.task.dto.TagDTO;
 import com.ksoichiro.task.exception.DuplicateTagNameException;
 import com.ksoichiro.task.repository.TagRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,9 +17,9 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-@AllArgsConstructor(onConstructor = @__({@Autowired}))
+@RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class TagService {
-    private TagRepository tagRepository;
+    private final TagRepository tagRepository;
 
     public Page<Tag> findByAccount(Account account, Pageable pageable) {
         return tagRepository.findByAccount(account, pageable);

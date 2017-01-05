@@ -1,7 +1,7 @@
 package com.ksoichiro.task.converter;
 
 import com.ksoichiro.task.constant.TaskStatusEnum;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.core.convert.converter.Converter;
@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
 import java.util.Locale;
 
 @Component
-@AllArgsConstructor(onConstructor = @__({@Autowired}))
+@RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class TaskStatusToStringConverter implements Converter<TaskStatusEnum, String> {
-    private MessageSource messageSource;
+    private final MessageSource messageSource;
 
     @Override
     public String convert(TaskStatusEnum source) {
