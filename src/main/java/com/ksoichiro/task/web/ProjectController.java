@@ -6,6 +6,7 @@ import com.ksoichiro.task.form.ProjectCreateForm;
 import com.ksoichiro.task.form.ProjectUpdateForm;
 import com.ksoichiro.task.service.ProjectService;
 import com.ksoichiro.task.service.TeamService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -17,12 +18,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @StandardController("/project")
+@AllArgsConstructor(onConstructor = @__({@Autowired}))
 @Slf4j
 public class ProjectController {
-    @Autowired
     private ProjectService projectService;
 
-    @Autowired
     private TeamService teamService;
 
     @RequestMapping

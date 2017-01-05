@@ -9,6 +9,7 @@ import com.ksoichiro.task.form.TaskSearchForm;
 import com.ksoichiro.task.form.TaskUpdateForm;
 import com.ksoichiro.task.service.TagService;
 import com.ksoichiro.task.service.TaskService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -23,12 +24,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.Date;
 
 @StandardController("/task")
+@AllArgsConstructor(onConstructor = @__({@Autowired}))
 @Slf4j
 public class TaskController {
-    @Autowired
     private TaskService taskService;
 
-    @Autowired
     private TagService tagService;
 
     @RequestMapping("/today/count")

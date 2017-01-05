@@ -7,6 +7,7 @@ import com.ksoichiro.task.annotation.StandardController;
 import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.form.TeamCreateForm;
 import com.ksoichiro.task.service.TeamService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -16,8 +17,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @StandardController("/team")
+@AllArgsConstructor(onConstructor = @__({@Autowired}))
 public class TeamController {
-    @Autowired
     private TeamService teamService;
 
     @RequestMapping
