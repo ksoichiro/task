@@ -33,6 +33,10 @@ public class TeamService {
         return teamRepository.findByAccount(account, pageable);
     }
 
+    public Team findByIdAndAccount(Integer id, Account account) {
+        return teamRepository.findByIdAndAccount(id, account);
+    }
+
     @Transactional
     public Team create(TeamDTO teamDTO) {
         if (teamDTO == null) {
@@ -57,6 +61,9 @@ public class TeamService {
             throw new IllegalArgumentException("teamDTO and id cannot be null");
         }
         Team team = teamRepository.findOne(teamDTO.getId());
+        if (!teamDTO.getName().equals(team.getName())) {
+            team.setName(teamDTO.getName());
+        }
         team.setUpdatedAt(new Date());
         return teamRepository.save(team);
     }

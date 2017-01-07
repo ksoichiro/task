@@ -19,4 +19,10 @@ public interface TeamRepository extends JpaRepository<Team, Integer> {
         + "JOIN t.teamAccounts ta "
         + "WHERE ta.account = ?1 ")
     List<Team> findByAccount(Account account);
+
+    @Query("SELECT t from #{#entityName} t "
+        + "JOIN FETCH t.teamAccounts ta "
+        + "WHERE t.id = ?1 "
+        + "AND ta.account = ?2 ")
+    Team findByIdAndAccount(Integer id, Account account);
 }
