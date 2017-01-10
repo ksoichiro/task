@@ -9,6 +9,7 @@ buildscript {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:1.3.2.RELEASE"
         classpath "org.springframework.boot:spring-boot-starter-security:1.3.2.RELEASE"
         classpath "com.github.ksoichiro:gradle-build-info-plugin:0.2.0"
+        classpath "info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.10"
     }
 }
 
@@ -26,6 +27,7 @@ apply plugin: 'spring-boot'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.ksoichiro.web.resource'
 apply plugin: 'com.github.ksoichiro.build.info'
+apply plugin: 'info.solidsoft.pitest'
 
 repositories {
     jcenter()
@@ -113,6 +115,11 @@ jacocoTestReport {
 }
 
 check.dependsOn 'jacocoTestReport'
+
+pitest {
+    targetClasses = ['com.ksoichiro.task.*']
+}
+//check.dependsOn 'pitest'
 
 def querydslDir = file('src/main/generated')
 
