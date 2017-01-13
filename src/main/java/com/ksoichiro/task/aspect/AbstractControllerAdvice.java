@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 public abstract class AbstractControllerAdvice {
-    @Pointcut("@within(org.springframework.stereotype.Controller)")
+    @Pointcut("@within(com.ksoichiro.task.annotation.StandardController)")
     public void controller() {
     }
 
