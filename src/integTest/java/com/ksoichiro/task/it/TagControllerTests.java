@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Sql({"/truncate.sql", "/web/data-tag.sql"})
+@Sql({"/truncate.sql", "/data-tag.sql"})
 @MvcTestConfiguration
 public class TagControllerTests extends AbstractTransactionalJUnit4SpringContextTests {
     @Autowired

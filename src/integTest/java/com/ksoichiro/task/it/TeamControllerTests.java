@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Sql({"/truncate.sql", "/web/data-team.sql"})
+@Sql({"/truncate.sql", "/data-team.sql"})
 @MvcTestConfiguration
 public class TeamControllerTests extends AbstractTransactionalJUnit4SpringContextTests {
     @Autowired

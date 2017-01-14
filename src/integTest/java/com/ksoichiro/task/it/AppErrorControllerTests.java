@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-@Sql({"/truncate.sql", "/web/data-task.sql"})
+@Sql({"/truncate.sql", "/data-task.sql"})
 @SpringApplicationConfiguration(App.class)
 @WebIntegrationTest
 @RunWith(SpringJUnit4ClassRunner.class)
