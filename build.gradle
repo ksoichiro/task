@@ -197,6 +197,12 @@ pitest {
 }
 //check.dependsOn 'pitest'
 
+consoleReporter {
+    jacoco {
+        reportFile project.file("${buildDir}/reports/jacoco/allJacocoTestReport/allJacocoTestReport.xml")
+    }
+}
+
 def querydslDir = file('src/main/generated')
 
 task generateQuerydsl(type: JavaCompile) {
