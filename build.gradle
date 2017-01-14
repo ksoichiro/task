@@ -37,6 +37,20 @@ ext['mariadb.version'] = '1.3.2'
 
 configurations {
     provided
+    integTest
+}
+
+sourceSets {
+    integTest {
+        java.srcDir file('src/integTest/java')
+        resources.srcDir file('src/integTest/resources')
+    }
+}
+
+task integTest(type: Test) {
+    testClassesDir = sourceSets.integTest.output.classesDir
+    classpath = sourceSets.integTest.runtimeClasspath
+    mustRunAfter test
 }
 
 dependencies {
@@ -53,14 +67,34 @@ dependencies {
     compile "com.h2database:h2"
     compile "org.mariadb.jdbc:mariadb-java-client"
     compile "com.mysema.querydsl:querydsl-jpa:${querydslVersion}"
+
     testCompile "org.springframework.boot:spring-boot-starter-test"
     testCompile "org.springframework.security:spring-security-test"
+
+    integTestCompile sourceSets.main.output
+    integTestCompile sourceSets.test.output
+    integTestCompile configurations.compile
+    integTestCompile configurations.testCompile
+    integTestRuntime configurations.runtime
+    integTestRuntime configurations.testRuntime
 }
 
 jar {
     baseName = 'task'
     version = '0.0.1-SNAPSHOT'
 }
+
+gradle.projectsEvaluated {
+    def unitTestTasks = []
+    gradle.rootProject.allprojects { project ->
+        unitTestTasks.addAll(project.tasks.findAll { it.name == 'test' })
+    }
+    unitTestTasks.each { unitTestTask ->
+        project.integTest.mustRunAfter unitTestTask
+    }
+}
+
+check.dependsOn integTest
 
 webResource {
     base {
@@ -115,6 +149,48 @@ jacocoTestReport {
 }
 
 check.dependsOn 'jacocoTestReport'
+
+task integJacocoTestReport(type: JacocoReport) {
+    dependsOn = ['integTest']
+    reports {
+        xml.enabled true
+    }
+    additionalSourceDirs = files(sourceSets.main.allSource.srcDirs)
+    sourceDirectories = files(sourceSets.main.allSource.srcDirs)
+    classDirectories = files(sourceSets.main.output)
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it,
+                exclude: [
+                    'com/ksoichiro/task/domain/Q*',
+                ])
+        })
+    }
+    executionData = files(file("$buildDir/jacoco/integTest.exec"))
+}
+
+check.dependsOn 'integJacocoTestReport'
+
+task allJacocoTestReport(type: JacocoReport) {
+    dependsOn = ['jacocoTestReport', 'integJacocoTestReport']
+    reports {
+        xml.enabled true
+    }
+    additionalSourceDirs = files(sourceSets.main.allSource.srcDirs)
+    sourceDirectories = files(sourceSets.main.allSource.srcDirs)
+    classDirectories = files(sourceSets.main.output)
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it,
+                exclude: [
+                    'com/ksoichiro/task/domain/Q*',
+                ])
+        })
+    }
+    executionData = files(file("$buildDir/jacoco/test.exec"), file("$buildDir/jacoco/integTest.exec"))
+}
+
+check.dependsOn 'allJacocoTestReport'
 
 pitest {
     targetClasses = ['com.ksoichiro.task.*']

@@ -1,4 +1,4 @@
-package com.ksoichiro.task.web;
+package com.ksoichiro.task.it;
 
 import com.ksoichiro.task.App;
 import com.ksoichiro.task.domain.Account;

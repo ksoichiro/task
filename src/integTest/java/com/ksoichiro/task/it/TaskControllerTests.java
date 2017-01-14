@@ -1,4 +1,4 @@
-package com.ksoichiro.task.web;
+package com.ksoichiro.task.it;
 
 import com.ksoichiro.task.annotation.MvcTestConfiguration;
 import com.ksoichiro.task.constant.TaskStatusEnum;
