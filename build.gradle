@@ -1,7 +1,6 @@
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 buildscript {
-    ext.querydslVersion = '3.6.7'
     repositories {
         jcenter()
     }
@@ -19,250 +18,166 @@ plugins {
     id 'com.github.kt3k.coveralls' version '2.7.0'
 }
 
-def vJavaLang = '1.8'
+ext.vJavaLang = '1.8'
 
-apply plugin: 'java'
-apply plugin: 'idea'
-apply plugin: 'spring-boot'
-apply plugin: 'jacoco'
-apply plugin: 'com.github.ksoichiro.web.resource'
-apply plugin: 'com.github.ksoichiro.build.info'
-apply plugin: 'info.solidsoft.pitest'
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'spring-boot'
+    apply plugin: 'jacoco'
+    apply plugin: 'com.github.ksoichiro.build.info'
+    apply plugin: 'info.solidsoft.pitest'
 
-repositories {
-    jcenter()
-}
-
-ext['mariadb.version'] = '1.3.2'
-
-configurations {
-    provided
-}
-
-sourceSets {
-    integTest {
-        java.srcDir file('src/integTest/java')
-        resources.srcDir file('src/integTest/resources')
+    repositories {
+        jcenter()
     }
-}
 
-task integTest(type: Test) {
-    testClassesDir = sourceSets.integTest.output.classesDir
-    classpath = sourceSets.integTest.runtimeClasspath
-    mustRunAfter test
-}
-
-dependencies {
-    provided "com.mysema.querydsl:querydsl-apt:${querydslVersion}"
-    compile 'org.projectlombok:lombok:1.16.2'
-    compile "org.springframework.boot:spring-boot-starter-web"
-    compile "org.springframework.boot:spring-boot-starter-thymeleaf"
-    compile "org.springframework.boot:spring-boot-starter-data-jpa"
-    compile "org.springframework.boot:spring-boot-starter-security"
-    compile "org.springframework.boot:spring-boot-starter-actuator"
-    compile "org.springframework.boot:spring-boot-starter-cache"
-    compile "org.thymeleaf.extras:thymeleaf-extras-springsecurity4"
-    compile "org.thymeleaf.extras:thymeleaf-extras-conditionalcomments"
-    compile "com.h2database:h2"
-    compile "org.mariadb.jdbc:mariadb-java-client"
-    compile "com.mysema.querydsl:querydsl-jpa:${querydslVersion}"
-
-    testCompile "org.springframework.boot:spring-boot-starter-test"
-    testCompile "org.springframework.security:spring-security-test"
-
-    integTestCompile sourceSets.main.output
-    integTestCompile sourceSets.test.output
-    integTestCompile configurations.compile
-    integTestCompile configurations.testCompile
-    integTestRuntime configurations.runtime
-    integTestRuntime configurations.testRuntime
-}
-
-jar {
-    baseName = 'task'
-    version = '0.0.1-SNAPSHOT'
-}
-
-gradle.projectsEvaluated {
-    def unitTestTasks = []
-    gradle.rootProject.allprojects { project ->
-        unitTestTasks.addAll(project.tasks.findAll { it.name == 'test' })
-    }
-    unitTestTasks.each { unitTestTask ->
-        project.integTest.mustRunAfter unitTestTask
-    }
-}
-
-check.dependsOn integTest
-
-webResource {
-    base {
-        dest = 'src/main/resources/static'
-    }
-    bower {
-        logLevel "INFO"
-        dependencies {
-            install name: 'jquery', version: '1.11.2', filter: ["dist/*.min.*"]
-            install name: 'bootstrap', version: '3.3.4', filter: ["dist/js/*.min.js", "dist/fonts/*"]
-            install name: 'components-font-awesome', version: '4.7.0', filter: ["fonts/*"]
-            install name: 'respond-minmax', version: '1.4.2', filter: ["dest/*.min.js"]
-            install name: 'html5shiv', version: '3.7.2', filter: ["dist/*.min.js"]
-            install name: 'chosen', version: '1.6.2', filter: ["*.js"]
-            install name: 'bootstrap-chosen', version: '1.0.1', filter: ["*.png"]
-            install name: 'js-cookie', version: '2.1.3'
-        }
-    }
-}
-webResourceInstallBowerDependencies {
-    doFirst {
-        def packageDir = file("${buildDir}/webResource/.bower/packages")
-        if (packageDir.exists()) {
-            packageDir.mkdirs()
+    idea {
+        module {
+            inheritOutputDirs = false
+            outputDir = file("${buildDir}/classes/main")
         }
     }
 }
 
-buildInfo {
-    gitPropertiesEnabled true
-}
+subprojects {
+    ext['mariadb.version'] = '1.3.2'
 
-bootRun {
-    addResources true
-    if (System.properties.containsKey('spring.profiles.active')) {
-        systemProperty "spring.profiles.active", System.properties['spring.profiles.active']
-    }
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled true
-    }
-    afterEvaluate {
-        classDirectories = files(classDirectories.files.collect {
-            fileTree(dir: it,
-                exclude: [
-                    'com/ksoichiro/task/domain/Q*',
-                ])
-        })
-    }
-}
-
-check.dependsOn 'jacocoTestReport'
-
-task integJacocoTestReport(type: JacocoReport) {
-    dependsOn = ['integTest']
-    reports {
-        xml.enabled true
-    }
-    additionalSourceDirs = files(sourceSets.main.allSource.srcDirs)
-    sourceDirectories = files(sourceSets.main.allSource.srcDirs)
-    classDirectories = files(sourceSets.main.output)
-    afterEvaluate {
-        classDirectories = files(classDirectories.files.collect {
-            fileTree(dir: it,
-                exclude: [
-                    'com/ksoichiro/task/domain/Q*',
-                ])
-        })
-    }
-    executionData = files(file("$buildDir/jacoco/integTest.exec"))
-}
-
-check.dependsOn 'integJacocoTestReport'
-
-task allJacocoTestReport(type: JacocoReport) {
-    dependsOn = ['jacocoTestReport', 'integJacocoTestReport']
-    reports {
-        xml.enabled true
-    }
-    additionalSourceDirs = files(sourceSets.main.allSource.srcDirs)
-    sourceDirectories = files(sourceSets.main.allSource.srcDirs)
-    classDirectories = files(sourceSets.main.output)
-    afterEvaluate {
-        classDirectories = files(classDirectories.files.collect {
-            fileTree(dir: it,
-                exclude: [
-                    'com/ksoichiro/task/domain/Q*',
-                ])
-        })
-    }
-    executionData = files(file("$buildDir/jacoco/test.exec"), file("$buildDir/jacoco/integTest.exec"))
-}
-
-check.dependsOn 'allJacocoTestReport'
-
-pitest {
-    targetClasses = ['com.ksoichiro.task.*']
-}
-//check.dependsOn 'pitest'
-
-consoleReporter {
-    jacoco {
-        reportFile project.file("${buildDir}/reports/jacoco/allJacocoTestReport/allJacocoTestReport.xml")
-    }
-}
-
-def querydslDir = file('src/main/generated')
-
-task generateQuerydsl(type: JavaCompile) {
-    source = sourceSets.main.java
-    classpath = configurations.compile + configurations.provided
-    destinationDir = querydslDir
-    options.compilerArgs += [
-        '-proc:only',
-        '-processor', [
-            'com.mysema.query.apt.jpa.JPAAnnotationProcessor',
-            // To use @__ in Lombok @AllArgsConstructor.onConstructor,
-            // add Lombok's annotation processor for Querydsl code generation
-            // https://github.com/ewerk/gradle-plugins/issues/59
-            'lombok.launch.AnnotationProcessorHider$AnnotationProcessor',
-        ].join(',')
-    ]
-}
-
-compileJava {
-    dependsOn generateQuerydsl
-    sourceSets.main.java.srcDir querydslDir
-}
-
-clean {
-    delete querydslDir
-}
-
-task processSql {
-    def sqlFile = file("src/main/sql/data.sql")
-    def h2File = file("src/main/resources/data-h2.sql")
-    def mariadbFile = file("src/main/resources/data-mariadb.sql")
-    inputs.file sqlFile
-    outputs.files h2File, mariadbFile
-    doLast {
-        h2File.withWriter { writer ->
-            sqlFile.eachLine { line ->
-                if (!line.startsWith("set ")) {
-                    writer.println(line)
-                }
-            }
-        }
-        copy {
-            from sqlFile
-            into "src/main/resources"
-            rename "data.sql", "data-mariadb.sql"
+    sourceSets {
+        integTest {
+            java.srcDir file('src/integTest/java')
+            resources.srcDir file('src/integTest/resources')
         }
     }
+
+    task integTest(type: Test) {
+        testClassesDir = sourceSets.integTest.output.classesDir
+        classpath = sourceSets.integTest.runtimeClasspath
+        mustRunAfter test
+    }
+
+    dependencies {
+        compile 'org.projectlombok:lombok:1.16.2'
+        compile "org.springframework.boot:spring-boot-starter-web"
+        compile "org.springframework.boot:spring-boot-starter-thymeleaf"
+        compile "org.springframework.boot:spring-boot-starter-data-jpa"
+        compile "org.springframework.boot:spring-boot-starter-security"
+        compile "org.springframework.boot:spring-boot-starter-actuator"
+        compile "org.springframework.boot:spring-boot-starter-cache"
+        compile "org.thymeleaf.extras:thymeleaf-extras-springsecurity4"
+        compile "org.thymeleaf.extras:thymeleaf-extras-conditionalcomments"
+        compile "com.h2database:h2"
+        compile "org.mariadb.jdbc:mariadb-java-client"
+
+        testCompile "org.springframework.boot:spring-boot-starter-test"
+        testCompile "org.springframework.security:spring-security-test"
+
+        integTestCompile sourceSets.main.output
+        integTestCompile sourceSets.test.output
+        integTestCompile configurations.compile
+        integTestCompile configurations.testCompile
+        integTestRuntime configurations.runtime
+        integTestRuntime configurations.testRuntime
+    }
+
+    jar {
+        baseName = rootProject.name + project.name.capitalize()
+        version = '0.0.1-SNAPSHOT'
+    }
+
+    gradle.projectsEvaluated {
+        def unitTestTasks = []
+        gradle.rootProject.allprojects { project ->
+            unitTestTasks.addAll(project.tasks.findAll { it.name == 'test' })
+        }
+        unitTestTasks.each { unitTestTask ->
+            project.integTest.mustRunAfter unitTestTask
+        }
+    }
+
+    check.dependsOn integTest
+
+    buildInfo {
+        gitPropertiesEnabled true
+    }
+
+    bootRun {
+        addResources true
+        if (System.properties.containsKey('spring.profiles.active')) {
+            systemProperty "spring.profiles.active", System.properties['spring.profiles.active']
+        }
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.enabled true
+        }
+        afterEvaluate {
+            classDirectories = files(classDirectories.files.collect {
+                fileTree(dir: it,
+                    exclude: [
+                        'com/ksoichiro/task/domain/Q*',
+                    ])
+            })
+        }
+    }
+    check.dependsOn 'jacocoTestReport'
+
+    task integJacocoTestReport(type: JacocoReport) {
+        dependsOn = ['integTest']
+        reports {
+            xml.enabled true
+        }
+        additionalSourceDirs = files(sourceSets.main.allSource.srcDirs)
+        sourceDirectories = files(sourceSets.main.allSource.srcDirs)
+        classDirectories = files(sourceSets.main.output)
+        afterEvaluate {
+            classDirectories = files(classDirectories.files.collect {
+                fileTree(dir: it,
+                    exclude: [
+                        'com/ksoichiro/task/domain/Q*',
+                    ])
+            })
+        }
+        executionData = files(file("$buildDir/jacoco/integTest.exec"))
+    }
+
+    check.dependsOn 'integJacocoTestReport'
+
+    task allJacocoTestReport(type: JacocoReport) {
+        dependsOn = ['jacocoTestReport', 'integJacocoTestReport']
+        reports {
+            xml.enabled true
+        }
+        additionalSourceDirs = files(sourceSets.main.allSource.srcDirs)
+        sourceDirectories = files(sourceSets.main.allSource.srcDirs)
+        classDirectories = files(sourceSets.main.output)
+        afterEvaluate {
+            classDirectories = files(classDirectories.files.collect {
+                fileTree(dir: it,
+                    exclude: [
+                        'com/ksoichiro/task/domain/Q*',
+                    ])
+            })
+        }
+        executionData = files(file("$buildDir/jacoco/test.exec"), file("$buildDir/jacoco/integTest.exec"))
+    }
+
+    check.dependsOn 'allJacocoTestReport'
+
+    pitest {
+        targetClasses = ['com.ksoichiro.task.*']
+    }
+    //check.dependsOn 'pitest'
+
+    consoleReporter {
+        jacoco {
+            reportFile project.file("${buildDir}/reports/jacoco/allJacocoTestReport/allJacocoTestReport.xml")
+        }
+    }
 }
-processResources.dependsOn 'processSql'
 
 idea {
-    module {
-        inheritOutputDirs = false
-        outputDir = file("${buildDir}/classes/main")
-
-        excludeDirs += [
-            file('src/main/resources/static/css'),
-            file('src/main/resources/static/js'),
-            file('src/main/resources/static/lib'),
-        ]
-    }
     project {
         languageLevel = vJavaLang
         ipr {
@@ -286,6 +201,5 @@ task encodePassword << {
     println encoder.encode(username)
 }
 
-compileJava.dependsOn 'webResourceCompile'
 task stage
 stage.dependsOn 'assemble'
