@@ -51,8 +51,18 @@ subprojects {
     }
 
     task integTest(type: Test) {
+        group = LifecycleBasePlugin.VERIFICATION_GROUP
+        description = 'Runs the integration tests.'
+
         testClassesDir = sourceSets.integTest.output.classesDir
         classpath = sourceSets.integTest.runtimeClasspath
+        binResultsDir = file("${buildDir}/integTest-results/binary/integTest")
+
+        reports {
+            html.destination = "${buildDir}/reports/integTest"
+            junitXml.destination = "${buildDir}/integTest-results"
+        }
+
         mustRunAfter test
     }
 
@@ -173,6 +183,12 @@ subprojects {
     consoleReporter {
         jacoco {
             reportFile project.file("${buildDir}/reports/jacoco/allJacocoTestReport/allJacocoTestReport.xml")
+        }
+    }
+
+    idea {
+        module {
+            testSourceDirs += files(sourceSets.integTest.allSource.srcDirs)
         }
     }
 }
