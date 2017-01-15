@@ -5,10 +5,10 @@
 
 Task management application.
 
-## Run
+## Run site
 
 ```
-./gradlew bootRun
+./gradlew site:bootRun
 ```
 
 ## License

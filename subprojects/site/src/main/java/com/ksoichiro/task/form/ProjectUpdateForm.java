@@ -6,7 +6,6 @@ import com.ksoichiro.task.dto.ProjectDTO;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.BeanUtils;
-import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotNull;
 
