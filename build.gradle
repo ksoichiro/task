@@ -43,29 +43,6 @@ allprojects {
 subprojects {
     ext['mariadb.version'] = '1.3.2'
 
-    sourceSets {
-        integTest {
-            java.srcDir file('src/integTest/java')
-            resources.srcDir file('src/integTest/resources')
-        }
-    }
-
-    task integTest(type: Test) {
-        group = LifecycleBasePlugin.VERIFICATION_GROUP
-        description = 'Runs the integration tests.'
-
-        testClassesDir = sourceSets.integTest.output.classesDir
-        classpath = sourceSets.integTest.runtimeClasspath
-        binResultsDir = file("${buildDir}/integTest-results/binary/integTest")
-
-        reports {
-            html.destination = "${buildDir}/reports/integTest"
-            junitXml.destination = "${buildDir}/integTest-results"
-        }
-
-        mustRunAfter test
-    }
-
     dependencies {
         compile 'org.projectlombok:lombok:1.16.2'
         compile "org.springframework.boot:spring-boot-starter-web"
@@ -81,31 +58,12 @@ subprojects {
 
         testCompile "org.springframework.boot:spring-boot-starter-test"
         testCompile "org.springframework.security:spring-security-test"
-
-        integTestCompile sourceSets.main.output
-        integTestCompile sourceSets.test.output
-        integTestCompile configurations.compile
-        integTestCompile configurations.testCompile
-        integTestRuntime configurations.runtime
-        integTestRuntime configurations.testRuntime
     }
 
     jar {
         baseName = rootProject.name + project.name.capitalize()
         version = '0.0.1-SNAPSHOT'
     }
-
-    gradle.projectsEvaluated {
-        def unitTestTasks = []
-        gradle.rootProject.allprojects { project ->
-            unitTestTasks.addAll(project.tasks.findAll { it.name == 'test' })
-        }
-        unitTestTasks.each { unitTestTask ->
-            project.integTest.mustRunAfter unitTestTask
-        }
-    }
-
-    check.dependsOn integTest
 
     buildInfo {
         gitPropertiesEnabled true
@@ -133,48 +91,6 @@ subprojects {
     }
     check.dependsOn 'jacocoTestReport'
 
-    task integJacocoTestReport(type: JacocoReport) {
-        dependsOn = ['integTest']
-        reports {
-            xml.enabled true
-        }
-        additionalSourceDirs = files(sourceSets.main.allSource.srcDirs)
-        sourceDirectories = files(sourceSets.main.allSource.srcDirs)
-        classDirectories = files(sourceSets.main.output)
-        afterEvaluate {
-            classDirectories = files(classDirectories.files.collect {
-                fileTree(dir: it,
-                    exclude: [
-                        'com/ksoichiro/task/domain/Q*',
-                    ])
-            })
-        }
-        executionData = files(file("$buildDir/jacoco/integTest.exec"))
-    }
-
-    check.dependsOn 'integJacocoTestReport'
-
-    task allJacocoTestReport(type: JacocoReport) {
-        dependsOn = ['jacocoTestReport', 'integJacocoTestReport']
-        reports {
-            xml.enabled true
-        }
-        additionalSourceDirs = files(sourceSets.main.allSource.srcDirs)
-        sourceDirectories = files(sourceSets.main.allSource.srcDirs)
-        classDirectories = files(sourceSets.main.output)
-        afterEvaluate {
-            classDirectories = files(classDirectories.files.collect {
-                fileTree(dir: it,
-                    exclude: [
-                        'com/ksoichiro/task/domain/Q*',
-                    ])
-            })
-        }
-        executionData = files(file("$buildDir/jacoco/test.exec"), file("$buildDir/jacoco/integTest.exec"))
-    }
-
-    check.dependsOn 'allJacocoTestReport'
-
     pitest {
         targetClasses = ['com.ksoichiro.task.*']
     }
@@ -185,13 +101,8 @@ subprojects {
             reportFile project.file("${buildDir}/reports/jacoco/allJacocoTestReport/allJacocoTestReport.xml")
         }
     }
-
-    idea {
-        module {
-            testSourceDirs += files(sourceSets.integTest.allSource.srcDirs)
-        }
-    }
 }
+apply from: 'gradle/integTest.gradle'
 
 idea {
     project {
