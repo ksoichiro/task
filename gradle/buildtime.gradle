@@ -1,0 +1,11 @@
+apply plugin: 'build-time-tracker'
+
+buildtimetracker {
+    reporters {
+        summary {
+            ordered true
+            threshold 50
+            barstyle 'unicode'
+        }
+    }
+}

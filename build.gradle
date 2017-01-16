@@ -21,17 +21,7 @@ plugins {
 
 ext.vJavaLang = '1.8'
 
-apply plugin: 'build-time-tracker'
-
-buildtimetracker {
-    reporters {
-        summary {
-            ordered true
-            threshold 50
-            barstyle 'unicode'
-        }
-    }
-}
+apply from: 'gradle/buildtime.gradle'
 
 allprojects {
     apply plugin: 'java'
@@ -118,6 +108,7 @@ subprojects {
         }
     }
 }
+
 apply from: 'gradle/integTest.gradle'
 
 idea {
