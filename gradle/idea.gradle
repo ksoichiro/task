@@ -1,0 +1,23 @@
+allprojects {
+    apply plugin: 'idea'
+
+    idea {
+        module {
+            inheritOutputDirs = false
+            outputDir = file("${buildDir}/classes/main")
+        }
+    }
+}
+
+idea {
+    project {
+        languageLevel = vJavaLang
+        ipr {
+            withXml { provider ->
+                def mapping = provider.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping
+                mapping.@vcs = 'Git'
+                mapping.@directory = '$PROJECT_DIR$'
+            }
+        }
+    }
+}

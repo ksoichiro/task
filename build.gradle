@@ -1,5 +1,3 @@
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-
 buildscript {
     repositories {
         jcenter()
@@ -21,31 +19,15 @@ plugins {
 
 ext.vJavaLang = '1.8'
 
-apply from: 'gradle/buildtime.gradle'
-
 allprojects {
     apply plugin: 'java'
-    apply plugin: 'idea'
-    apply plugin: 'jacoco'
-    apply plugin: 'com.github.ksoichiro.build.info'
-    apply plugin: 'info.solidsoft.pitest'
 
     repositories {
         jcenter()
     }
-
-    idea {
-        module {
-            inheritOutputDirs = false
-            outputDir = file("${buildDir}/classes/main")
-        }
-    }
 }
 
 subprojects {
-    apply plugin: 'spring-boot'
-    ext['mariadb.version'] = '1.3.2'
-
     dependencies {
         compile 'org.projectlombok:lombok:1.16.2'
         compile "org.springframework.boot:spring-boot-starter-web"
@@ -67,73 +49,13 @@ subprojects {
         baseName = rootProject.name + project.name.capitalize()
         version = '0.0.1-SNAPSHOT'
     }
-
-    buildInfo {
-        gitPropertiesEnabled true
-    }
-
-    bootRepackage {
-        enabled = project.name != 'core'
-    }
-    bootRun {
-        addResources true
-        if (System.properties.containsKey('spring.profiles.active')) {
-            systemProperty "spring.profiles.active", System.properties['spring.profiles.active']
-        }
-    }
-
-    jacocoTestReport {
-        reports {
-            xml.enabled true
-        }
-        afterEvaluate {
-            classDirectories = files(classDirectories.files.collect {
-                fileTree(dir: it,
-                    exclude: [
-                        'com/ksoichiro/task/domain/Q*',
-                    ])
-            })
-        }
-    }
-    check.dependsOn 'jacocoTestReport'
-
-    pitest {
-        targetClasses = ['com.ksoichiro.task.*']
-    }
-    //check.dependsOn 'pitest'
-
-    consoleReporter {
-        jacoco {
-            reportFile project.file("${buildDir}/reports/jacoco/allJacocoTestReport/allJacocoTestReport.xml")
-        }
-    }
 }
 
+apply from: 'gradle/buildtime.gradle'
+apply from: 'gradle/idea.gradle'
+apply from: 'gradle/springBoot.gradle'
 apply from: 'gradle/integTest.gradle'
-
-idea {
-    project {
-        languageLevel = vJavaLang
-        ipr {
-            withXml { provider ->
-                def mapping = provider.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping
-                mapping.@vcs = 'Git'
-                mapping.@directory = '$PROJECT_DIR$'
-            }
-        }
-    }
-}
-
-// e.g. ./gradlew encodePassword -Pargs="test"
-task encodePassword << {
-    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder()
-    String username = 'test'
-    if (project.hasProperty('args')) {
-        username = project.args.split('\\s+')[0]
-    }
-    println "Encoded password for user ${username}:"
-    println encoder.encode(username)
-}
-
-task stage
-stage.dependsOn 'assemble'
+apply from: 'gradle/quality.gradle'
+apply from: 'gradle/buildInfo.gradle'
+apply from: 'gradle/util.gradle'
+apply from: 'gradle/heroku.gradle'

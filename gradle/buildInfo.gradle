@@ -1,0 +1,9 @@
+allprojects {
+    apply plugin: 'com.github.ksoichiro.build.info'
+}
+
+subprojects {
+    buildInfo {
+        gitPropertiesEnabled true
+    }
+}

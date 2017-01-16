@@ -1,0 +1,32 @@
+allprojects {
+    apply plugin: 'jacoco'
+    apply plugin: 'info.solidsoft.pitest'
+}
+
+subprojects {
+    jacocoTestReport {
+        reports {
+            xml.enabled true
+        }
+        afterEvaluate {
+            classDirectories = files(classDirectories.files.collect {
+                fileTree(dir: it,
+                    exclude: [
+                        'com/ksoichiro/task/domain/Q*',
+                    ])
+            })
+        }
+    }
+    check.dependsOn 'jacocoTestReport'
+
+    pitest {
+        targetClasses = ['com.ksoichiro.task.*']
+    }
+    //check.dependsOn 'pitest'
+
+    consoleReporter {
+        jacoco {
+            reportFile project.file("${buildDir}/reports/jacoco/allJacocoTestReport/allJacocoTestReport.xml")
+        }
+    }
+}
