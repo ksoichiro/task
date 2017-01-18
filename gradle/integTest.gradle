@@ -1,5 +1,7 @@
 subprojects {
     sourceSets {
+        // IntelliJ handles only one directory for test sources,
+        // so 'integTest' classes are put into the test classes directory.
         integTest {
             java.srcDir file('src/integTest/java')
             resources.srcDir file('src/integTest/resources')
