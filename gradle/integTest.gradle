@@ -83,15 +83,57 @@ subprojects {
             })
         }
         def executionDataList = []
-        [file("$buildDir/jacoco/test.exec"), file("$buildDir/jacoco/integTest.exec")].each {
-            if (it.exists()) {
-                executionDataList += it
-            }
+        if (file("src/test/java").exists()) {
+            executionDataList += file("$buildDir/jacoco/test.exec")
+        }
+        if (file("src/integTest/java").exists()) {
+            executionDataList += file("$buildDir/jacoco/integTest.exec")
         }
         executionData executionDataList
     }
 
     check.dependsOn 'allJacocoTestReport'
+
+    task allProjectJacocoTestReport(type: JacocoReport) {
+        dependsOn = ['jacocoTestReport', 'integJacocoTestReport', 'allJacocoTestReport']
+        reports {
+            xml.enabled true
+        }
+        additionalSourceDirs = files(sourceSets.main.allSource.srcDirs)
+        sourceDirectories = files(sourceSets.main.allSource.srcDirs)
+        classDirectories = files(sourceSets.main.output)
+        afterEvaluate {
+            classDirectories = files(classDirectories.files.collect {
+                fileTree(dir: it,
+                    exclude: [
+                        'com/ksoichiro/task/domain/Q*',
+                    ])
+            })
+        }
+        def executionDataList = []
+        rootProject.subprojects.each { p ->
+            if (p.file("src/test/java").exists()) {
+                executionDataList += p.file("$p.buildDir/jacoco/test.exec")
+            }
+            if (p.file("src/integTest/java").exists()) {
+                executionDataList += p.file("$p.buildDir/jacoco/integTest.exec")
+            }
+        }
+        executionData executionDataList
+    }
+
+    check.dependsOn 'allProjectJacocoTestReport'
+
+    gradle.projectsEvaluated {
+        def jacocoTasks = []
+        gradle.rootProject.allprojects { project ->
+            jacocoTasks.addAll(project.tasks.findAll {
+                it.name.toLowerCase().contains('jacocotestreport') && it.name != 'allProjectJacocoTestReport' })
+        }
+        jacocoTasks.each { testTask ->
+            project.allProjectJacocoTestReport.mustRunAfter jacocoTasks
+        }
+    }
 
     idea {
         module {
