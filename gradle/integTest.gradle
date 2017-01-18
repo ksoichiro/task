@@ -82,7 +82,13 @@ subprojects {
                     ])
             })
         }
-        executionData = files(file("$buildDir/jacoco/test.exec"), file("$buildDir/jacoco/integTest.exec"))
+        def executionDataList = []
+        [file("$buildDir/jacoco/test.exec"), file("$buildDir/jacoco/integTest.exec")].each {
+            if (it.exists()) {
+                executionDataList += it
+            }
+        }
+        executionData executionDataList
     }
 
     check.dependsOn 'allJacocoTestReport'
