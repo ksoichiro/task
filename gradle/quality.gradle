@@ -6,10 +6,40 @@ allprojects {
 subprojects {
     apply plugin: 'com.github.ksoichiro.console.reporter'
 
-    jacocoTestReport {
+    def testTypes = ['test', 'integTest']
+    def jacocoTestReportTaskName = { testType -> "jacocoTestReport${testType.capitalize()}" }
+
+    testTypes.each { testType ->
+        def taskName = jacocoTestReportTaskName(testType)
+        task "${taskName}"(type: JacocoReport) {
+            dependsOn = [testType]
+            reports {
+                xml.enabled true
+            }
+            additionalSourceDirs = files(sourceSets.main.allSource.srcDirs)
+            sourceDirectories = files(sourceSets.main.allSource.srcDirs)
+            classDirectories = files(sourceSets.main.output)
+            afterEvaluate {
+                classDirectories = files(classDirectories.files.collect {
+                    fileTree(dir: it,
+                        exclude: [
+                            'com/ksoichiro/task/domain/Q*',
+                        ])
+                })
+            }
+            executionData = files(file("$buildDir/jacoco/${testType}.exec"))
+        }
+        check.dependsOn taskName
+    }
+
+    task allJacocoTestReport(type: JacocoReport) {
+        dependsOn = testTypes.collect { jacocoTestReportTaskName(it) }
         reports {
             xml.enabled true
         }
+        additionalSourceDirs = files(sourceSets.main.allSource.srcDirs)
+        sourceDirectories = files(sourceSets.main.allSource.srcDirs)
+        classDirectories = files(sourceSets.main.output)
         afterEvaluate {
             classDirectories = files(classDirectories.files.collect {
                 fileTree(dir: it,
@@ -18,8 +48,56 @@ subprojects {
                     ])
             })
         }
+        def executionDataList = []
+        testTypes.each { testType ->
+            if (file("src/${testType}/java").exists()) {
+                executionDataList += file("$buildDir/jacoco/${testType}.exec")
+            }
+        }
+        executionData executionDataList
     }
-    check.dependsOn 'jacocoTestReport'
+
+    check.dependsOn 'allJacocoTestReport'
+
+    task allProjectJacocoTestReport(type: JacocoReport) {
+        dependsOn = ['allJacocoTestReport'] + testTypes.collect { jacocoTestReportTaskName(it) }
+        reports {
+            xml.enabled true
+        }
+        additionalSourceDirs = files(sourceSets.main.allSource.srcDirs)
+        sourceDirectories = files(sourceSets.main.allSource.srcDirs)
+        classDirectories = files(sourceSets.main.output)
+        afterEvaluate {
+            classDirectories = files(classDirectories.files.collect {
+                fileTree(dir: it,
+                    exclude: [
+                        'com/ksoichiro/task/domain/Q*',
+                    ])
+            })
+        }
+        def executionDataList = []
+        rootProject.subprojects.each { p ->
+            testTypes.each { testType ->
+                if (p.file("src/${testType}/java").exists()) {
+                    executionDataList += p.file("$p.buildDir/jacoco/${testType}.exec")
+                }
+            }
+        }
+        executionData executionDataList
+    }
+
+    check.dependsOn 'allProjectJacocoTestReport'
+
+    gradle.projectsEvaluated {
+        def jacocoTasks = []
+        gradle.rootProject.allprojects { project ->
+            jacocoTasks.addAll(project.tasks.findAll {
+                it.name.toLowerCase().contains('jacocotestreport') && it.name != 'allProjectJacocoTestReport' })
+        }
+        jacocoTasks.each { testTask ->
+            project.allProjectJacocoTestReport.mustRunAfter jacocoTasks
+        }
+    }
 
     pitest {
         targetClasses = ['com.ksoichiro.task.*']
