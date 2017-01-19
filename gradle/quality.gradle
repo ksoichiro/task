@@ -4,6 +4,8 @@ allprojects {
 }
 
 subprojects {
+    apply plugin: 'com.github.ksoichiro.console.reporter'
+
     jacocoTestReport {
         reports {
             xml.enabled true
@@ -26,7 +28,8 @@ subprojects {
 
     consoleReporter {
         jacoco {
-            reportFile project.file("${buildDir}/reports/jacoco/allJacocoTestReport/allJacocoTestReport.xml")
+            coverageTaskName 'allProjectJacocoTestReport'
+            reportFile project.file("${buildDir}/reports/jacoco/allProjectJacocoTestReport/allProjectJacocoTestReport.xml")
         }
     }
 }
