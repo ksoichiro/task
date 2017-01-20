@@ -14,7 +14,7 @@ public class MiddleVersionPathStrategy implements VersionPathStrategy {
     @Override
     public String extractVersion(String requestPath) {
         if (requestPath.startsWith(this.prefix)) {
-            String prefixRemoved = requestPath.substring(this.prefix.length());
+            final String prefixRemoved = requestPath.substring(this.prefix.length());
             if (prefixRemoved.startsWith(this.version)) {
                 return this.version;
             }

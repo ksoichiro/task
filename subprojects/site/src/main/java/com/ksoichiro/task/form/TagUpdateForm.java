@@ -22,7 +22,7 @@ public class TagUpdateForm implements UpdateForm<Tag, TagDTO> {
 
     @Override
     public TagDTO toDTO(Account account) {
-        TagDTO tagDTO = new TagDTO();
+        final TagDTO tagDTO = new TagDTO();
         tagDTO.setAccount(account);
         BeanUtils.copyProperties(this, tagDTO);
         return tagDTO;

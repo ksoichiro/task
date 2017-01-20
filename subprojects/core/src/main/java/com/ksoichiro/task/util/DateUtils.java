@@ -16,8 +16,8 @@ public abstract class DateUtils {
     }
 
     public static String toStringFromDate(Date date, String pattern) {
-        LocalDateTime t = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(pattern);
+        final LocalDateTime t = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+        final DateTimeFormatter dtf = DateTimeFormatter.ofPattern(pattern);
         return dtf.format(t);
     }
 
@@ -30,8 +30,8 @@ public abstract class DateUtils {
     }
 
     public static Date toDateFromString(String value, String pattern) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(pattern);
-        LocalDateTime t = LocalDateTime.parse(value, dtf);
+        final DateTimeFormatter dtf = DateTimeFormatter.ofPattern(pattern);
+        final LocalDateTime t = LocalDateTime.parse(value, dtf);
         return Date.from(t.atZone(ZoneId.systemDefault()).toInstant());
     }
 }

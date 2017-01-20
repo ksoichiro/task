@@ -46,7 +46,7 @@ public class TeamService {
         BeanUtils.copyProperties(teamDTO, team, "id");
         List<TeamAccount> teamAccounts = new ArrayList<>();
         team = teamRepository.save(team);
-        TeamAccount teamAccount = new TeamAccount();
+        final TeamAccount teamAccount = new TeamAccount();
         teamAccount.setAccount(teamDTO.getAccount());
         teamAccount.setTeam(team);
         teamAccounts.add(teamAccount);
@@ -60,7 +60,7 @@ public class TeamService {
         if (teamDTO == null || teamDTO.getId() == null) {
             throw new IllegalArgumentException("teamDTO and id cannot be null");
         }
-        Team team = teamRepository.findOne(teamDTO.getId());
+        final Team team = teamRepository.findOne(teamDTO.getId());
         if (!teamDTO.getName().equals(team.getName())) {
             team.setName(teamDTO.getName());
         }

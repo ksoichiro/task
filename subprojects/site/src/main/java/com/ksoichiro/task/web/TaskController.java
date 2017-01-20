@@ -53,7 +53,7 @@ public class TaskController {
     @Post("/today")
     public String todaySearch(@LoginAccount Account account, TaskSearchForm taskSearchForm, Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("allTaskStatus", TaskStatusEnum.values());
-        TaskDTO dto = taskSearchForm.toDTO(account);
+        final TaskDTO dto = taskSearchForm.toDTO(account);
         dto.setScheduledAt(new Date());
         model.addAttribute("tasks", taskService.findByAccountAndConditions(dto, pageable));
         return "task/today";

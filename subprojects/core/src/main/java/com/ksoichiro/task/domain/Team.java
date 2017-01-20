@@ -25,7 +25,7 @@ public class Team extends BaseEntity {
     }
 
     public static Team empty() {
-        Team team = new Team("", "", null);
+        final Team team = new Team("", "", null);
         team.setId(0);
         team.setCreatedAt(emptyDate());
         team.setUpdatedAt(emptyDate());

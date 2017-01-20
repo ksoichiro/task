@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!--
+ ! https://github.com/checkstyle/contribution/blob/master/examples/checks/all-checkstyle-checks.xml
+ !_____________________________________________________________________________
+ !
+ !   All CheckStyle checks, with defaults explicitly stated.
+ !
+ !   Can be used as a starting point for custom rule sets.
+ !_____________________________________________________________________________
+ !-->
+<!DOCTYPE module PUBLIC
+    "-//Puppy Crawl//DTD Check Configuration 1.1//EN"
+    "http://www.puppycrawl.com/dtds/configuration_1_1.dtd">
+
+<module name="Checker">
+    <module name="Translation">
+        <property name="fileExtensions" value="properties"/>
+    </module>
+    <module name="SuppressionFilter">
+        <property name="file" value="config/checkstyle/suppressions.xml"/>
+    </module>
+    <module name="TreeWalker">
+        <module name="SuppressWarningsHolder" />
+        <module name="HideUtilityClassConstructor"/>
+        <module name="DeclarationOrder">
+            <property name="ignoreConstructors" value="false"/>
+            <property name="ignoreModifiers"    value="false"/>
+        </module>
+        <module name="EmptyStatement"/>
+        <module name="EqualsAvoidNull"/>
+        <module name="FallThrough">
+            <property name="checkLastCaseGroup" value="false"/>
+            <property name="reliefPattern"      value="fallthru|falls??through"/>
+        </module>
+        <module name="FinalLocalVariable">
+            <property name="tokens" value="VARIABLE_DEF"/>
+        </module>
+        <module name="IllegalCatch">
+            <property name="illegalClassNames" value="java.lang.Throwable"/>
+        </module>
+        <module name="IllegalThrows">
+            <property name="illegalClassNames" value="java.lang.Throwable, java.lang.Error, java.lang.RuntimeException"/>
+        </module>
+        <module name="IllegalType">
+            <property name="tokens"                 value="PARAMETER_DEF, VARIABLE_DEF, METHOD_DEF"/>
+            <property name="illegalClassNames"      value="java.util.GregorianCalendar, java.util.Hashtable,
+                                                            java.util.HashSet, java.util.HashMap, java.util.ArrayList,
+                                                            java.util.LinkedList, java.util.LinkedHashMap,
+                                                            java.util.LinkedHashSet, java.util.TreeSet,
+                                                            java.util.TreeMap, java.util.Vector"/>
+            <property name="legalAbstractClassNames" value=""/>
+            <property name="ignoredMethodNames"      value="getInitialContext, getEnvironment"/>
+            <property name="format"                  value="^(.*[\\.])?Abstract.*$"/>
+        </module>
+        <module name="InnerAssignment">
+            <property name="tokens" value="ASSIGN, BAND_ASSIGN, BOR_ASSIGN, BSR_ASSIGN, BXOR_ASSIGN,
+                                           DIV_ASSIGN, MINUS_ASSIGN, MOD_ASSIGN, PLUS_ASSIGN, SL_ASSIGN,
+                                           SR_ASSIGN, STAR_ASSIGN"/>
+        </module>
+        <module name="MagicNumber">
+            <property name="tokens"               value="NUM_DOUBLE, NUM_FLOAT, NUM_INT, NUM_LONG"/>
+            <property name="ignoreNumbers"        value="-1, 0, 1, 2"/>
+            <property name="ignoreHashCodeMethod" value="false"/>
+        </module>
+        <module name="MissingSwitchDefault"/>
+        <module name="ModifiedControlVariable"/>
+        <module name="MultipleVariableDeclarations"/>
+        <module name="NestedForDepth">
+            <property name="max" value="3"/>
+        </module>
+        <module name="NestedIfDepth">
+            <property name="max" value="2"/>
+        </module>
+        <module name="NestedTryDepth">
+            <property name="max" value="1"/>
+        </module>
+    </module>
+    <module name="SuppressWarningsFilter" />
+</module>

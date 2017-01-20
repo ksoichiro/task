@@ -46,7 +46,7 @@ public class ProjectService {
         if (projectDTO == null) {
             throw new IllegalArgumentException("projectDTO cannot be null");
         }
-        Project project = new Project();
+        final Project project = new Project();
         BeanUtils.copyProperties(projectDTO, project, "id", "team");
         project.setTeam(teamRepository.findOne(projectDTO.getTeamId()));
         return projectRepository.save(project);
@@ -60,7 +60,7 @@ public class ProjectService {
         if (projectDTO.getId() == null || projectDTO.getId() < 0) {
             throw new IllegalArgumentException("project.id cannot be null or minus");
         }
-        Project project = projectRepository.findOne(projectDTO.getId());
+        final Project project = projectRepository.findOne(projectDTO.getId());
         BeanUtils.copyProperties(projectDTO, project, "id");
         project.setUpdatedAt(new Date());
         return projectRepository.save(project);

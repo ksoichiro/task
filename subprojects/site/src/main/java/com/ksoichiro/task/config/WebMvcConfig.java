@@ -28,14 +28,14 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public LocalValidatorFactoryBean validator() {
-        LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
+        final LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
         localValidatorFactoryBean.setValidationMessageSource(messageSource);
         return localValidatorFactoryBean;
     }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        VersionResourceResolver versionResolver = new VersionResourceResolver()
+        final VersionResourceResolver versionResolver = new VersionResourceResolver()
             .addContentVersionStrategy("/css/**", "/js/**")
             .addVersionStrategy(new PrefixAndFixedVersionStrategy("lib/", gitProperties.getCommitId()), "/lib/**");
         registry.addResourceHandler("/**")

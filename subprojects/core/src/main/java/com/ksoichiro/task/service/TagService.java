@@ -36,14 +36,14 @@ public class TagService {
     @Transactional
     public Tag create(TagDTO tagDTO) {
         validateName(tagDTO.getName(), tagDTO.getAccount());
-        Tag tag = new Tag();
+        final Tag tag = new Tag();
         BeanUtils.copyProperties(tagDTO, tag);
         return tagRepository.save(tag);
     }
 
     @Transactional
     public Tag update(TagDTO tagDTO) {
-        Tag toUpdate = tagRepository.findOne(tagDTO.getId());
+        final Tag toUpdate = tagRepository.findOne(tagDTO.getId());
         if (!tagDTO.getAccount().getId().equals(toUpdate.getAccount().getId())) {
             throw new IllegalStateException("Tag cannot be updated by this account: owner: " + tagDTO.getAccount().getId() + ", updated by: " + toUpdate.getAccount().getId());
         }
@@ -56,7 +56,7 @@ public class TagService {
     }
 
     void validateName(String name, Account account) {
-        Tag duplicated = tagRepository.findByNameAndAccount(name, account);
+        final Tag duplicated = tagRepository.findByNameAndAccount(name, account);
         if (duplicated != null) {
             throw new DuplicateTagNameException("Tag name is already registered: " + name + ", id: " + duplicated.getId());
         }

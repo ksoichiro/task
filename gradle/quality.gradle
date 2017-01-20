@@ -5,6 +5,12 @@ allprojects {
 
 subprojects {
     apply plugin: 'com.github.ksoichiro.console.reporter'
+    apply plugin: 'checkstyle'
+
+    checkstyle {
+        toolVersion '7.4'
+        configFile file("$rootDir/config/checkstyle/checkstyle.xml")
+    }
 
     def testTypes = ['test', 'integTest']
     def jacocoTestReportTaskName = { testType -> "jacocoTestReport${testType.capitalize()}" }

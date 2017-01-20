@@ -51,9 +51,9 @@ public class TaskService {
     }
 
     public Page<Task> findByAccountAndConditions(TaskDTO dto, Pageable pageable) {
-        QTask task = QTask.task;
+        final QTask task = QTask.task;
 
-        BooleanBuilder predicate = new BooleanBuilder();
+        final BooleanBuilder predicate = new BooleanBuilder();
         predicate.and(task.account.id.eq(dto.getAccount().getId()));
 
         if (!StringUtils.isEmpty(dto.getName())) {
@@ -66,16 +66,16 @@ public class TaskService {
             predicate.and(task.scheduledAt.eq(DateUtils.truncateTime(dto.getScheduledAt())));
         }
 
-        PathBuilder<Task> builder = new PathBuilder<>(Task.class, QTask.task.getMetadata());
-        Querydsl querydsl = new Querydsl(entityManager, builder);
+        final PathBuilder<Task> builder = new PathBuilder<>(Task.class, QTask.task.getMetadata());
+        final Querydsl querydsl = new Querydsl(entityManager, builder);
 
-        JPQLQuery countQuery = createQuery(predicate);
-        JPQLQuery query = querydsl.applyPagination(pageable, createQuery(predicate));
+        final JPQLQuery countQuery = createQuery(predicate);
+        final JPQLQuery query = querydsl.applyPagination(pageable, createQuery(predicate));
 
-        Path<Task> path = QTask.task;
-        Long total = countQuery.count();
+        final Path<Task> path = QTask.task;
+        final Long total = countQuery.count();
 
-        List<Task> content = total > pageable.getOffset() ? query.list(path) : Collections.emptyList();
+        final List<Task> content = total > pageable.getOffset() ? query.list(path) : Collections.emptyList();
 
         return new PageImpl<>(content, pageable, total);
     }
@@ -98,7 +98,7 @@ public class TaskService {
         @CacheEvict(cacheNames = Caches.TASK_COUNT, key = "#taskDTO.account.id"),
         @CacheEvict(cacheNames = Caches.TASK_COUNT, key = "#taskDTO.account.id + '-today'")})
     public Task create(TaskDTO taskDTO) {
-        Task task = new Task();
+        final Task task = new Task();
         BeanUtils.copyProperties(taskDTO, task);
         return taskRepository.save(task);
     }
@@ -108,7 +108,7 @@ public class TaskService {
         @CacheEvict(cacheNames = Caches.TASK_COUNT, key = "#taskDTO.account.id"),
         @CacheEvict(cacheNames = Caches.TASK_COUNT, key = "#taskDTO.account.id + '-today'")})
     public Task update(TaskDTO taskDTO) {
-        Task toUpdate = taskRepository.findOne(taskDTO.getId());
+        final Task toUpdate = taskRepository.findOne(taskDTO.getId());
         if (!taskDTO.getAccount().getId().equals(toUpdate.getAccount().getId())) {
             throw new IllegalStateException("Task cannot be updated by this account: owner: " + taskDTO.getAccount().getId() + ", updated by: " + toUpdate.getAccount().getId());
         }

@@ -25,15 +25,15 @@ public class LoginService implements UserDetailsService {
         if (StringUtils.isEmpty(username)) {
             throw new UsernameNotFoundException("Username is empty");
         }
-        Account domainAccount = accountRepository.findByUsername(username);
+        final Account domainAccount = accountRepository.findByUsername(username);
         if (domainAccount == null) {
             throw new UsernameNotFoundException("User not found for name: " + username);
         }
-        List<GrantedAuthority> authorities = new ArrayList<>();
+        final List<GrantedAuthority> authorities = new ArrayList<>();
         if (domainAccount.getRole() != null) {
             authorities.add(new SimpleGrantedAuthority(domainAccount.getRole().getName()));
         }
-        Account account = new Account(username, domainAccount.getPassword(), domainAccount.isEnabled(), authorities);
+        final Account account = new Account(username, domainAccount.getPassword(), domainAccount.isEnabled(), authorities);
         account.setId(domainAccount.getId());
         account.setName(domainAccount.getName());
         account.setCreatedAt(domainAccount.getCreatedAt());

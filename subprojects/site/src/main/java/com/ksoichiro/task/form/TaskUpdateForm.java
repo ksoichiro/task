@@ -31,7 +31,7 @@ public class TaskUpdateForm implements UpdateForm<Task, TaskDTO> {
 
     @Override
     public TaskDTO toDTO(Account account) {
-        TaskDTO taskDTO = new TaskDTO(account);
+        final TaskDTO taskDTO = new TaskDTO(account);
         BeanUtils.copyProperties(this, taskDTO);
         return taskDTO;
     }

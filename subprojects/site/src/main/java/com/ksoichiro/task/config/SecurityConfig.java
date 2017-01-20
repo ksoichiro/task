@@ -39,12 +39,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // Workaround for disabling cache controls for static resources:
         // http://stackoverflow.com/a/36017075/4285965
-        RequestMatcher notResourcesMatcher = new NegatedRequestMatcher(
+        final RequestMatcher notResourcesMatcher = new NegatedRequestMatcher(
             new OrRequestMatcher(
                 new AntPathRequestMatcher("/css/**"),
                 new AntPathRequestMatcher("/js/**"),
                 new AntPathRequestMatcher("/lib/**")));
-        HeaderWriter notResourcesHeaderWriter = new DelegatingRequestMatcherHeaderWriter(notResourcesMatcher, new CacheControlHeadersWriter());
+        final HeaderWriter notResourcesHeaderWriter = new DelegatingRequestMatcherHeaderWriter(notResourcesMatcher, new CacheControlHeadersWriter());
         http
             .headers()
                 .cacheControl().disable()

@@ -17,7 +17,7 @@ public class TeamCreateForm implements CreateForm<Team, TeamDTO> {
 
     @Override
     public TeamDTO toDTO(Account account) {
-        TeamDTO teamDTO = new TeamDTO();
+        final TeamDTO teamDTO = new TeamDTO();
         BeanUtils.copyProperties(this, teamDTO);
         teamDTO.setAccount(account);
         return teamDTO;

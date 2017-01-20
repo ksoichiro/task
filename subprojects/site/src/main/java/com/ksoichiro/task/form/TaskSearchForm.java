@@ -18,7 +18,7 @@ public class TaskSearchForm implements Form<Task> {
     private TaskStatusEnum status;
 
     public TaskDTO toDTO(Account account) {
-        TaskDTO dto = new TaskDTO(account);
+        final TaskDTO dto = new TaskDTO(account);
         BeanUtils.copyProperties(this, dto);
         return dto;
     }

@@ -22,7 +22,7 @@ public class ProjectCreateForm implements CreateForm<Project, ProjectDTO> {
 
     @Override
     public ProjectDTO toDTO(Account account) {
-        ProjectDTO projectDTO = new ProjectDTO(account);
+        final ProjectDTO projectDTO = new ProjectDTO(account);
         BeanUtils.copyProperties(this, projectDTO);
         return projectDTO;
     }

@@ -18,7 +18,7 @@ public class ServiceAdvice {
     public void service() {
     }
 
-    @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
+    @SuppressWarnings({"ThrowableResultOfMethodCallIgnored","IllegalThrows"})
     @Around("service() && execution(* com.ksoichiro.task.service.*.*(..))")
     public Object execution(ProceedingJoinPoint pjp) throws Throwable {
         try {
@@ -26,7 +26,7 @@ public class ServiceAdvice {
         } catch (NestedRuntimeException e) {
             if (e.contains(SQLException.class)) {
                 // If needed, we can handle specific SQL error codes.
-                SQLException cause = getCause(e, SQLException.class);
+                final SQLException cause = getCause(e, SQLException.class);
                 log.warn("SQL Error: {}, SQLState: {}, message: {}", cause.getErrorCode(), cause.getSQLState(), cause.getMessage());
             }
             // Rethrow it to delegate handling
