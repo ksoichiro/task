@@ -56,8 +56,8 @@ subprojects {
         }
         def executionDataList = []
         testTypes.each { testType ->
-            if (file("src/${testType}/java").exists()) {
-                executionDataList += file("$buildDir/jacoco/${testType}.exec")
+            if (project.file("src/${testType}/java").exists()) {
+                executionDataList += file("$project.buildDir/jacoco/${testType}.exec")
             }
         }
         executionData executionDataList
