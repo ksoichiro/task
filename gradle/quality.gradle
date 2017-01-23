@@ -218,11 +218,13 @@ task summary {
             }
             def covSingleClasses = covClasses(covSingle)
             def covAllClasses = covClasses(covAll)
+            def singleHtmlReportFile = p.file("${p.buildDir}/reports/jacoco/allJacocoTestReport/html/index.html")
+            def allHtmlReportFile = p.file("${p.buildDir}/reports/jacoco/allProjectJacocoTestReport/html/index.html")
             reportFile.text += """\
                 |<tr>
                 |  <td>${p.name}</td>
-                |  <td class="right ${covSingleClasses}">${sprintf('%3.2f', covSingle.round(2))}</td>
-                |  <td class="right ${covAllClasses}">${sprintf('%3.2f', covAll.round(2))}</td>
+                |  <td class="right"><a href="file://${singleHtmlReportFile.canonicalPath}" class="${covSingleClasses}">${sprintf('%3.2f', covSingle.round(2))}</a></td>
+                |  <td class="right"><a href="file://${allHtmlReportFile.canonicalPath}" class="${covAllClasses}">${sprintf('%3.2f', covAll.round(2))}</a></td>
                 |</tr>
                 |""".stripMargin().stripIndent()
         }
