@@ -117,3 +117,123 @@ subprojects {
         }
     }
 }
+
+task summary {
+    def dependentTasks = []
+    rootProject.subprojects.each { p ->
+        dependentTasks.addAll(p.tasks.findAll { it.name == 'allProjectJacocoTestReport' })
+    }
+    onlyIf {
+        0 < dependentTasks.size()
+    }
+    if (0 < dependentTasks.size()) {
+        dependsOn dependentTasks
+    }
+    def inputFiles = []
+    rootProject.subprojects.each { p ->
+        inputFiles += p.file("${p.buildDir}/reports/jacoco/allJacocoTestReport/allJacocoTestReport.xml")
+        inputFiles += p.file("${p.buildDir}/reports/jacoco/allProjectJacocoTestReport/allProjectJacocoTestReport.xml")
+    }
+    inputs.files inputFiles
+    def reportFile = project.file("${buildDir}/report/summary/index.html")
+    outputs.file reportFile
+    outputs.upToDateWhen { false }
+    doLast {
+        def reportDir = reportFile.parentFile
+        if (!reportDir.exists()) {
+            project.mkdir(reportDir)
+        }
+        reportFile.text = """\
+            |<html>
+            |<head>
+            |<title>Summary</title>
+            |<style>
+            |body {
+            |  font-size: 14px;
+            |  font-family: "Helvetica Neue"
+            |}
+            |h3 {
+            |  font-size: 24px;
+            |}
+            |table {
+            |  border-collapse: collapse;
+            |}
+            |td,th {
+            |  border: 1px solid #ddd;
+            |  padding: 4px;
+            |}
+            |th {
+            |  font-weight: bold;
+            |  border-bottom-width: 2px;
+            |}
+            |.right {
+            |  text-align: right;
+            |}
+            |.bad {
+            |  color: #d9534f;
+            |}
+            |.warn {
+            |  color: #f0ad4e;
+            |}
+            |.fine {
+            |  color: #5cb85c;
+            |}
+            |</style>
+            |</head>
+            |<body>
+            |<h3>Coverage</h3>
+            |<table>
+            |<tr>
+            |  <th>Project</th>
+            |  <th>Single project[%]</th>
+            |  <th>All projects[%]</th>
+            |</tr>
+            |""".stripMargin().stripIndent()
+        rootProject.subprojects.each { p ->
+            def coverage = { file ->
+                def rootNode = new XmlParser(false, false).parseText(file.text.replaceAll("<!DOCTYPE[^>]*>", ""))
+                def cov = 0.0f
+                rootNode.counter.each { counter ->
+                    try {
+                        if ('INSTRUCTION' == counter.@type) {
+                            def covered = Integer.valueOf(counter.@covered as String)
+                            def missed = Integer.valueOf(counter.@missed as String)
+                            cov = (100.0 * covered / (missed + covered)) as float
+                        }
+                    } catch (ignore) {
+                    }
+                }
+                cov
+            }
+            def covSingle = coverage(p.file("${p.buildDir}/reports/jacoco/allJacocoTestReport/allJacocoTestReport.xml"))
+            def covAll = coverage(p.file("${p.buildDir}/reports/jacoco/allProjectJacocoTestReport/allProjectJacocoTestReport.xml"))
+            def covClasses = { cov ->
+                if (80 <= cov) {
+                    return "fine"
+                } else if (60 <= cov) {
+                    return "warn"
+                } else {
+                    return "bad"
+                }
+            }
+            def covSingleClasses = covClasses(covSingle)
+            def covAllClasses = covClasses(covAll)
+            reportFile.text += """\
+                |<tr>
+                |  <td>${p.name}</td>
+                |  <td class="right ${covSingleClasses}">${sprintf('%3.2f', covSingle.round(2))}</td>
+                |  <td class="right ${covAllClasses}">${sprintf('%3.2f', covAll.round(2))}</td>
+                |</tr>
+                |""".stripMargin().stripIndent()
+        }
+        reportFile.text += """\
+            |</table>
+            |</div>
+            |</body>
+            |</html>
+            |""".stripMargin().stripIndent()
+        println "Summary:"
+        println "${reportFile.canonicalPath}"
+    }
+}
+check.dependsOn 'summary'
