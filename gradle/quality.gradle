@@ -139,7 +139,7 @@ task summary {
         inputFiles += p.file("${p.buildDir}/reports/jacoco/allProjectJacocoTestReport/allProjectJacocoTestReport.xml")
     }
     inputs.files inputFiles
-    def reportFile = project.file("${buildDir}/report/summary/index.html")
+    def reportFile = project.file("${buildDir}/reports/summary/index.html")
     outputs.file reportFile
     outputs.upToDateWhen { false }
     doLast {
