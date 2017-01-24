@@ -3,6 +3,9 @@ allprojects {
     apply plugin: 'info.solidsoft.pitest'
 }
 
+def testTypes = ['test', 'integTest']
+def jacocoTestReportTaskName = { testType -> "jacocoTestReport${testType.capitalize()}" }
+
 subprojects {
     apply plugin: 'com.github.ksoichiro.console.reporter'
     apply plugin: 'checkstyle'
@@ -11,9 +14,6 @@ subprojects {
         toolVersion '7.4'
         configFile file("$rootDir/config/checkstyle/checkstyle.xml")
     }
-
-    def testTypes = ['test', 'integTest']
-    def jacocoTestReportTaskName = { testType -> "jacocoTestReport${testType.capitalize()}" }
 
     testTypes.each { testType ->
         def taskName = jacocoTestReportTaskName(testType)
@@ -102,7 +102,9 @@ subprojects {
         def jacocoTasks = []
         gradle.rootProject.allprojects { project ->
             jacocoTasks.addAll(project.tasks.findAll {
-                it.name.toLowerCase().contains('jacocotestreport') && it.name != 'allProjectJacocoTestReport' })
+                it.name.toLowerCase().contains('jacocotestreport') &&
+                    it.name != 'allProjectJacocoTestReport' &&
+                    it.name != 'allSubrojectsJacocoTestReport' })
         }
         jacocoTasks.each { testTask ->
             project.allProjectJacocoTestReport.mustRunAfter jacocoTasks
@@ -122,26 +124,46 @@ subprojects {
     }
 }
 
-task summary {
-    def dependentTasks = []
+task allSubrojectsJacocoTestReport(type: JacocoReport) {
+    println rootProject.subprojects.collect { it.name + ':allProjectJacocoTestReport'.capitalize() }
+    dependsOn = rootProject.subprojects.collect { it.name + ':allProjectJacocoTestReport'.capitalize() }
+    reports {
+        xml.enabled true
+    }
+    additionalSourceDirs =files(rootProject.subprojects.collect { Project p -> p.sourceSets.main.allSource.srcDirs })
+    sourceDirectories = files(rootProject.subprojects.collect { Project p -> p.sourceSets.main.allSource.srcDirs })
+    classDirectories = files(rootProject.subprojects.collect { Project p -> p.sourceSets.main.output })
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it,
+                exclude: [
+                    'com/ksoichiro/task/domain/Q*',
+                ])
+        })
+    }
+    def executionDataList = []
     rootProject.subprojects.each { p ->
-        dependentTasks.addAll(p.tasks.findAll { it.name == 'allProjectJacocoTestReport' })
+        testTypes.each { testType ->
+            if (p.file("src/${testType}/java").exists()) {
+                executionDataList += p.file("$p.buildDir/jacoco/${testType}.exec")
+            }
+        }
     }
-    onlyIf {
-        0 < dependentTasks.size()
-    }
-    if (0 < dependentTasks.size()) {
-        dependsOn dependentTasks
-    }
+    executionData executionDataList
+}
+check.dependsOn 'allSubrojectsJacocoTestReport'
+
+task summary {
+    dependsOn 'allSubrojectsJacocoTestReport'
     def inputFiles = []
     rootProject.subprojects.each { p ->
         inputFiles += p.file("${p.buildDir}/reports/jacoco/allJacocoTestReport/allJacocoTestReport.xml")
         inputFiles += p.file("${p.buildDir}/reports/jacoco/allProjectJacocoTestReport/allProjectJacocoTestReport.xml")
     }
+    inputFiles += project.file("${buildDir}/reports/jacoco/allSubrojectsJacocoTestReport/allSubrojectsJacocoTestReport.xml")
     inputs.files inputFiles
     def reportFile = project.file("${buildDir}/reports/summary/index.html")
     outputs.file reportFile
-    outputs.upToDateWhen { false }
     doLast {
         def reportDir = reportFile.parentFile
         if (!reportDir.exists()) {
@@ -193,33 +215,33 @@ task summary {
             |  <th>All projects[%]</th>
             |</tr>
             |""".stripMargin().stripIndent()
-        rootProject.subprojects.each { p ->
-            def coverage = { file ->
-                def rootNode = new XmlParser(false, false).parseText(file.text.replaceAll("<!DOCTYPE[^>]*>", ""))
-                def cov = 0.0f
-                rootNode.counter.each { counter ->
-                    try {
-                        if ('INSTRUCTION' == counter.@type) {
-                            def covered = Integer.valueOf(counter.@covered as String)
-                            def missed = Integer.valueOf(counter.@missed as String)
-                            cov = (100.0 * covered / (missed + covered)) as float
-                        }
-                    } catch (ignore) {
-                    }
-                }
-                cov
+        def covClasses = { cov ->
+            if (80 <= cov) {
+                return "fine"
+            } else if (60 <= cov) {
+                return "warn"
+            } else {
+                return "bad"
             }
+        }
+        def coverage = { file ->
+            def rootNode = new XmlParser(false, false).parseText(file.text.replaceAll("<!DOCTYPE[^>]*>", ""))
+            def cov = 0.0f
+            rootNode.counter.each { counter ->
+                try {
+                    if ('INSTRUCTION' == counter.@type) {
+                        def covered = Integer.valueOf(counter.@covered as String)
+                        def missed = Integer.valueOf(counter.@missed as String)
+                        cov = (100.0 * covered / (missed + covered)) as float
+                    }
+                } catch (ignore) {
+                }
+            }
+            cov
+        }
+        rootProject.subprojects.each { p ->
             def covSingle = coverage(p.file("${p.buildDir}/reports/jacoco/allJacocoTestReport/allJacocoTestReport.xml"))
             def covAll = coverage(p.file("${p.buildDir}/reports/jacoco/allProjectJacocoTestReport/allProjectJacocoTestReport.xml"))
-            def covClasses = { cov ->
-                if (80 <= cov) {
-                    return "fine"
-                } else if (60 <= cov) {
-                    return "warn"
-                } else {
-                    return "bad"
-                }
-            }
             def covSingleClasses = covClasses(covSingle)
             def covAllClasses = covClasses(covAll)
             def singleHtmlReportFile = p.file("${p.buildDir}/reports/jacoco/allJacocoTestReport/html/index.html")
@@ -232,6 +254,16 @@ task summary {
                 |</tr>
                 |""".stripMargin().stripIndent()
         }
+        def covAllProjects = coverage(project.file("${buildDir}/reports/jacoco/allSubrojectsJacocoTestReport/allSubrojectsJacocoTestReport.xml"))
+        def covAllProjectsClasses = covClasses(covAllProjects)
+        def allProjectsHtmlReportFile = file("${buildDir}/reports/jacoco/allSubrojectsJacocoTestReport/html/index.html")
+        reportFile.text += """\
+                |<tr>
+                |  <td>All</td>
+                |  <td class="right">-</td>
+                |  <td class="right"><abbr title="Coverage might be incorrect if there are classes that have same name in multiple projects."><a href="file://${allProjectsHtmlReportFile.canonicalPath}" class="${covAllProjectsClasses}">${sprintf('%3.2f', covAllProjects.round(2))}</a></abbr></td>
+                |</tr>
+                |""".stripMargin().stripIndent()
         reportFile.text += """\
             |</table>
             |</div>
