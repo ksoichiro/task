@@ -1,6 +1,7 @@
 allprojects {
     apply plugin: 'jacoco'
     apply plugin: 'info.solidsoft.pitest'
+    apply plugin: 'net.ltgt.errorprone'
 }
 
 def testTypes = ['test', 'integTest']
