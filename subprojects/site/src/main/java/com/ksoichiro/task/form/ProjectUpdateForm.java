@@ -4,6 +4,7 @@ import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.domain.Project;
 import com.ksoichiro.task.dto.ProjectDTO;
 import lombok.Data;
+import lombok.Getter;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.BeanUtils;
 
@@ -12,7 +13,8 @@ import javax.validation.constraints.NotNull;
 @Data
 public class ProjectUpdateForm implements UpdateForm<Project, ProjectDTO> {
     @NotNull
-    private Integer id;
+    @Getter(onMethod = @__({@Override}))
+    private Integer  id;
 
     @NotEmpty
     private String cd;

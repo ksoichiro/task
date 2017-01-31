@@ -24,6 +24,7 @@ public class TaskCreateFormTests extends AbstractFormTests<TaskCreateForm> {
     };
 
     @Theory
+    @Override
     public void validate(Fixture<TaskCreateForm> fixture) throws Exception {
         super.validate(fixture);
     }

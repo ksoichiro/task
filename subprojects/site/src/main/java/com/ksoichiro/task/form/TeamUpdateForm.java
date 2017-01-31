@@ -4,6 +4,7 @@ import com.ksoichiro.task.domain.Account;
 import com.ksoichiro.task.domain.Team;
 import com.ksoichiro.task.dto.TeamDTO;
 import lombok.Data;
+import lombok.Getter;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.BeanUtils;
 
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotNull;
 @Data
 public class TeamUpdateForm implements UpdateForm<Team, TeamDTO> {
     @NotNull
+    @Getter(onMethod = @__({@Override}))
     private Integer id;
 
     @NotEmpty

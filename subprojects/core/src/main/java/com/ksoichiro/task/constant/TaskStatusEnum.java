@@ -7,7 +7,7 @@ public enum TaskStatusEnum {
     HOLD(2),
     DONE(4);
 
-    private int code;
+    private final int code;
 
     TaskStatusEnum(int code) {
         this.code = code;

@@ -20,6 +20,7 @@ public class TaskSearchFormTests extends AbstractFormTests<TaskSearchForm> {
     };
 
     @Theory
+    @Override
     public void validate(Fixture<TaskSearchForm> fixture) throws Exception {
         super.validate(fixture);
     }

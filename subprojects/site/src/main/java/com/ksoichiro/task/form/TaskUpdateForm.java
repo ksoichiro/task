@@ -7,6 +7,7 @@ import com.ksoichiro.task.domain.Task;
 import com.ksoichiro.task.dto.TaskDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.BeanUtils;
@@ -19,6 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 public class TaskUpdateForm implements UpdateForm<Task, TaskDTO> {
     @NotNull
+    @Getter(onMethod = @__({@Override}))
     private Integer id;
 
     @NotEmpty

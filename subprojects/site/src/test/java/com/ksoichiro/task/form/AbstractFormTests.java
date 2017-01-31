@@ -32,16 +32,8 @@ public abstract class AbstractFormTests<F> {
         validator = createValidator();
     }
 
-    @Test
-    public void formEquals() throws Exception {
-        // Just for increasing test coverage
-        F form = getFormClass().newInstance();
-        F form2 = getFormClass().newInstance();
-        assertThat(form, equalTo(form2));
-    }
-
     protected void validate(Fixture<F> fixture) throws Exception {
-        F form = getFormClass().newInstance();
+        F form = getFormClass().getConstructor(new Class<?>[0]).newInstance();
         BeanUtils.copyProperties(fixture, form);
         BindException errors = new BindException(form, "form");
         ValidationUtils.invokeValidator(validator, form, errors);

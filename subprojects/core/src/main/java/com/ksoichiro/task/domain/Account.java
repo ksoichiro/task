@@ -2,6 +2,7 @@ package com.ksoichiro.task.domain;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -20,9 +21,12 @@ public class Account extends User {
     @Id
     @GeneratedValue
     private Integer id;
+    @Getter(onMethod = @__({@Override}))
     private String username;
     private String name;
+    @Getter(onMethod = @__({@Override}))
     private String password;
+    @Getter(onMethod = @__({@Override}))
     private boolean enabled;
     private Date createdAt;
     private Date updatedAt;
