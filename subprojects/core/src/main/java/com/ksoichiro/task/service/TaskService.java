@@ -7,12 +7,11 @@ import com.ksoichiro.task.domain.Task;
 import com.ksoichiro.task.dto.TaskDTO;
 import com.ksoichiro.task.repository.TaskRepository;
 import com.ksoichiro.task.util.DateUtils;
-import com.mysema.query.BooleanBuilder;
-import com.mysema.query.jpa.JPQLQuery;
-import com.mysema.query.jpa.impl.JPAQuery;
-import com.mysema.query.types.Path;
-import com.mysema.query.types.Predicate;
-import com.mysema.query.types.path.PathBuilder;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.PathBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -72,10 +71,9 @@ public class TaskService {
         final JPQLQuery countQuery = createQuery(predicate);
         final JPQLQuery query = querydsl.applyPagination(pageable, createQuery(predicate));
 
-        final Path<Task> path = QTask.task;
-        final Long total = countQuery.count();
+        final Long total = countQuery.fetchCount();
 
-        final List<Task> content = total > pageable.getOffset() ? query.list(path) : Collections.emptyList();
+        final List<Task> content = total > pageable.getOffset() ? query.fetch() : Collections.emptyList();
 
         return new PageImpl<>(content, pageable, total);
     }
@@ -125,8 +123,8 @@ public class TaskService {
         return taskRepository.save(toUpdate);
     }
 
-    private JPAQuery createQuery(Predicate predicate) {
-        return new JPAQuery(entityManager)
+    private JPAQuery<Task> createQuery(Predicate predicate) {
+        return new JPAQuery<Task>(entityManager)
             .from(QTask.task)
             .leftJoin(QTask.task.tags)
             .where(predicate);

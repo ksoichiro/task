@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 @PropertySource("classpath:/git.properties")
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
-public class GitProperties {
+public class GitProps {
     private final Environment environment;
 
     public String getCommitId() {

@@ -19,7 +19,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     private MessageSource messageSource;
 
     @Autowired
-    private GitProperties gitProperties;
+    private GitProps gitProperties;
 
     @Bean
     public ResourceUrlEncodingFilter resourceUrlEncodingFilter() {
