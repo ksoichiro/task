@@ -16,6 +16,10 @@ subprojects {
         configFile file("$rootDir/config/checkstyle/checkstyle.xml")
     }
 
+    tasks.withType(JavaCompile) {
+        options.compilerArgs += [ '-Xep:ParameterName:OFF' ]
+    }
+
     testTypes.each { testType ->
         def taskName = jacocoTestReportTaskName(testType)
         task "${taskName}"(type: JacocoReport) {
