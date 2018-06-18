@@ -7,8 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.TestPropertySource;
@@ -26,8 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @Sql({"/truncate.sql", "/data-task.sql"})
-@SpringApplicationConfiguration(App.class)
-@WebIntegrationTest
+@SpringBootTest(classes = App.class, webEnvironment= SpringBootTest.WebEnvironment.DEFINED_PORT)
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource(properties = "application.security.enabled: true")
 public class AppErrorControllerTests extends AbstractTransactionalJUnit4SpringContextTests {

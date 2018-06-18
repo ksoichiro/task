@@ -1,7 +1,7 @@
 package com.ksoichiro.task.annotation;
 
 import com.ksoichiro.task.App;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@SpringApplicationConfiguration(App.class)
+@SpringBootTest(classes = App.class)
 @WebAppConfiguration
 @TestPropertySource(properties = "application.security.enabled: true")
 public @interface MvcTestConfiguration {

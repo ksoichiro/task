@@ -8,7 +8,7 @@ import com.ksoichiro.task.repository.AccountRepository;
 import com.ksoichiro.task.repository.TaskRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 @Sql({"/truncate.sql", "/domain/data-task-status-converter.sql"})
-@SpringApplicationConfiguration(App.class)
+@SpringBootTest(classes = App.class)
 public class TaskStatusConverterTests extends AbstractTransactionalJUnit4SpringContextTests {
     @Autowired
     private AccountRepository accountRepository;

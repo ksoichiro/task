@@ -4,7 +4,7 @@ import com.ksoichiro.task.App;
 import com.ksoichiro.task.constant.TaskStatusEnum;
 import org.junit.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.rules.SpringClassRule;
 import org.springframework.test.context.junit4.rules.SpringMethodRule;
 
@@ -13,7 +13,7 @@ import java.util.Locale;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-@SpringApplicationConfiguration(App.class)
+@SpringBootTest(classes = App.class)
 public class TaskStatusToStringConverterJaTests {
     @ClassRule
     public static final SpringClassRule SPRING_CLASS_RULE = new SpringClassRule();

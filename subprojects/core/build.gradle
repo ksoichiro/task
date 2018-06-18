@@ -42,10 +42,13 @@ clean {
 
 task processSql {
     def sqlFile = file("src/main/sql/data.sql")
+    def sqlSchemaFile = file("src/main/sql/schema.sql")
     def h2File = file("src/main/resources/data-h2.sql")
+    def h2SchemaFile = file("src/main/resources/schema-h2.sql")
     def mariadbFile = file("src/main/resources/data-mariadb.sql")
-    inputs.file sqlFile
-    outputs.files h2File, mariadbFile
+    def mariadbSchemaFile = file("src/main/resources/schema-mariadb.sql")
+    inputs.files sqlFile, sqlSchemaFile
+    outputs.files h2File, h2SchemaFile, mariadbFile, mariadbSchemaFile
     doLast {
         h2File.withWriter { writer ->
             sqlFile.eachLine { line ->
@@ -54,10 +57,20 @@ task processSql {
                 }
             }
         }
+        h2SchemaFile.withWriter { writer ->
+            sqlSchemaFile.eachLine { line ->
+                writer.println(line.replaceAll("datetime\\([0-9]*\\)", "datetime"))
+            }
+        }
         copy {
             from sqlFile
             into "src/main/resources"
             rename "data.sql", "data-mariadb.sql"
+        }
+        copy {
+            from sqlSchemaFile
+            into "src/main/resources"
+            rename "schema.sql", "schema-mariadb.sql"
         }
     }
 }

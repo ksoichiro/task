@@ -6,17 +6,16 @@ import com.ksoichiro.task.repository.AccountRepository;
 import com.ksoichiro.task.repository.RoleRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
+@Sql("/schema-h2.sql")
 @Sql({"/truncate.sql", "/data-account.sql"})
-@SpringApplicationConfiguration(App.class)
+@SpringBootTest(classes = App.class)
 public class AccountServiceTests extends AbstractTransactionalJUnit4SpringContextTests {
     @Autowired
     private AccountRepository accountRepository;

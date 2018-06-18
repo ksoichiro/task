@@ -10,15 +10,16 @@ import com.ksoichiro.task.repository.TaskRepository;
 import org.junit.Test;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
+@Sql("/schema-h2.sql")
 @Sql({"/truncate.sql", "/data-task.sql"})
-@SpringApplicationConfiguration(App.class)
+@SpringBootTest(classes = App.class)
 public class TaskServiceTests extends AbstractTransactionalJUnit4SpringContextTests {
     @Autowired
     private TaskRepository taskRepository;

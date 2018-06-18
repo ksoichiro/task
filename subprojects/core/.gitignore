@@ -1,2 +1,3 @@
 src/main/generated/
 src/main/resources/data-*.sql
+src/main/resources/schema-*.sql
