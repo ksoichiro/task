@@ -17,7 +17,7 @@ subprojects {
     }
 
     tasks.withType(JavaCompile) {
-        options.compilerArgs += [ '-Xep:ParameterName:OFF' ]
+        options.compilerArgs += [ '-Xep:ParameterName:OFF', '-Xep:UnusedVariable:OFF' ]
     }
 
     testTypes.each { testType ->
