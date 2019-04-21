@@ -1,7 +1,7 @@
 allprojects {
     apply plugin: 'jacoco'
     apply plugin: 'info.solidsoft.pitest'
-    apply plugin: 'net.ltgt.errorprone'
+//    apply plugin: 'net.ltgt.errorprone'
 }
 
 def testTypes = ['test', 'integTest']
@@ -17,7 +17,7 @@ subprojects {
     }
 
     tasks.withType(JavaCompile) {
-        options.compilerArgs += [ '-Xep:ParameterName:OFF', '-Xep:UnusedVariable:OFF' ]
+//        options.compilerArgs += [ '-Xep:ParameterName:OFF', '-Xep:UnusedVariable:OFF' ]
     }
 
     testTypes.each { testType ->
