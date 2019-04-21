@@ -10,12 +10,14 @@ buildscript {
 }
 
 // e.g. ./gradlew encodePassword -Pargs="test"
-task encodePassword << {
-    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder()
-    String username = 'test'
-    if (project.hasProperty('args')) {
-        username = project.args.split('\\s+')[0]
+task encodePassword {
+    doLast {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder()
+        String username = 'test'
+        if (project.hasProperty('args')) {
+            username = project.args.split('\\s+')[0]
+        }
+        println "Encoded password for user ${username}:"
+        println encoder.encode(username)
     }
-    println "Encoded password for user ${username}:"
-    println encoder.encode(username)
 }

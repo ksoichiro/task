@@ -230,6 +230,9 @@ task summary {
             }
         }
         def coverage = { file ->
+            if (!file.exists()) {
+                return 0.0f
+            }
             def rootNode = new XmlParser(false, false).parseText(file.text.replaceAll("<!DOCTYPE[^>]*>", ""))
             def cov = 0.0f
             rootNode.counter.each { counter ->

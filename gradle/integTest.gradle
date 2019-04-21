@@ -12,13 +12,13 @@ subprojects {
         group = LifecycleBasePlugin.VERIFICATION_GROUP
         description = 'Runs the integration tests.'
 
-        testClassesDir = sourceSets.integTest.output.classesDir
+        testClassesDirs = sourceSets.integTest.output.classesDirs
         classpath = sourceSets.integTest.runtimeClasspath
         binResultsDir = file("${buildDir}/integTest-results/binary/integTest")
 
         reports {
-            html.destination = "${buildDir}/reports/integTest"
-            junitXml.destination = "${buildDir}/integTest-results"
+            html.destination = file("${buildDir}/reports/integTest")
+            junitXml.destination = file("${buildDir}/integTest-results")
         }
 
         mustRunAfter test
