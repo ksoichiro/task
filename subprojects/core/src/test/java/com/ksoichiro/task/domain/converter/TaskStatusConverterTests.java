@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
+@Sql("/schema-h2.sql")
 @Sql({"/truncate.sql", "/domain/data-task-status-converter.sql"})
 @SpringBootTest(classes = App.class)
 public class TaskStatusConverterTests extends AbstractTransactionalJUnit4SpringContextTests {
